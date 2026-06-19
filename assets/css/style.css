@@ -1,0 +1,851 @@
+/* 
+   Soekarno-Hatta CGK - Flight Information Display System (FIDS)
+   ALL TERMINALS: Terminal 1, 2, 3
+   Theme: FIDS Digital Board Aesthetic (Deep Charcoal, Amber Yellow, Emerald, Crimson, Cyan)
+   Typography: Outfit (Futuristic Headings) & Roboto Mono (Digital Data Rows)
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --fids-bg-darkest: #060911;      /* Deepest screen terminal background */
+    --fids-bg-board: #0B101D;        /* Main FIDS board background */
+    --fids-bg-row: #121829;          /* FIDS table row background */
+    --fids-bg-row-hover: #192138;    /* FIDS table row hover background */
+    --fids-border: #1E2840;          /* Hairline border for tables */
+    
+    /* Digital LED Colors */
+    --fids-amber: #FFC107;           /* Main FIDS Amber/Yellow text */
+    --fids-amber-glow: rgba(255, 193, 7, 0.2);
+    --fids-green: #2EC4B6;           /* Landed / On Time */
+    --fids-red: #FF1744;             /* Delayed / Cancelled */
+    --fids-blue: #00E5FF;            /* Boarding / Check-in */
+    --fids-grey: #7E8B9B;            /* Departed / Closed */
+    
+    --text-white: #FFFFFF;
+    --text-muted: #8E9BAE;
+    
+    --transition-fids: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    --radius-fids: 8px;
+}
+
+/* Base Styles */
+body {
+    font-family: 'Outfit', sans-serif;
+    color: var(--text-white);
+    background-color: var(--fids-bg-darkest);
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    line-height: 1.6;
+}
+
+/* Digital Font Helpers */
+.font-digital {
+    font-family: 'Roboto Mono', monospace;
+    font-weight: 500;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    color: var(--text-white);
+}
+
+.text-gold { color: var(--fids-amber) !important; }
+
+/* Custom FIDS Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: var(--fids-bg-darkest);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--fids-amber);
+    border-radius: 3px;
+}
+
+/* Page Loader */
+#page-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--fids-bg-darkest);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.loader-logo {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--fids-amber);
+    text-shadow: 0 0 10px var(--fids-amber-glow);
+}
+
+/* Scroll Animation classes */
+.reveal {
+    opacity: 0;
+    transform: translateY(15px);
+    transition: var(--transition-fids);
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.reveal.delay-1 { transition-delay: 0.15s; }
+.reveal.delay-2 { transition-delay: 0.3s; }
+.reveal.delay-3 { transition-delay: 0.45s; }
+
+/* Navigation Bar */
+.navbar-custom {
+    background-color: rgba(6, 9, 17, 0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 2px solid var(--fids-amber);
+    padding: 15px 0;
+    transition: var(--transition-fids);
+}
+
+.navbar-brand {
+    font-weight: 800;
+    letter-spacing: 1px;
+    font-size: 1.3rem;
+    color: var(--fids-amber) !important;
+    text-shadow: 0 0 8px var(--fids-amber-glow);
+}
+
+.navbar-custom .nav-link {
+    color: var(--text-white) !important;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 8px 16px !important;
+    transition: var(--transition-fids);
+}
+
+.navbar-custom .nav-link:hover,
+.navbar-custom .nav-link.active {
+    color: var(--fids-amber) !important;
+}
+
+/* ============================================
+   TERMINAL SELECTION DASHBOARD (index.html)
+   ============================================ */
+
+.dashboard-hero {
+    position: relative;
+    min-height: 45vh;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, #060911 0%, #0d1630 40%, #111d3a 70%, #060911 100%);
+    padding-top: 100px;
+    padding-bottom: 110px;
+    overflow: hidden;
+}
+
+.dashboard-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(255, 193, 7, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(0, 229, 255, 0.04) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.dashboard-hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -1px;
+}
+
+.dashboard-hero-subtitle {
+    color: var(--fids-amber);
+    font-size: 0.9rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Animated radar pulse on dashboard */
+.radar-pulse {
+    position: absolute;
+    right: -5%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 193, 7, 0.08);
+    animation: radarPulse 3s ease-out infinite;
+}
+
+.radar-pulse:nth-child(2) { animation-delay: 1s; width: 300px; height: 300px; }
+.radar-pulse:nth-child(3) { animation-delay: 2s; width: 200px; height: 200px; }
+
+@keyframes radarPulse {
+    0% { opacity: 0; transform: translateY(-50%) scale(0.8); }
+    30% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-50%) scale(1.5); }
+}
+
+/* Terminal Selection Cards */
+/* Pushed terminal cards further down below the hero background boundary line */
+.terminal-cards-section {
+    margin-top: 30px;
+    position: relative;
+    z-index: 10;
+    padding-bottom: 80px;
+}
+
+.terminal-card {
+    position: relative;
+    background-color: var(--fids-bg-board);
+    border: 1px solid var(--fids-border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer;
+    text-decoration: none !important;
+    display: block;
+}
+
+.terminal-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--fids-amber);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), 0 0 30px var(--fids-amber-glow);
+}
+
+.terminal-card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.terminal-card:hover .terminal-card-image {
+    transform: scale(1.05);
+}
+
+.terminal-card-image-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.terminal-card-image-wrapper::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60%;
+    background: linear-gradient(transparent, var(--fids-bg-board));
+    pointer-events: none;
+}
+
+.terminal-card-body {
+    padding: 25px 28px 30px;
+    position: relative;
+}
+
+.terminal-card-number {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 4rem;
+    font-weight: 800;
+    color: rgba(255, 193, 7, 0.08);
+    position: absolute;
+    top: -25px;
+    right: 20px;
+    line-height: 1;
+    pointer-events: none;
+}
+
+.terminal-card-name {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text-white);
+    margin-bottom: 6px;
+}
+
+.terminal-card-desc {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+    line-height: 1.5;
+}
+
+.terminal-card-stats {
+    display: flex;
+    gap: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--fids-border);
+}
+
+.terminal-stat {
+    text-align: center;
+    flex: 1;
+}
+
+.terminal-stat-value {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--fids-amber);
+    display: block;
+}
+
+.terminal-stat-label {
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.terminal-card-enter {
+    position: absolute;
+    bottom: 28px;
+    right: 28px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 193, 7, 0.1);
+    border: 1px solid var(--fids-amber);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--fids-amber);
+    transition: var(--transition-fids);
+}
+
+.terminal-card:hover .terminal-card-enter {
+    background: var(--fids-amber);
+    color: var(--fids-bg-darkest);
+    box-shadow: 0 0 20px var(--fids-amber-glow);
+}
+
+/* Live Flights counter on dashboard */
+.dashboard-live-counter {
+    background: var(--fids-bg-board);
+    border: 1px solid var(--fids-border);
+    border-radius: var(--radius-fids);
+    padding: 25px 30px;
+}
+
+.dashboard-stat-number {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--fids-amber);
+    text-shadow: 0 0 15px var(--fids-amber-glow);
+}
+
+/* ============================================
+   FIDS BOARD PAGE (terminal1/2/3.html)
+   ============================================ */
+
+/* Terminal Hero Section */
+.hero-fids-container {
+    position: relative;
+    min-height: 55vh;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(rgba(6, 9, 17, 0.4), rgba(6, 9, 17, 0.85)), url('../images/cgk_terminal_3_header.png') no-repeat center center;
+    background-size: cover;
+    padding-top: 100px;
+    padding-bottom: 90px;
+}
+
+.hero-fids-container.terminal-1-hero {
+    background-image: linear-gradient(rgba(6, 9, 17, 0.4), rgba(6, 9, 17, 0.85)), url('../images/cgk_terminal_1_header.png');
+}
+
+.hero-fids-container.terminal-2-hero {
+    background-image: linear-gradient(rgba(6, 9, 17, 0.4), rgba(6, 9, 17, 0.85)), url('../images/cgk_terminal_2_header.png');
+}
+
+.hero-fids-container.terminal-3-hero {
+    background-image: linear-gradient(rgba(6, 9, 17, 0.4), rgba(6, 9, 17, 0.85)), url('../images/cgk_terminal_3_header.png');
+}
+
+.hero-fids-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-fids-title {
+    font-size: 3.2rem;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -1px;
+}
+
+.hero-fids-subtitle {
+    color: var(--fids-amber);
+    font-size: 0.95rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.live-pulse {
+    width: 8px;
+    height: 8px;
+    background-color: var(--fids-red);
+    border-radius: 50%;
+    display: inline-block;
+    animation: livePulseAni 1.2s infinite alternate;
+}
+
+@keyframes livePulseAni {
+    0% { transform: scale(0.8); opacity: 0.5; box-shadow: 0 0 0 rgba(255, 23, 68, 0.2); }
+    100% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 10px rgba(255, 23, 68, 0.8); }
+}
+
+/* Terminal quick nav breadcrumb */
+.terminal-breadcrumb {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    background: rgba(255, 193, 7, 0.08);
+    border: 1px solid rgba(255, 193, 7, 0.2);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+}
+
+.terminal-breadcrumb a {
+    color: var(--fids-amber);
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition-fids);
+}
+
+.terminal-breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.terminal-breadcrumb .separator {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+/* FIDS Controls Dashboard */
+.fids-dashboard-container {
+    background-color: var(--fids-bg-board);
+    border: 1px solid var(--fids-border);
+    border-radius: var(--radius-fids);
+    padding: 30px;
+    margin-top: -60px;
+    position: relative;
+    z-index: 10;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Custom Search & Filters inside FIDS Board */
+.fids-search-control {
+    background: var(--fids-bg-darkest);
+    border: 1px solid var(--fids-border);
+    color: var(--text-white) !important;
+    border-radius: var(--radius-fids);
+    padding: 12px 18px;
+    font-size: 0.9rem;
+    transition: var(--transition-fids);
+}
+
+.fids-search-control:focus {
+    border-color: var(--fids-amber);
+    box-shadow: 0 0 10px var(--fids-amber-glow);
+    outline: none;
+}
+
+/* Tabs style for departures/arrivals */
+.fids-tabs {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-fids-tab {
+    background: var(--fids-bg-darkest);
+    border: 1px solid var(--fids-border);
+    color: var(--text-muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+    padding: 12px 28px;
+    border-radius: var(--radius-fids);
+    transition: var(--transition-fids);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.btn-fids-tab.active {
+    border-color: var(--fids-amber);
+    color: var(--fids-amber);
+    background: var(--fids-bg-row);
+    box-shadow: 0 0 12px var(--fids-amber-glow);
+}
+
+.btn-fids-tab:hover:not(.active) {
+    color: var(--text-white);
+    border-color: var(--text-muted);
+}
+
+/* FIDS LED Board Table styling */
+.fids-board-header {
+    background-color: var(--fids-bg-darkest);
+    border-bottom: 2px solid var(--fids-border);
+    padding: 14px 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+}
+
+.fids-board-row {
+    background-color: var(--fids-bg-row);
+    border-bottom: 1px solid var(--fids-border);
+    padding: 18px 20px;
+    transition: var(--transition-fids);
+    cursor: pointer;
+}
+
+.fids-board-row:hover {
+    background-color: var(--fids-bg-row-hover);
+    transform: translateX(4px);
+    border-left: 3px solid var(--fids-amber);
+}
+
+/* FIDS Fonts and Colors */
+.fids-time {
+    color: var(--text-white);
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+.fids-flight {
+    color: var(--fids-amber);
+    font-size: 1.15rem;
+    font-weight: 700;
+    text-shadow: 0 0 4px var(--fids-amber-glow);
+}
+
+.fids-airline-logo {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    margin-right: 10px;
+}
+
+.fids-destination, .fids-airline {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.fids-gate, .fids-counter, .fids-baggage {
+    color: var(--fids-amber);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* Status colors map */
+.status-scheduled { color: var(--text-white); }
+.status-checkin { color: var(--fids-blue); }
+.status-boarding { color: var(--fids-blue); font-weight: 700; }
+.status-departed { color: var(--fids-grey); }
+.status-delayed { color: var(--fids-red); font-weight: 700; }
+.status-landed { color: var(--fids-green); }
+.status-cancelled { color: var(--fids-red); text-decoration: line-through; opacity: 0.7; }
+
+/* Interactive Flight Info Modal */
+.fids-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(6, 9, 17, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition-fids);
+}
+
+.fids-modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.fids-modal-content {
+    background-color: var(--fids-bg-board);
+    border: 1px solid var(--fids-amber);
+    border-radius: var(--radius-fids);
+    width: 100%;
+    max-width: 600px;
+    padding: 35px;
+    box-shadow: 0 10px 40px rgba(255, 193, 7, 0.15);
+    position: relative;
+    transform: scale(0.9);
+    transition: var(--transition-fids);
+}
+
+.fids-modal.show .fids-modal-content {
+    transform: scale(1);
+}
+
+.fids-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: var(--transition-fids);
+}
+
+.fids-modal-close:hover {
+    color: var(--fids-amber);
+}
+
+/* Flight Details Tracker inside modal */
+.modal-tracker-timeline {
+    position: relative;
+    padding: 20px 0 40px;
+    margin: 25px 0;
+}
+
+.modal-timeline-line {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    position: relative;
+    border-radius: 2px;
+}
+
+.modal-timeline-fill {
+    height: 100%;
+    background: var(--fids-amber);
+    position: absolute;
+    left: 0;
+    border-radius: 2px;
+}
+
+.modal-timeline-node {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--fids-bg-board);
+    border: 2px solid var(--text-muted);
+    position: absolute;
+    top: -5px;
+    transform: translateX(-50%);
+    z-index: 5;
+}
+
+.modal-timeline-node.active {
+    border-color: var(--fids-amber);
+    background-color: var(--fids-amber);
+    box-shadow: 0 0 10px var(--fids-amber);
+}
+
+.modal-timeline-label {
+    position: absolute;
+    top: 22px;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.modal-timeline-node.active + .modal-timeline-label {
+    color: var(--fids-amber);
+}
+
+.modal-timeline-plane {
+    position: absolute;
+    top: -10px;
+    transform: translateX(-50%) rotate(90deg);
+    color: var(--fids-amber);
+    font-size: 1.1rem;
+    text-shadow: 0 0 8px var(--fids-amber);
+}
+
+/* Airline Info Page styles */
+.airline-card-modern {
+    background-color: var(--fids-bg-row);
+    border: 1px solid var(--fids-border);
+    border-radius: var(--radius-fids);
+    padding: 25px;
+    transition: var(--transition-fids);
+}
+
+.airline-card-modern:hover {
+    border-color: var(--fids-amber);
+    background-color: var(--fids-bg-row-hover);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 15px var(--fids-amber-glow);
+}
+
+.airline-card-modern:hover .brand-font {
+    color: var(--fids-amber) !important;
+}
+
+/* Modern Page Banner (for airlines page etc) */
+.modern-page-banner {
+    padding-top: 120px;
+    padding-bottom: 30px;
+    background: linear-gradient(135deg, var(--fids-bg-darkest) 0%, var(--fids-bg-board) 100%);
+    border-bottom: 1px solid var(--fids-border);
+}
+
+/* Badge styles */
+.badge-tracker {
+    font-family: 'Roboto Mono', monospace;
+    font-weight: 700;
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+}
+
+.badge-status-inflight {
+    background: rgba(255, 193, 7, 0.15);
+    color: var(--fids-amber);
+    border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.badge-status-transit {
+    background: rgba(0, 229, 255, 0.1);
+    color: var(--fids-blue);
+    border: 1px solid rgba(0, 229, 255, 0.25);
+}
+
+/* Button Styles */
+.btn-modern-outline {
+    background: transparent;
+    border: 1px solid var(--fids-amber);
+    color: var(--fids-amber);
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    border-radius: var(--radius-fids);
+    transition: var(--transition-fids);
+    cursor: pointer;
+}
+
+.btn-modern-outline:hover {
+    background: var(--fids-amber);
+    color: var(--fids-bg-darkest);
+}
+
+/* Footer Section */
+.footer-fids {
+    background-color: var(--fids-bg-darkest);
+    color: var(--text-muted);
+    border-top: 1px solid var(--fids-border);
+    padding: 60px 0 35px;
+    font-size: 0.85rem;
+}
+
+.footer-fids h5 {
+    color: var(--fids-amber);
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+}
+
+.footer-fids-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: var(--transition-fids);
+    display: block;
+    margin-bottom: 8px;
+}
+
+.footer-fids-link:hover {
+    color: var(--fids-amber);
+}
+
+.footer-contact-link {
+    color: var(--text-white) !important;
+    text-decoration: none;
+    transition: var(--transition-fids);
+}
+
+.footer-contact-link:hover {
+    color: var(--fids-amber) !important;
+    text-decoration: underline !important;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 991px) {
+    .dashboard-hero-title {
+        font-size: 2.5rem;
+    }
+    .hero-fids-title {
+        font-size: 2.3rem;
+    }
+    .fids-dashboard-container {
+        margin-top: 20px;
+        padding: 20px;
+    }
+    .fids-board-header {
+        display: none;
+    }
+    .radar-pulse {
+        display: none;
+    }
+    .terminal-card-number {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .dashboard-hero-title {
+        font-size: 2rem;
+    }
+    .terminal-card-stats {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .fids-tabs {
+        flex-direction: column;
+    }
+    .btn-fids-tab {
+        padding: 10px 16px;
+        font-size: 0.75rem;
+    }
+}

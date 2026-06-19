@@ -1,0 +1,11 @@
+{
+  "name": "skyluxe-airlines",
+  "version": "1.0.0",
+  "description": "Premium Flight Schedule and Ticket Booking website",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx -y serve ."
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
