@@ -395,6 +395,71 @@ const AIRPORT_COORDS = {
     'AUH': { name: 'Abu Dhabi (AUH)', lat: 24.433, lon: 54.651 }
 };
 
+// Database Label Negara untuk ditampilkan di Globe 3D
+const COUNTRY_LABELS = [
+    // Asia Tenggara
+    { name: 'INDONESIA', lat: -2.5, lon: 118.0 },
+    { name: 'MALAYSIA', lat: 4.2, lon: 101.9 },
+    { name: 'SINGAPURA', lat: 1.35, lon: 103.8 },
+    { name: 'FILIPINA', lat: 12.9, lon: 121.8 },
+    { name: 'THAILAND', lat: 15.9, lon: 100.5 },
+    { name: 'VIETNAM', lat: 16.0, lon: 108.0 },
+    { name: 'MYANMAR', lat: 19.8, lon: 96.2 },
+    { name: 'KAMBOJA', lat: 12.6, lon: 104.9 },
+    { name: 'LAOS', lat: 18.2, lon: 103.9 },
+    // Asia Timur
+    { name: 'JEPANG', lat: 36.2, lon: 138.3 },
+    { name: 'KOREA SELATAN', lat: 35.9, lon: 127.8 },
+    { name: 'TIONGKOK', lat: 35.9, lon: 104.2 },
+    { name: 'TAIWAN', lat: 23.7, lon: 121.0 },
+    { name: 'MONGOLIA', lat: 46.9, lon: 103.8 },
+    // Asia Selatan
+    { name: 'INDIA', lat: 20.6, lon: 79.0 },
+    { name: 'SRI LANKA', lat: 7.9, lon: 80.8 },
+    { name: 'BANGLADESH', lat: 23.7, lon: 90.4 },
+    { name: 'NEPAL', lat: 28.4, lon: 84.1 },
+    { name: 'PAKISTAN', lat: 30.4, lon: 69.3 },
+    // Timur Tengah
+    { name: 'ARAB SAUDI', lat: 23.9, lon: 45.1 },
+    { name: 'UNI EMIRAT ARAB', lat: 23.4, lon: 53.8 },
+    { name: 'QATAR', lat: 25.4, lon: 51.2 },
+    { name: 'TURKI', lat: 39.0, lon: 35.2 },
+    { name: 'IRAN', lat: 32.4, lon: 53.7 },
+    { name: 'IRAK', lat: 33.2, lon: 43.7 },
+    // Eropa
+    { name: 'BELANDA', lat: 52.1, lon: 5.3 },
+    { name: 'JERMAN', lat: 51.2, lon: 10.5 },
+    { name: 'PRANCIS', lat: 46.2, lon: 2.2 },
+    { name: 'INGGRIS', lat: 55.4, lon: -3.4 },
+    { name: 'ITALIA', lat: 42.5, lon: 12.6 },
+    { name: 'SPANYOL', lat: 40.5, lon: -3.7 },
+    { name: 'RUSIA', lat: 61.5, lon: 105.3 },
+    { name: 'SWEDIA', lat: 60.1, lon: 18.6 },
+    { name: 'NORWEGIA', lat: 60.5, lon: 8.5 },
+    { name: 'POLANDIA', lat: 52.0, lon: 19.1 },
+    { name: 'UKRAINA', lat: 48.4, lon: 31.2 },
+    // Afrika
+    { name: 'MESIR', lat: 26.8, lon: 30.8 },
+    { name: 'AFRIKA SELATAN', lat: -30.6, lon: 22.9 },
+    { name: 'NIGERIA', lat: 9.1, lon: 8.7 },
+    { name: 'KENYA', lat: -0.02, lon: 37.9 },
+    { name: 'ETHIOPIA', lat: 9.1, lon: 40.5 },
+    { name: 'MAROKO', lat: 31.8, lon: -7.1 },
+    // Oseania
+    { name: 'AUSTRALIA', lat: -25.3, lon: 133.8 },
+    { name: 'SELANDIA BARU', lat: -40.9, lon: 174.9 },
+    { name: 'PAPUA NUGINI', lat: -6.3, lon: 147.2 },
+    // Amerika
+    { name: 'AMERIKA SERIKAT', lat: 37.1, lon: -95.7 },
+    { name: 'KANADA', lat: 56.1, lon: -106.3 },
+    { name: 'MEKSIKO', lat: 23.6, lon: -102.6 },
+    { name: 'BRASIL', lat: -14.2, lon: -51.9 },
+    { name: 'ARGENTINA', lat: -38.4, lon: -63.6 },
+    { name: 'KOLOMBIA', lat: 4.6, lon: -74.3 },
+    { name: 'CHILE', lat: -35.7, lon: -71.5 },
+    { name: 'PERU', lat: -9.2, lon: -75.0 },
+];
+
 // Data Batas Benua (Longitude, Latitude) yang disederhanakan untuk Visualisasi 3D Globe
 const LAND_POLYGONS = [
     // Eurasia (Europe + Asia)
@@ -734,8 +799,8 @@ function startFlightMapAnimation(flight) {
         const dx = e.clientX - startX;
         const dy = e.clientY - startY;
         
-        rotY = dragRotY + dx * 0.0075;
-        rotX = dragRotX - dy * 0.0075;
+        rotY = dragRotY - dx * 0.0075;
+        rotX = dragRotX + dy * 0.0075;
         
         // Batasi sudut kemiringan vertikal (lat) agar tidak terbalik
         rotX = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, rotX));
@@ -760,8 +825,8 @@ function startFlightMapAnimation(flight) {
         const dx = e.touches[0].clientX - startX;
         const dy = e.touches[0].clientY - startY;
         
-        rotY = dragRotY + dx * 0.0075;
-        rotX = dragRotX - dy * 0.0075;
+        rotY = dragRotY - dx * 0.0075;
+        rotX = dragRotX + dy * 0.0075;
         rotX = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, rotX));
     };
     
@@ -981,6 +1046,39 @@ function startFlightMapAnimation(flight) {
             ctx.restore();
             ctx.shadowBlur = 0; // reset shadow
         }
+        
+        // 7.5 Label Nama Negara pada permukaan 3D Globe
+        const isFullscreen = document.querySelector('.flight-map-wrapper')?.classList.contains('fullscreen-map');
+        const labelFontSize = isFullscreen ? 9 : 7;
+        const maxLabels = isFullscreen ? COUNTRY_LABELS.length : 25;
+        let labelCount = 0;
+        
+        ctx.font = `bold ${labelFontSize}px monospace`;
+        ctx.textAlign = 'center';
+        
+        for (let i = 0; i < COUNTRY_LABELS.length && labelCount < maxLabels; i++) {
+            const country = COUNTRY_LABELS[i];
+            const ptC = project3D(country.lon, country.lat, cx, cy, R, rotX, rotY);
+            
+            if (!ptC.visible) continue;
+            
+            // Hanya tampilkan jika ada di dalam lingkaran bola (bukan di tepi)
+            const distFromCenter = Math.sqrt((ptC.x - cx) * (ptC.x - cx) + (ptC.y - cy) * (ptC.y - cy));
+            if (distFromCenter > R * 0.92) continue;
+            
+            // Titik penanda kecil
+            ctx.fillStyle = 'rgba(56, 189, 248, 0.7)';
+            ctx.beginPath();
+            ctx.arc(ptC.x, ptC.y, 1.5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Teks nama negara
+            ctx.fillStyle = 'rgba(200, 230, 255, 0.65)';
+            ctx.fillText(country.name, ptC.x, ptC.y - 5);
+            labelCount++;
+        }
+        
+        ctx.textAlign = 'start'; // Reset text alignment
         
         // 8. Tampilan HUD Dashboard Telemetry di Kanan Atas
         ctx.fillStyle = 'rgba(5, 7, 13, 0.8)';
