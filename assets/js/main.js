@@ -117,6 +117,8 @@ const TERMINAL_MAP = {
 let activeTab = 'departure';
 let currentTerminal = null;
 let FLIGHT_DATABASE = [];
+let mapAnimationId = null;
+let worldLandGeoJSON = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Fadeout Loader
@@ -144,6 +146,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 5. Dashboard live stats
     updateDashboardStats();
+
+    // 6. Ambil data peta bumi riil (Natural Earth GeoJSON)
+    fetch('https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_land.geojson')
+        .then(res => {
+            if (!res.ok) throw new Error("Gagal mengambil data peta");
+            return res.json();
+        })
+        .then(data => {
+            worldLandGeoJSON = data;
+        })
+        .catch(err => {
+            console.warn("Koneksi offline atau lambat, menggunakan fallback benua lokal:", err);
+        });
 });
 
 /**
@@ -169,8 +184,10 @@ function initFIDSBoard() {
 
     // Modal close listeners
     const modal = document.getElementById('fids-detail-modal');
-    const closeBtn = modal?.querySelector('.fids-modal-close');
-    closeBtn?.addEventListener('click', () => closeModal());
+    const closeBtns = modal?.querySelectorAll('.fids-modal-close');
+    closeBtns?.forEach(btn => {
+        btn.addEventListener('click', () => closeModal());
+    });
     
     // Close modal if clicked outside
     window.addEventListener('click', (e) => {
@@ -343,6 +360,693 @@ function renderFIDS() {
 /**
  * Open FIDS Info Modal
  */
+// Database Koordinat Bandara (Latitude, Longitude)
+const AIRPORT_COORDS = {
+    'CGK': { name: 'Jakarta (CGK)', lat: -6.126, lon: 106.656 },
+    // Domestik
+    'SUB': { name: 'Surabaya (SUB)', lat: -7.380, lon: 112.787 },
+    'JOG': { name: 'Yogyakarta (JOG)', lat: -7.788, lon: 110.432 },
+    'DPS': { name: 'Bali (DPS)', lat: -8.748, lon: 115.168 },
+    'SRG': { name: 'Semarang (SRG)', lat: -6.973, lon: 110.375 },
+    'UPG': { name: 'Makassar (UPG)', lat: -5.061, lon: 119.554 },
+    'PLM': { name: 'Palembang (PLM)', lat: -2.900, lon: 104.701 },
+    'BDJ': { name: 'Banjarmasin (BDJ)', lat: -3.442, lon: 114.761 },
+    'BPN': { name: 'Balikpapan (BPN)', lat: -1.268, lon: 116.894 },
+    'KNO': { name: 'Medan (KNO)', lat: 3.642, lon: 98.880 },
+    'PNK': { name: 'Pontianak (PNK)', lat: -0.150, lon: 109.404 },
+    'SOC': { name: 'Solo (SOC)', lat: -7.514, lon: 110.756 },
+    'MDC': { name: 'Manado (MDC)', lat: 1.549, lon: 124.926 },
+    'KOE': { name: 'Kupang (KOE)', lat: -10.172, lon: 123.670 },
+    // Internasional
+    'KUL': { name: 'Kuala Lumpur (KUL)', lat: 2.745, lon: 101.710 },
+    'MEL': { name: 'Melbourne (MEL)', lat: -37.669, lon: 144.843 },
+    'SIN': { name: 'Singapore (SIN)', lat: 1.364, lon: 103.994 },
+    'MNL': { name: 'Manila (MNL)', lat: 14.509, lon: 121.020 },
+    'DMK': { name: 'Bangkok (DMK)', lat: 13.913, lon: 100.608 },
+    'JED': { name: 'Jeddah (JED)', lat: 21.680, lon: 39.157 },
+    'SGN': { name: 'Ho Chi Minh (SGN)', lat: 10.822, lon: 106.660 },
+    'TPE': { name: 'Taipei (TPE)', lat: 25.080, lon: 121.233 },
+    'DXB': { name: 'Dubai (DXB)', lat: 25.253, lon: 55.364 },
+    'DOH': { name: 'Doha (DOH)', lat: 25.261, lon: 51.565 },
+    'HND': { name: 'Tokyo Haneda (HND)', lat: 35.549, lon: 139.780 },
+    'NRT': { name: 'Tokyo Narita (NRT)', lat: 35.772, lon: 140.393 },
+    'ICN': { name: 'Seoul Incheon (ICN)', lat: 37.460, lon: 126.440 },
+    'AMS': { name: 'Amsterdam (AMS)', lat: 52.308, lon: 4.764 },
+    'AUH': { name: 'Abu Dhabi (AUH)', lat: 24.433, lon: 54.651 }
+};
+
+// Data Batas Benua (Longitude, Latitude) yang disederhanakan untuk Visualisasi 3D Globe
+const LAND_POLYGONS = [
+    // Eurasia (Europe + Asia)
+    [ [10,70],[30,75],[60,75],[90,75],[120,75],[150,70],[170,60],[140,40],[120,30],[100,10],[105,-5],[95,5],[75,10],[35,15],[30,30],[26,40],[5,60],[10,70] ],
+    // Indonesia / Sumatra
+    [ [95,5],[105,-5],[102,-6],[95,2],[95,5] ],
+    // Java
+    [ [105,-6],[115,-8],[114,-8.5],[105,-7.5],[105,-6] ],
+    // Borneo
+    [ [109,4],[118,4],[118,-4],[109,-4],[109,4] ],
+    // Sulawesi
+    [ [120,2],[125,2],[125,-5],[120,-5],[120,2] ],
+    // New Guinea
+    [ [130,-2],[141,-8],[130,-8],[130,-2] ],
+    // Filipina
+    [ [120,15],[125,15],[125,10],[120,10],[120,15] ],
+    // Jepang
+    [ [130,32],[140,38],[142,40],[140,32],[130,32] ],
+    // Korea
+    [ [125,38],[129,38],[129,34],[125,34],[125,38] ],
+    // Indochina
+    [ [100,20],[109,20],[109,10],[105,8],[100,15],[100,20] ],
+    // India
+    [ [70,20],[88,20],[80,8],[70,20] ],
+    // Arab
+    [ [35,30],[50,30],[60,25],[60,15],[45,12],[35,20],[35,30] ],
+    // Australia
+    [ [113,-22],[130,-12],[142,-10],[153,-25],[148,-38],[115,-35],[113,-22] ],
+    // Afrika
+    [ [15,35],[32,30],[43,10],[20,-34],[12,-15],[10,5],[-15,15],[-10,32],[15,35] ],
+    // Amerika Utara
+    [ [-160,70],[-60,70],[-50,50],[-80,25],[-90,15],[-105,20],[-115,30],[-140,60],[-160,70] ],
+    // Amerika Selatan
+    [ [-72,12],[-35,-5],[-70,-53],[-73,-40],[-70,-20],[-80,0],[-72,12] ]
+];
+
+// Ekstrak kode bandara dari nama rute (misal: "Surabaya (SUB)" -> "SUB")
+function getAirportCode(str) {
+    if (!str) return 'CGK';
+    const match = str.match(/\(([^)]+)\)/);
+    return match ? match[1] : str;
+}
+
+// Proyeksi 3D Orthographic dari Koordinat Bola (Lon, Lat) ke Layar Canvas 2D
+function project3D(lon, lat, centerX, centerY, R, rotX, rotY) {
+    const phi = lat * Math.PI / 180;
+    const lambda = lon * Math.PI / 180;
+    
+    // Cartesian koordinat pada unit bola
+    const x0 = Math.cos(phi) * Math.sin(lambda);
+    const y0 = Math.sin(phi);
+    const z0 = Math.cos(phi) * Math.cos(lambda);
+    
+    // Rotasi Y (spining longitude)
+    const x1 = x0 * Math.cos(rotY) - z0 * Math.sin(rotY);
+    const y1 = y0;
+    const z1 = x0 * Math.sin(rotY) + z0 * Math.cos(rotY);
+    
+    // Rotasi X (tilting latitude)
+    const x2 = x1;
+    const y2 = y1 * Math.cos(rotX) - z1 * Math.sin(rotX);
+    const z2 = y1 * Math.sin(rotX) + z1 * Math.cos(rotX);
+    
+    return {
+        x: centerX + R * x2,
+        y: centerY - R * y2,
+        visible: z2 > 0 // bagian belahan bumi depan (front hemisphere)
+    };
+}
+
+// Proyeksi 3D dari titik unit yang sudah memiliki ketinggian di atas bola bumi
+function project3DPoint(pt3D, centerX, centerY, R, rotX, rotY) {
+    // Rotasi Y (spining longitude)
+    const x1 = pt3D.x0 * Math.cos(rotY) - pt3D.z0 * Math.sin(rotY);
+    const y1 = pt3D.y0;
+    const z1 = pt3D.x0 * Math.sin(rotY) + pt3D.z0 * Math.cos(rotY);
+    
+    // Rotasi X (tilting latitude)
+    const x2 = x1;
+    const y2 = y1 * Math.cos(rotX) - z1 * Math.sin(rotX);
+    const z2 = y1 * Math.sin(rotX) + z1 * Math.cos(rotX);
+    
+    return {
+        x: centerX + R * x2,
+        y: centerY - R * y2,
+        visible: z2 > 0
+    };
+}
+
+// Menghitung titik 3D lengkungan di atas bola bumi (rute lengkung 3D)
+function getArcPoint3D(origin, dest, t, heightFactor = 0.12) {
+    const phi1 = origin.lat * Math.PI / 180;
+    const lam1 = origin.lon * Math.PI / 180;
+    const phi2 = dest.lat * Math.PI / 180;
+    const lam2 = dest.lon * Math.PI / 180;
+    
+    // Titik 3D Asal
+    const x0 = Math.cos(phi1) * Math.sin(lam1);
+    const y0 = Math.sin(phi1);
+    const z0 = Math.cos(phi1) * Math.cos(lam1);
+    
+    // Titik 3D Tujuan
+    const x2 = Math.cos(phi2) * Math.sin(lam2);
+    const y2 = Math.sin(phi2);
+    const z2 = Math.cos(phi2) * Math.cos(lam2);
+    
+    // Interpolasi linier dan normalisasi (NLERP)
+    let x = x0 * (1 - t) + x2 * t;
+    let y = y0 * (1 - t) + y2 * t;
+    let z = z0 * (1 - t) + z2 * t;
+    const len = Math.sqrt(x*x + y*y + z*z);
+    x /= len;
+    y /= len;
+    z /= len;
+    
+    // Kalikan dengan ketinggian rute udara
+    const altitude = 1 + heightFactor * Math.sin(t * Math.PI);
+    return {
+        x0: x * altitude,
+        y0: y * altitude,
+        z0: z * altitude
+    };
+}
+
+// Menggambar daratan bumi riil (dari GeoJSON) atau fallback benua lokal
+function drawRealEarth(ctx, cx, cy, R, rotX, rotY) {
+    if (!worldLandGeoJSON) {
+        // Fallback benua lokal jika GeoJSON belum termuat atau offline
+        ctx.strokeStyle = 'rgba(56, 189, 248, 0.45)';
+        ctx.lineWidth = 1;
+        ctx.fillStyle = 'rgba(56, 189, 248, 0.05)';
+        LAND_POLYGONS.forEach(poly => {
+            ctx.beginPath();
+            let first = true;
+            let count = 0;
+            for (let i = 0; i < poly.length; i++) {
+                const pt = project3D(poly[i][0], poly[i][1], cx, cy, R, rotX, rotY);
+                if (pt.visible) {
+                    if (first) ctx.moveTo(pt.x, pt.y);
+                    else ctx.lineTo(pt.x, pt.y);
+                    first = false;
+                    count++;
+                } else {
+                    first = true;
+                }
+            }
+            if (count > 1) {
+                ctx.stroke();
+                ctx.fill();
+            }
+        });
+        return;
+    }
+
+    // Gambar benua dari data GeoJSON bumi asli
+    ctx.strokeStyle = 'rgba(56, 189, 248, 0.45)'; // cyan stroke
+    ctx.lineWidth = 0.8;
+    ctx.fillStyle = 'rgba(56, 189, 248, 0.04)';  // transparent cyan fill
+
+    worldLandGeoJSON.features.forEach(feature => {
+        const geom = feature.geometry;
+        if (geom.type === 'Polygon') {
+            drawPolygon3D(ctx, geom.coordinates, cx, cy, R, rotX, rotY);
+        } else if (geom.type === 'MultiPolygon') {
+            geom.coordinates.forEach(polyCoords => {
+                drawPolygon3D(ctx, polyCoords, cx, cy, R, rotX, rotY);
+            });
+        }
+    });
+}
+
+// Helper untuk menggambar ring polygon 3D
+function drawPolygon3D(ctx, coordinates, cx, cy, R, rotX, rotY) {
+    const outerRing = coordinates[0];
+    ctx.beginPath();
+    let first = true;
+    let drawCount = 0;
+    
+    for (let i = 0; i < outerRing.length; i++) {
+        const lon = outerRing[i][0];
+        const lat = outerRing[i][1];
+        
+        const pt = project3D(lon, lat, cx, cy, R, rotX, rotY);
+        if (pt.visible) {
+            if (first) {
+                ctx.moveTo(pt.x, pt.y);
+            } else {
+                ctx.lineTo(pt.x, pt.y);
+            }
+            first = false;
+            drawCount++;
+        } else {
+            first = true; // Potong segment jika garis memutar ke belahan bumi belakang
+        }
+    }
+    if (drawCount > 1) {
+        ctx.stroke();
+        ctx.fill();
+    }
+}
+
+// Fungsi Zoom / Fullscreen untuk Peta Penerbangan (Memindahkan DOM untuk menghindari bug transform modal)
+function toggleFullscreenMap() {
+    const wrapper = document.querySelector('.flight-map-wrapper');
+    if (!wrapper) return;
+    
+    const btn = wrapper.querySelector('.btn-map-zoom');
+    let backdrop = document.getElementById('map-backdrop');
+    
+    if (wrapper.classList.contains('fullscreen-map')) {
+        // KELUAR FULLSCREEN
+        wrapper.classList.remove('fullscreen-map');
+        
+        // Kembalikan peta ke posisinya semula di dalam modal tracker
+        const placeholder = document.getElementById('map-placeholder');
+        if (placeholder && placeholder.parentNode) {
+            placeholder.parentNode.insertBefore(wrapper, placeholder);
+            placeholder.remove();
+        }
+        
+        if (backdrop) {
+            backdrop.classList.remove('show');
+        }
+        if (btn) btn.innerHTML = '<i class="fa-solid fa-expand"></i> Zoom';
+    } else {
+        // MASUK FULLSCREEN
+        // Buat placeholder di modal agar tahu posisi kembalinya peta nanti
+        const placeholder = document.createElement('div');
+        placeholder.id = 'map-placeholder';
+        wrapper.parentNode.insertBefore(placeholder, wrapper);
+        
+        // Pindahkan peta ke body agar lepas dari stacking context dan transform modal
+        document.body.appendChild(wrapper);
+        wrapper.classList.add('fullscreen-map');
+        
+        // Tampilkan backdrop blur gelap di body
+        if (!backdrop) {
+            backdrop = document.createElement('div');
+            backdrop.id = 'map-backdrop';
+            backdrop.className = 'map-fullscreen-backdrop';
+            document.body.appendChild(backdrop);
+            backdrop.addEventListener('click', () => toggleFullscreenMap());
+        }
+        backdrop.classList.add('show');
+        
+        if (btn) btn.innerHTML = '<i class="fa-solid fa-compress"></i> Close';
+    }
+    
+    // Sesuaikan resolusi internal canvas dengan ukuran tampilannya secara instan
+    setTimeout(() => {
+        const canvas = document.getElementById('flight-map-canvas');
+        if (canvas) {
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
+        }
+    }, 50);
+}
+
+// Visualisasi Interaktif 3D Globe Penerbangan
+function startFlightMapAnimation(flight) {
+    stopFlightMapAnimation();
+    
+    const canvas = document.getElementById('flight-map-canvas');
+    if (!canvas) return;
+    
+    // Atur resolusi awal canvas agar pas dengan wadahnya
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+    
+    const ctx = canvas.getContext('2d');
+    
+    // Parse Rute
+    const orgCode = flight.type === 'departure' ? 'CGK' : getAirportCode(flight.origin);
+    const destCode = flight.type === 'departure' ? getAirportCode(flight.destination) : 'CGK';
+    
+    const origin = AIRPORT_COORDS[orgCode] || { name: flight.origin || 'Jakarta', lat: -6.126, lon: 106.656 };
+    const destination = AIRPORT_COORDS[destCode] || { name: flight.destination || 'Jakarta', lat: -6.126, lon: 106.656 };
+    
+    // Status Telemetri
+    const isStationary = ['Cancelled', 'Scheduled', 'Check-in'].includes(flight.status);
+    const isLanded = ['Landed', 'Baggage Claim'].includes(flight.status);
+    
+    const targetSpeed = isStationary ? 0 : (isLanded ? 0 : 840);
+    const targetAlt = isStationary ? 0 : (isLanded ? 0 : 36000);
+    const progressPct = flight.progress / 100;
+    
+    // Hitung Heading (Bearing)
+    const dLonRad = (destination.lon - origin.lon) * Math.PI / 180;
+    const lat1Rad = origin.lat * Math.PI / 180;
+    const lat2Rad = destination.lat * Math.PI / 180;
+    const yVal = Math.sin(dLonRad) * Math.cos(lat2Rad);
+    const xVal = Math.cos(lat1Rad) * Math.sin(lat2Rad) - Math.sin(lat1Rad) * Math.cos(lat2Rad) * Math.cos(dLonRad);
+    let bearingDeg = Math.atan2(yVal, xVal) * 180 / Math.PI;
+    bearingDeg = (bearingDeg + 360) % 360;
+    const heading = Math.round(bearingDeg);
+    
+    // Hitung Jarak (Haversine)
+    const R_EARTH = 6371;
+    const dLatRad = (destination.lat - origin.lat) * Math.PI / 180;
+    const aVal = Math.sin(dLatRad / 2) * Math.sin(dLatRad / 2) +
+                 Math.cos(lat1Rad) * Math.cos(lat2Rad) * Math.sin(dLonRad / 2) * Math.sin(dLonRad / 2);
+    const cVal = 2 * Math.atan2(Math.sqrt(aVal), Math.sqrt(1 - aVal));
+    const totalDistance = R_EARTH * cVal;
+    const distanceRemaining = Math.max(0, Math.round(totalDistance * (1 - progressPct)));
+    
+    // Nilai awal efek berhitung HUD
+    let currentSpeed = 0;
+    let currentAlt = 0;
+    let currentDist = totalDistance;
+    let animationFrame = 0;
+    
+    // Tempat penyimpanan rotasi 3D Globe
+    // Set rotasi awal agar otomatis terfokus pada titik tengah rute penerbangan
+    const midLon = (origin.lon + destination.lon) / 2;
+    const midLat = (origin.lat + destination.lat) / 2;
+    
+    let rotY = -midLon * Math.PI / 180;
+    let rotX = midLat * Math.PI / 180;
+    
+    // Mouse / Touch Drag and Drop Interaction
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let dragRotX = 0;
+    let dragRotY = 0;
+    
+    canvas.onmousedown = (e) => {
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        dragRotX = rotX;
+        dragRotY = rotY;
+    };
+    
+    window.onmousemove = (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        
+        rotY = dragRotY + dx * 0.0075;
+        rotX = dragRotX - dy * 0.0075;
+        
+        // Batasi sudut kemiringan vertikal (lat) agar tidak terbalik
+        rotX = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, rotX));
+    };
+    
+    window.onmouseup = () => {
+        isDragging = false;
+    };
+    
+    // Touchscreen gesture drag
+    canvas.ontouchstart = (e) => {
+        if (e.touches.length !== 1) return;
+        isDragging = true;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        dragRotX = rotX;
+        dragRotY = rotY;
+    };
+    
+    window.ontouchmove = (e) => {
+        if (!isDragging || e.touches.length !== 1) return;
+        const dx = e.touches[0].clientX - startX;
+        const dy = e.touches[0].clientY - startY;
+        
+        rotY = dragRotY + dx * 0.0075;
+        rotX = dragRotX - dy * 0.0075;
+        rotX = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, rotX));
+    };
+    
+    window.ontouchend = () => {
+        isDragging = false;
+    };
+    
+    // Loop Render Animasi Globe
+    function drawGlobeLoop() {
+        animationFrame++;
+        
+        // Counter efek mengalir
+        if (currentSpeed < targetSpeed) {
+            currentSpeed = Math.min(targetSpeed, currentSpeed + Math.ceil(targetSpeed / 25));
+        }
+        if (currentAlt < targetAlt) {
+            currentAlt = Math.min(targetAlt, currentAlt + Math.ceil(targetAlt / 25));
+        }
+        if (currentDist > distanceRemaining) {
+            currentDist = Math.max(distanceRemaining, currentDist - (totalDistance - distanceRemaining) / 25);
+        }
+        
+        // 1. Skala Radius dan Posisi Globe dinamis terhadap Canvas
+        const cx = canvas.width / 2;
+        const cy = canvas.height / 2;
+        const R = Math.min(canvas.width, canvas.height) * 0.42;
+        
+        // Background ruang angkasa (Biru Navy Premium)
+        ctx.fillStyle = '#0d172e';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // 2. Lingkaran Dasar Samudera Globe
+        ctx.fillStyle = '#080f21';
+        ctx.beginPath();
+        ctx.arc(cx, cy, R, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Glow tipis pada batas atmosfir
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = 'rgba(0, 240, 255, 0.2)';
+        ctx.strokeStyle = 'rgba(0, 240, 255, 0.3)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(cx, cy, R, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.shadowBlur = 0; // reset shadow
+        
+        // 3. Grid Lintang & Bujur Globe (Latitude & Longitude Lines)
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+        ctx.lineWidth = 0.8;
+        
+        // Lintang (Latitudes)
+        for (let lat = -60; lat <= 60; lat += 30) {
+            ctx.beginPath();
+            let first = true;
+            for (let lon = 0; lon <= 360; lon += 10) {
+                const pt = project3D(lon, lat, cx, cy, R, rotX, rotY);
+                if (pt.visible) {
+                    if (first) ctx.moveTo(pt.x, pt.y);
+                    else ctx.lineTo(pt.x, pt.y);
+                    first = false;
+                } else {
+                    first = true;
+                }
+            }
+            ctx.stroke();
+        }
+        
+        // Bujur (Longitudes)
+        for (let lon = 0; lon < 360; lon += 30) {
+            ctx.beginPath();
+            let first = true;
+            for (let lat = -80; lat <= 80; lat += 5) {
+                const pt = project3D(lon, lat, cx, cy, R, rotX, rotY);
+                if (pt.visible) {
+                    if (first) ctx.moveTo(pt.x, pt.y);
+                    else ctx.lineTo(pt.x, pt.y);
+                    first = false;
+                } else {
+                    first = true;
+                }
+            }
+            ctx.stroke();
+        }
+        
+        // 4. Batas Benua (Landmass Polygons) - Menggunakan data GeoJSON Riil
+        drawRealEarth(ctx, cx, cy, R, rotX, rotY);
+        
+        // 5. Rute Jalur Penerbangan 3D Arc (Lengkung di Atas Bola Bumi)
+        const pathPoints = [];
+        const segments = 40;
+        for (let i = 0; i <= segments; i++) {
+            const t = i / segments;
+            const pt3D = getArcPoint3D(origin, destination, t, 0.15); // ketinggian kelengkungan rute 0.15
+            const pt = project3DPoint(pt3D, cx, cy, R, rotX, rotY);
+            pathPoints.push(pt);
+        }
+        
+        // Glow latar jalur
+        ctx.beginPath();
+        let started = false;
+        for (let i = 0; i < pathPoints.length; i++) {
+            const pt = pathPoints[i];
+            if (pt.visible) {
+                if (!started) ctx.moveTo(pt.x, pt.y);
+                else ctx.lineTo(pt.x, pt.y);
+                started = true;
+            } else {
+                started = false;
+            }
+        }
+        ctx.strokeStyle = 'rgba(255, 193, 7, 0.2)';
+        ctx.lineWidth = 3.5;
+        ctx.stroke();
+        
+        // Garis putus-putus merayap
+        ctx.beginPath();
+        started = false;
+        for (let i = 0; i < pathPoints.length; i++) {
+            const pt = pathPoints[i];
+            if (pt.visible) {
+                if (!started) ctx.moveTo(pt.x, pt.y);
+                else ctx.lineTo(pt.x, pt.y);
+                started = true;
+            } else {
+                started = false;
+            }
+        }
+        ctx.strokeStyle = '#ffc107';
+        ctx.lineWidth = 1.8;
+        ctx.setLineDash([4, 6]);
+        ctx.lineDashOffset = -animationFrame * 0.6;
+        ctx.stroke();
+        ctx.setLineDash([]);
+        
+        // 6. Beacons Bandara (Pulsing ring pada permukaan bumi)
+        const pulse = 1 + Math.sin(animationFrame * 0.08) * 0.35;
+        const ptOrg = project3DPoint(getArcPoint3D(origin, destination, 0, 0), cx, cy, R, rotX, rotY);
+        const ptDst = project3DPoint(getArcPoint3D(origin, destination, 1, 0), cx, cy, R, rotX, rotY);
+        
+        if (ptOrg.visible) {
+            ctx.fillStyle = flight.type === 'departure' ? '#ffc107' : '#0d6efd';
+            ctx.beginPath();
+            ctx.arc(ptOrg.x, ptOrg.y, 4.5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.strokeStyle = flight.type === 'departure' ? 'rgba(255, 193, 7, 0.45)' : 'rgba(13, 110, 253, 0.45)';
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.arc(ptOrg.x, ptOrg.y, 7 * pulse, 0, Math.PI * 2);
+            ctx.stroke();
+            
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 8.5px monospace';
+            ctx.fillText(orgCode, ptOrg.x - 7, ptOrg.y - 10);
+        }
+        
+        if (ptDst.visible) {
+            ctx.fillStyle = flight.type === 'departure' ? '#0d6efd' : '#ffc107';
+            ctx.beginPath();
+            ctx.arc(ptDst.x, ptDst.y, 4.5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.strokeStyle = flight.type === 'departure' ? 'rgba(13, 110, 253, 0.45)' : 'rgba(255, 193, 7, 0.45)';
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.arc(ptDst.x, ptDst.y, 7 * pulse, 0, Math.PI * 2);
+            ctx.stroke();
+            
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 8.5px monospace';
+            ctx.fillText(destCode, ptDst.x - 7, ptDst.y - 10);
+        }
+        
+        // 7. Render Pesawat Terbang 3D sesuai progress
+        const tPlane = progressPct;
+        const ptPlane3D = getArcPoint3D(origin, destination, tPlane, 0.15);
+        const ptPlane = project3DPoint(ptPlane3D, cx, cy, R, rotX, rotY);
+        
+        if (ptPlane.visible) {
+            // Hitung orientasi (kemiringan pesawat terhadap arah rute berikutnya)
+            const tNext = Math.min(1.0, tPlane + 0.01);
+            const ptPlaneNext3D = getArcPoint3D(origin, destination, tNext, 0.15);
+            const ptPlaneNext = project3DPoint(ptPlaneNext3D, cx, cy, R, rotX, rotY);
+            
+            const planeAngle = Math.atan2(ptPlaneNext.y - ptPlane.y, ptPlaneNext.x - ptPlane.x);
+            
+            ctx.save();
+            ctx.translate(ptPlane.x, ptPlane.y);
+            ctx.rotate(planeAngle);
+            
+            // Bayangan pesawat bersinar
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = '#ffc107';
+            ctx.fillStyle = '#ffc107';
+            
+            // Gambar Pesawat
+            ctx.beginPath();
+            ctx.moveTo(9, 0);       // Nose
+            ctx.lineTo(-2, 3);
+            ctx.lineTo(-4, 9.5);    // Wing R
+            ctx.lineTo(-6.5, 9.5);
+            ctx.lineTo(-4.5, 3);
+            ctx.lineTo(-9, 2.2);
+            ctx.lineTo(-11, 5);     // Stab R
+            ctx.lineTo(-12, 5);
+            ctx.lineTo(-10.5, 0);   // Tail
+            ctx.lineTo(-12, -5);
+            ctx.lineTo(-11, -5);    // Stab L
+            ctx.lineTo(-9, -2.2);
+            ctx.lineTo(-4.5, -3);
+            ctx.lineTo(-6.5, -9.5);
+            ctx.lineTo(-4, -9.5);   // Wing L
+            ctx.lineTo(-2, -3);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+            ctx.shadowBlur = 0; // reset shadow
+        }
+        
+        // 8. Tampilan HUD Dashboard Telemetry di Kanan Atas
+        ctx.fillStyle = 'rgba(5, 7, 13, 0.8)';
+        const hudX = canvas.width - 122;
+        const hudY = 10;
+        const hudW = 112;
+        const hudH = 75;
+        ctx.fillRect(hudX, hudY, hudW, hudH);
+        
+        ctx.strokeStyle = 'rgba(255, 193, 7, 0.25)';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(hudX, hudY, hudW, hudH);
+        
+        ctx.fillStyle = '#ffc107';
+        ctx.font = 'bold 7px monospace';
+        ctx.fillText("FLIGHT TELEMETRY", hudX + 8, hudY + 12);
+        
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+        ctx.font = '6.5px monospace';
+        ctx.fillText("SPEED :", hudX + 8, hudY + 25);
+        ctx.fillText("ALT   :", hudX + 8, hudY + 36);
+        ctx.fillText("DIST  :", hudX + 8, hudY + 47);
+        ctx.fillText("HDG   :", hudX + 8, hudY + 58);
+        ctx.fillText("STATUS:", hudX + 8, hudY + 69);
+        
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 7.2px monospace';
+        ctx.fillText(`${currentSpeed} km/h`, hudX + 46, hudY + 25);
+        ctx.fillText(`${currentAlt.toLocaleString()} ft`, hudX + 46, hudY + 36);
+        ctx.fillText(`${Math.round(currentDist)} km`, hudX + 46, hudY + 47);
+        ctx.fillText(`${heading}°`, hudX + 46, hudY + 58);
+        
+        if (flight.status === 'Cancelled') {
+            ctx.fillStyle = '#dc3545';
+        } else if (isLanded) {
+            ctx.fillStyle = '#198754';
+        } else if (flight.status === 'Delayed') {
+            ctx.fillStyle = '#fd7e14';
+        } else {
+            ctx.fillStyle = '#ffc107';
+        }
+        ctx.fillText(flight.status.toUpperCase(), hudX + 46, hudY + 69);
+        
+        // Tampilkan petunjuk putar di kiri bawah
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.font = '7px monospace';
+        ctx.fillText("◀ SERET MOUSE / TOUCH UNTUK MEMUTAR BUMI ▶", 12, canvas.height - 10);
+        
+        // Loop Frame
+        mapAnimationId = requestAnimationFrame(drawGlobeLoop);
+    }
+    
+    drawGlobeLoop();
+}
+
+// Bersihkan interval / requestAnimationFrame animasi map
+function stopFlightMapAnimation() {
+    if (mapAnimationId) {
+        cancelAnimationFrame(mapAnimationId);
+        mapAnimationId = null;
+    }
+}
+
+/**
+ * Open FIDS Info Modal
+ */
 function openModal(flight) {
     const modal = document.getElementById('fids-detail-modal');
     if (!modal) return;
@@ -414,6 +1118,27 @@ function openModal(flight) {
         </div>
     `;
 
+    // Pastikan status zoom di-reset ketika membuka detail penerbangan baru
+    const wrapper = document.querySelector('.flight-map-wrapper');
+    if (wrapper) {
+        wrapper.classList.remove('fullscreen-map');
+        const zoomBtn = wrapper.querySelector('.btn-map-zoom');
+        if (zoomBtn) zoomBtn.innerHTML = '<i class="fa-solid fa-expand"></i> Zoom';
+        
+        // Hapus handler lama dan pasang handler klik zoom baru
+        const newZoomBtn = zoomBtn.cloneNode(true);
+        zoomBtn.parentNode.replaceChild(newZoomBtn, zoomBtn);
+        newZoomBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleFullscreenMap();
+        });
+    }
+
+    // Mulai animasi radar rute map dengan delay tipis agar render canvas pas
+    setTimeout(() => {
+        startFlightMapAnimation(flight);
+    }, 150);
+
     modal.classList.add('show');
 }
 
@@ -423,6 +1148,14 @@ function openModal(flight) {
 function closeModal() {
     const modal = document.getElementById('fids-detail-modal');
     modal?.classList.remove('show');
+    
+    // Tutup mode fullscreen map jika sedang aktif dengan pemindahan DOM yang benar
+    const wrapper = document.querySelector('.flight-map-wrapper');
+    if (wrapper && wrapper.classList.contains('fullscreen-map')) {
+        toggleFullscreenMap();
+    }
+    
+    stopFlightMapAnimation();
 }
 
 /**
