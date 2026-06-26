@@ -339,16 +339,30 @@ function renderFIDS() {
         const row = document.createElement('div');
         row.className = 'fids-board-row';
         row.innerHTML = `
-            <div class="row align-items-center">
+            <div class="row align-items-center g-2 g-md-0">
                 <div class="col-3 col-md-1 font-digital fids-time">${flight.time}</div>
-                <div class="col-3 col-md-2 font-digital fids-flight">${flight.number}</div>
-                <div class="col-6 col-md-3">
-                    <span class="fids-destination d-block text-uppercase">${flight.type === 'departure' ? flight.destination : flight.origin}</span>
-                    <span class="text-muted d-none d-md-inline" style="font-size:0.8rem">${flight.airline}</span>
+                <div class="col-4 col-md-2 font-digital fids-flight text-truncate">${flight.number}</div>
+                <div class="col-5 col-md-3">
+                    <span class="fids-destination d-block text-uppercase text-truncate">${flight.type === 'departure' ? flight.destination : flight.origin}</span>
+                    <span class="text-muted d-none d-md-inline text-truncate" style="font-size:0.8rem">${flight.airline}</span>
                 </div>
-                <div class="col-4 col-md-2 d-none d-md-block">${gateColText}</div>
-                <div class="col-4 col-md-2 font-digital text-center text-md-start text-white-50">${flight.estimatedTime.split(' ')[0]}</div>
-                <div class="col-4 col-md-2 text-end font-digital text-uppercase ${statusClass}">${statusLabelText}</div>
+                
+                <div class="col-6 col-md-2 mt-2 mt-md-0 d-md-block">
+                    <div class="d-md-none text-muted small mb-1 font-monospace" style="font-size:0.65rem">GATE/SABUK</div>
+                    ${gateColText}
+                </div>
+                
+                <div class="col-6 col-md-2 font-digital text-end text-md-start text-white-50 mt-2 mt-md-0">
+                    <div class="d-md-none text-muted small mb-1 font-monospace" style="font-size:0.65rem">ESTIMASI</div>
+                    ${flight.estimatedTime.split(' ')[0]}
+                </div>
+                
+                <div class="col-12 col-md-2 text-end font-digital text-uppercase ${statusClass} mt-2 mt-md-0 d-none d-md-block">${statusLabelText}</div>
+                
+                <!-- Status badge khusus untuk mobile agar rapi -->
+                <div class="col-12 d-md-none mt-2">
+                    <div class="w-100 text-center py-1 font-digital text-uppercase ${statusClass} rounded border border-secondary border-opacity-25" style="background: rgba(0,0,0,0.2);">${statusLabelText}</div>
+                </div>
             </div>
         `;
 
