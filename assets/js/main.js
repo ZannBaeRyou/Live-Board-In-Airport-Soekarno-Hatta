@@ -195,6 +195,47 @@ function initFIDSBoard() {
             closeModal();
         }
     });
+
+    // Swipe-down-to-close gesture for mobile bottom sheet
+    if (modal) {
+        let touchStartY = 0;
+        let touchCurrentY = 0;
+        const modalContent = modal.querySelector('.fids-modal-content');
+        
+        modalContent?.addEventListener('touchstart', (e) => {
+            // Only enable swipe-close if user is at the top of the scrollable content
+            if (modalContent.scrollTop <= 0) {
+                touchStartY = e.touches[0].clientY;
+            } else {
+                touchStartY = 0;
+            }
+        }, { passive: true });
+        
+        modalContent?.addEventListener('touchmove', (e) => {
+            if (touchStartY === 0) return;
+            touchCurrentY = e.touches[0].clientY;
+            const delta = touchCurrentY - touchStartY;
+            
+            // Visual feedback: drag the modal down
+            if (delta > 0 && modalContent.scrollTop <= 0) {
+                modalContent.style.transform = `translateY(${Math.min(delta * 0.4, 120)}px)`;
+                modalContent.style.opacity = Math.max(0.5, 1 - delta / 400);
+            }
+        }, { passive: true });
+        
+        modalContent?.addEventListener('touchend', () => {
+            const delta = touchCurrentY - touchStartY;
+            if (delta > 80) {
+                // Swipe threshold reached — close modal
+                closeModal();
+            }
+            // Reset transform
+            modalContent.style.transform = '';
+            modalContent.style.opacity = '';
+            touchStartY = 0;
+            touchCurrentY = 0;
+        });
+    }
 }
 
 /**

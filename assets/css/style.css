@@ -533,10 +533,11 @@ h1, h2, h3, h4, h5, h6 {
     border: 1px solid var(--fids-border);
     border-left: 3px solid transparent;
     border-radius: var(--radius-fids);
-    margin-bottom: 12px;
+    margin-bottom: 16px;
     padding: 18px 20px;
     transition: var(--transition-fids);
     cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .fids-board-row:hover {
@@ -628,30 +629,21 @@ h1, h2, h3, h4, h5, h6 {
     transform: scale(1);
 }
 
-.fids-modal-content > button.fids-modal-close:first-child {
-    position: absolute;
-    top: -12px;
-    right: -12px;
-    color: #fff;
-    background: #dc3545;
-    border: 2px solid var(--fids-amber);
-    font-size: 1.3rem;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: var(--transition-fids);
-    z-index: 105;
-    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.4);
+/* Drag Handle for mobile bottom sheet swipe indicator */
+.modal-drag-handle {
+    display: none;
 }
 
-.fids-modal-content > button.fids-modal-close:first-child:hover {
-    background: #bb2d3b;
-    color: #fff;
-    transform: scale(1.1);
+@media (max-width: 576px) {
+    .modal-drag-handle {
+        display: block;
+        width: 40px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.25);
+        border-radius: 2px;
+        margin: 0 auto 16px;
+        cursor: grab;
+    }
 }
 
 /* Flight Details Tracker inside modal */
@@ -889,9 +881,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ============================================
-   RESPONSIVE
+   RESPONSIVE — ALL DEVICE SIZES
    ============================================ */
 
+/* === TABLETS & SMALL LAPTOPS (max 991px) === */
 @media (max-width: 991px) {
     .dashboard-hero-title {
         font-size: 2.5rem;
@@ -914,13 +907,74 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
-@media (max-width: 576px) {
+/* === SMALL TABLETS & LARGE PHONES (max 768px) === */
+@media (max-width: 768px) {
+    .dashboard-hero {
+        min-height: 35vh;
+        padding-top: 80px;
+        padding-bottom: 60px;
+    }
+    .hero-fids-container {
+        min-height: 40vh;
+        padding-top: 80px;
+        padding-bottom: 60px;
+    }
     .dashboard-hero-title {
+        font-size: 2.2rem;
+    }
+    .hero-fids-title {
         font-size: 2rem;
+    }
+    .terminal-card-body {
+        padding: 18px 20px 22px;
+    }
+    .terminal-card-name {
+        font-size: 1.3rem;
+    }
+    .footer-fids {
+        padding: 40px 0 25px;
+    }
+    
+    /* Card separation — more gap on tablet */
+    .fids-board-row {
+        margin-bottom: 14px;
+    }
+}
+
+/* === STANDARD PHONES (max 576px) — iPhone 11/12/13/14, Samsung S series, Pixel, etc. === */
+@media (max-width: 576px) {
+    body {
+        font-size: 14px;
+    }
+    .dashboard-hero-title {
+        font-size: 1.8rem;
+    }
+    .hero-fids-title {
+        font-size: 1.6rem;
+    }
+    .hero-fids-subtitle {
+        font-size: 0.75rem;
+        letter-spacing: 2px;
+    }
+    .dashboard-hero-subtitle {
+        font-size: 0.75rem;
+        letter-spacing: 2px;
     }
     .terminal-card-stats {
         flex-direction: column;
         gap: 10px;
+    }
+    .terminal-card-body {
+        padding: 15px 16px 20px;
+    }
+    .terminal-card-name {
+        font-size: 1.2rem;
+    }
+    .terminal-card-desc {
+        font-size: 0.8rem;
+    }
+    .terminal-stat-value {
+        font-size: 1.2rem;
     }
     .fids-tabs {
         flex-direction: column;
@@ -929,34 +983,201 @@ h1, h2, h3, h4, h5, h6 {
         padding: 10px 16px;
         font-size: 0.75rem;
     }
-    
-    /* Optimasi Modal untuk HP dengan Notch/Safe Area */
-    .fids-modal-content {
-        padding: 20px 15px calc(20px + env(safe-area-inset-bottom));
-        margin: calc(15px + env(safe-area-inset-top)) calc(15px + env(safe-area-inset-right)) calc(15px + env(safe-area-inset-bottom)) calc(15px + env(safe-area-inset-left));
-        max-height: calc(100vh - 30px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-        overflow-y: auto;
+    .fids-search-control {
+        padding: 10px 14px;
+        font-size: 0.85rem;
     }
-    .fids-modal-content > button.fids-modal-close:first-child {
-        top: 8px;
-        right: 8px;
-        width: 36px;
-        height: 36px;
-        font-size: 1.1rem;
-        border-width: 1px;
+    .fids-dashboard-container {
+        padding: 15px;
+        margin-top: 15px;
+    }
+    
+    /* Card separation — distinct individual cards on mobile */
+    .fids-board-row {
+        margin-bottom: 16px;
+        padding: 14px 12px;
+        border-radius: 10px;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+    }
+    .fids-time {
+        font-size: 1rem;
+    }
+    .fids-flight {
+        font-size: 0.95rem;
+    }
+    .fids-destination, .fids-airline {
+        font-size: 0.85rem;
+    }
+    .fids-gate, .fids-counter, .fids-baggage {
+        font-size: 0.95rem;
+    }
+    
+    /* Modal optimasi untuk semua HP */
+    .fids-modal {
+        align-items: flex-end;
+    }
+    .fids-modal-content {
+        padding: 24px 18px calc(24px + env(safe-area-inset-bottom));
+        margin: 0;
+        max-width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        border-radius: 16px 16px 0 0;
+        border-bottom: none;
+        -webkit-overflow-scrolling: touch;
+    }
+    .fids-modal.show .fids-modal-content {
+        transform: scale(1);
     }
     .flight-map-wrapper {
         height: 180px !important;
     }
     
-    /* Optimasi Baris Penerbangan untuk HP */
+    /* Footer mobile */
+    .footer-fids {
+        padding: 30px 0 20px;
+        font-size: 0.8rem;
+    }
+    .footer-fids h5 {
+        font-size: 0.85rem;
+    }
+    
+    /* Navbar mobile */
+    .navbar-brand {
+        font-size: 1.1rem;
+    }
+}
+
+/* === SMALL PHONES (max 400px) — iPhone SE, iPhone Mini, Galaxy A series, budget phones === */
+@media (max-width: 400px) {
+    .dashboard-hero-title {
+        font-size: 1.5rem;
+    }
+    .hero-fids-title {
+        font-size: 1.4rem;
+    }
+    .dashboard-hero {
+        padding-top: 70px;
+        padding-bottom: 40px;
+    }
+    .hero-fids-container {
+        padding-top: 70px;
+        padding-bottom: 40px;
+    }
+    .terminal-card-image {
+        height: 150px;
+    }
+    .terminal-card-name {
+        font-size: 1.1rem;
+    }
+    .terminal-card-desc {
+        font-size: 0.75rem;
+        margin-bottom: 10px;
+    }
+    .terminal-card-number {
+        font-size: 2.5rem;
+    }
+    .terminal-card-enter {
+        width: 34px;
+        height: 34px;
+        bottom: 20px;
+        right: 16px;
+    }
+    .dashboard-stat-number {
+        font-size: 2rem;
+    }
+    .dashboard-live-counter {
+        padding: 18px 20px;
+    }
+    
+    /* Even more card separation on small screens */
     .fids-board-row {
+        margin-bottom: 14px;
         padding: 12px 10px;
+        border-radius: 10px;
     }
     .fids-time {
-        font-size: 1.05rem;
+        font-size: 0.9rem;
     }
     .fids-flight {
+        font-size: 0.85rem;
+    }
+    .fids-destination {
+        font-size: 0.8rem;
+    }
+    .fids-gate, .fids-counter, .fids-baggage {
+        font-size: 0.85rem;
+    }
+    
+    .fids-modal-content {
+        padding: 20px 14px calc(20px + env(safe-area-inset-bottom));
+    }
+    .flight-map-wrapper {
+        height: 160px !important;
+    }
+    
+    .btn-fids-tab {
+        padding: 8px 12px;
+        font-size: 0.7rem;
+    }
+    .navbar-brand {
         font-size: 1rem;
+    }
+    .navbar-custom .nav-link {
+        font-size: 0.78rem;
+        padding: 6px 12px !important;
+    }
+}
+
+/* === EXTRA-SMALL PHONES (max 340px) — iPhone SE 1st gen, very small budget phones === */
+@media (max-width: 340px) {
+    .dashboard-hero-title {
+        font-size: 1.3rem;
+    }
+    .hero-fids-title {
+        font-size: 1.2rem;
+    }
+    .terminal-card-body {
+        padding: 12px 14px 16px;
+    }
+    .terminal-card-name {
+        font-size: 1rem;
+    }
+    .fids-board-row {
+        padding: 10px 8px;
+        margin-bottom: 12px;
+    }
+    .fids-time {
+        font-size: 0.85rem;
+    }
+    .fids-flight {
+        font-size: 0.8rem;
+    }
+    .fids-modal-content {
+        padding: 16px 12px calc(16px + env(safe-area-inset-bottom));
+    }
+    .flight-map-wrapper {
+        height: 140px !important;
+    }
+}
+
+/* === LANDSCAPE MOBILE OPTIMIZATION === */
+@media (max-height: 500px) and (orientation: landscape) {
+    .dashboard-hero {
+        min-height: auto;
+        padding-top: 60px;
+        padding-bottom: 30px;
+    }
+    .hero-fids-container {
+        min-height: auto;
+        padding-top: 60px;
+        padding-bottom: 30px;
+    }
+    .fids-modal-content {
+        max-height: 95vh;
+        padding: 15px;
+    }
+    .flight-map-wrapper {
+        height: 150px !important;
     }
 }
