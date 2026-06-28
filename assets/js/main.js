@@ -1105,13 +1105,13 @@ function startFlightMapAnimation(flight) {
         // 7.5 Label Nama Negara pada permukaan 3D Globe
         const isFullscreen = document.querySelector('.flight-map-wrapper')?.classList.contains('fullscreen-map');
         const labelFontSize = isFullscreen ? 9 : 7;
-        const maxLabels = isFullscreen ? COUNTRY_LABELS.length : 25;
+        const maxLabels = COUNTRY_LABELS.length;
         let labelCount = 0;
         
         ctx.font = `bold ${labelFontSize}px monospace`;
         ctx.textAlign = 'center';
         
-        for (let i = 0; i < COUNTRY_LABELS.length && labelCount < maxLabels; i++) {
+        for (let i = 0; i < COUNTRY_LABELS.length; i++) {
             const country = COUNTRY_LABELS[i];
             const ptC = project3D(country.lon, country.lat, cx, cy, R, rotX, rotY);
             
