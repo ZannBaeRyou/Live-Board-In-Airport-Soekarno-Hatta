@@ -385,16 +385,16 @@ function renderFIDS() {
                 <div class="col-4 col-md-2 font-digital fids-flight text-truncate">${flight.number}</div>
                 <div class="col-5 col-md-3">
                     <span class="fids-destination d-block text-uppercase text-truncate">${flight.type === 'departure' ? flight.destination : flight.origin}</span>
-                    <span class="text-muted d-none d-md-inline text-truncate" style="font-size:0.8rem">${flight.airline}</span>
+                    <span class="text-muted d-block d-md-inline text-truncate" style="font-size:0.8rem">${flight.airline}</span>
                 </div>
                 
                 <div class="col-6 col-md-2 mt-2 mt-md-0 d-md-block">
-                    <div class="d-md-none text-muted small mb-1 font-monospace" style="font-size:0.65rem">GATE/SABUK</div>
+                    <div class="d-md-none text-muted small mb-1 font-monospace" style="font-size:0.65rem">${typeof __t !== 'undefined' ? __t('lbl_gate') : 'GATE/SABUK'}</div>
                     ${gateColText}
                 </div>
                 
                 <div class="col-6 col-md-2 font-digital text-end text-md-start text-white-50 mt-2 mt-md-0">
-                    <div class="d-md-none text-muted small mb-1 font-monospace" style="font-size:0.65rem">ESTIMASI</div>
+                    <div class="d-md-none text-muted small mb-1 font-monospace" style="font-size:0.65rem">${typeof __t !== 'undefined' ? __t('lbl_est') : 'ESTIMASI'}</div>
                     ${flight.estimatedTime.split(' ')[0]}
                 </div>
                 
@@ -402,7 +402,10 @@ function renderFIDS() {
                 
                 <!-- Status badge khusus untuk mobile agar rapi -->
                 <div class="col-12 d-md-none mt-2">
-                    <div class="w-100 text-center py-1 font-digital text-uppercase ${statusClass} rounded border border-secondary border-opacity-25" style="background: rgba(0,0,0,0.2);">${statusLabelText}</div>
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1 text-center py-1 font-digital text-uppercase ${statusClass} rounded border border-secondary border-opacity-25" style="background: rgba(0,0,0,0.2);">${statusLabelText}</div>
+                        <div class="ms-3 text-white-50"><i class="fa-solid fa-chevron-right"></i></div>
+                    </div>
                 </div>
             </div>
         `;
@@ -865,29 +868,34 @@ function startFlightMapAnimation(flight) {
         isDragging = false;
     };
     
-    // Touchscreen gesture drag
-    canvas.ontouchstart = (e) => {
+    // Touchscreen gesture drag (dengan preventDefault agar tidak bentrok dengan scroll/swipe modal)
+    canvas.addEventListener('touchstart', (e) => {
         if (e.touches.length !== 1) return;
+        e.stopPropagation();
+        
         isDragging = true;
         startX = e.touches[0].clientX;
         startY = e.touches[0].clientY;
         dragRotX = rotX;
         dragRotY = rotY;
-    };
+    }, { passive: false });
     
-    window.ontouchmove = (e) => {
+    canvas.addEventListener('touchmove', (e) => {
         if (!isDragging || e.touches.length !== 1) return;
+        e.stopPropagation();
+        if (e.cancelable) e.preventDefault(); // Stop scroll browser
+        
         const dx = e.touches[0].clientX - startX;
         const dy = e.touches[0].clientY - startY;
         
         rotY = dragRotY - dx * 0.0075;
         rotX = dragRotX + dy * 0.0075;
         rotX = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, rotX));
-    };
+    }, { passive: false });
     
-    window.ontouchend = () => {
+    canvas.addEventListener('touchend', () => {
         isDragging = false;
-    };
+    });
     
     // Loop Render Animasi Globe
     function drawGlobeLoop() {
@@ -1200,7 +1208,10 @@ function stopFlightMapAnimation() {
 /**
  * Open FIDS Info Modal
  */
+let currentSelectedFlight = null;
+
 function openModal(flight) {
+    currentSelectedFlight = flight;
     const modal = document.getElementById('fids-detail-modal');
     if (!modal) return;
 
@@ -1293,6 +1304,11 @@ function openModal(flight) {
     }, 150);
 
     modal.classList.add('show');
+
+    // Re-apply translations to modal labels
+    if (typeof applyTranslations === 'function') {
+        applyTranslations();
+    }
 }
 
 /**
@@ -1375,6 +1391,21 @@ function initScrollReveal() {
         threshold: 0.05,
         rootMargin: '0px 0px -20px 0px'
     });
+
+// i18n integration
+window.addEventListener('languageChanged', () => {
+    // Re-render board list if terminal page
+    const terminalMeta = document.querySelector('meta[name="terminal"]');
+    if (terminalMeta && fidsData.length > 0) {
+        renderFidsBoard(fidsData);
+    }
+    
+    // Update modal if open
+    const modal = document.getElementById('fids-detail-modal');
+    if (modal && modal.classList.contains('show') && typeof currentSelectedFlight !== 'undefined' && currentSelectedFlight) {
+        openModal(currentSelectedFlight);
+    }
+});
 
     revealElements.forEach(el => observer.observe(el));
 }

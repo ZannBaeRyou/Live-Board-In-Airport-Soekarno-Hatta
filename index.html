@@ -39,10 +39,15 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-lg-center">
                     <li class="nav-item">
-                        <a class="nav-link active" href="index.html" id="nav-home">Dashboard</a>
+                        <a class="nav-link active" href="index.html" id="nav-home" data-i18n="nav_dashboard">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="airlines.html" id="nav-airlines">Maskapai</a>
+                        <a class="nav-link" href="airlines.html" id="nav-airlines" data-i18n="nav_airlines">Maskapai</a>
+                    </li>
+                    <li class="nav-item ms-lg-3 mt-3 mt-lg-0 d-flex align-items-center">
+                        <button id="lang-id" class="btn btn-sm text-gold fw-bold px-2 py-0" onclick="setLanguage('id')" data-i18n="btn_lang_id">ID</button>
+                        <span class="text-white-50 mx-1">|</span>
+                        <button id="lang-en" class="btn btn-sm text-white-50 fw-bold px-2 py-0" onclick="setLanguage('en')" data-i18n="btn_lang_en">EN</button>
                     </li>
                 </ul>
             </div>
@@ -54,24 +59,24 @@
         <div class="container position-relative">
             <div class="row align-items-center">
                 <div class="col-lg-7 text-start">
-                    <span class="dashboard-hero-subtitle mb-3">
+                    <span class="dashboard-hero-subtitle mb-3" data-i18n="hero_subtitle">
                         <span class="live-pulse"></span> Live Flight Information
                     </span>
-                    <h1 class="dashboard-hero-title mb-3">Bandara Internasional<br>Soekarno-Hatta</h1>
-                    <p class="text-white-50 mb-4" style="max-width: 520px; font-size: 1.05rem;">
+                    <h1 class="dashboard-hero-title mb-3" data-i18n="hero_title">Bandara Internasional<br>Soekarno-Hatta</h1>
+                    <p class="text-white-50 mb-4" style="max-width: 520px; font-size: 1.05rem;" data-i18n="hero_desc">
                         Sistem Informasi Jadwal Penerbangan Digital untuk seluruh terminal. Pilih terminal di bawah untuk melihat jadwal keberangkatan dan kedatangan secara real-time.
                     </p>
                     <div class="d-flex gap-4 align-items-center">
                         <div>
-                            <span class="font-digital text-white-50 small">WAKTU SISTEM</span>
+                            <span class="font-digital text-white-50 small" data-i18n="sys_time">WAKTU SISTEM</span>
                             <span class="d-block font-digital text-gold fs-4 fids-live-clock">--:--:-- WIB</span>
                         </div>
                         <div class="ps-4" style="border-left: 1px solid var(--fids-border);">
-                            <span class="font-digital text-white-50 small">TOTAL PENERBANGAN</span>
+                            <span class="font-digital text-white-50 small" data-i18n="total_flights">TOTAL PENERBANGAN</span>
                             <span class="d-block font-digital text-gold fs-4" id="total-flights">0</span>
                         </div>
                         <div class="ps-4 d-none d-md-block" style="border-left: 1px solid var(--fids-border);">
-                            <span class="font-digital text-white-50 small">AKTIF</span>
+                            <span class="font-digital text-white-50 small" data-i18n="active_flights">AKTIF</span>
                             <span class="d-block font-digital text-gold fs-4" id="total-active">0</span>
                         </div>
                     </div>
@@ -99,21 +104,21 @@
                         <div class="terminal-card-body">
                             <span class="terminal-card-number">T1</span>
                             <h3 class="terminal-card-name">Terminal 1</h3>
-                            <p class="terminal-card-desc">
-                                Terminal domestik utama — Lion Air, Batik Air, Wings Air, Sriwijaya Air, NAM Air. Melayani rute domestik ke seluruh kota besar Indonesia.
+                            <p class="terminal-card-desc" data-i18n="term1_desc">
+                                Penerbangan Domestik Utama. Menampilkan jadwal real-time untuk maskapai Lion Air, Batik Air, Wings Air, Sriwijaya Air, dan NAM Air.
                             </p>
                             <div class="terminal-card-stats">
                                 <div class="terminal-stat">
                                     <span class="terminal-stat-value" id="t1-dep-count">-</span>
-                                    <span class="terminal-stat-label">Keberangkatan</span>
+                                    <span class="terminal-stat-label" data-i18n="tab_departures">Keberangkatan</span>
                                 </div>
                                 <div class="terminal-stat">
                                     <span class="terminal-stat-value" id="t1-arr-count">-</span>
-                                    <span class="terminal-stat-label">Kedatangan</span>
+                                    <span class="terminal-stat-label" data-i18n="tab_arrivals">Kedatangan</span>
                                 </div>
                                 <div class="terminal-stat">
                                     <span class="terminal-stat-value" id="t1-active-count">-</span>
-                                    <span class="terminal-stat-label">Aktif</span>
+                                    <span class="terminal-stat-label" data-i18n="active_flights">Aktif</span>
                                 </div>
                             </div>
                             <div class="terminal-card-enter">
@@ -132,21 +137,21 @@
                         <div class="terminal-card-body">
                             <span class="terminal-card-number">T2</span>
                             <h3 class="terminal-card-name">Terminal 2</h3>
-                            <p class="terminal-card-desc">
-                                Terminal internasional low-cost — AirAsia, Scoot, Jetstar Asia, Cebu Pacific, Lion Air Internasional. Rute Asia Tenggara, Australia, dan Timur Tengah.
+                            <p class="terminal-card-desc" data-i18n="term2_desc">
+                                Penerbangan Domestik & Internasional (LCC). Jadwal real-time maskapai Super Air Jet, AirAsia, Pelita Air, dan lainnya.
                             </p>
                             <div class="terminal-card-stats">
                                 <div class="terminal-stat">
                                     <span class="terminal-stat-value" id="t2-dep-count">-</span>
-                                    <span class="terminal-stat-label">Keberangkatan</span>
+                                    <span class="terminal-stat-label" data-i18n="tab_departures">Keberangkatan</span>
                                 </div>
                                 <div class="terminal-stat">
                                     <span class="terminal-stat-value" id="t2-arr-count">-</span>
-                                    <span class="terminal-stat-label">Kedatangan</span>
+                                    <span class="terminal-stat-label" data-i18n="tab_arrivals">Kedatangan</span>
                                 </div>
                                 <div class="terminal-stat">
                                     <span class="terminal-stat-value" id="t2-active-count">-</span>
-                                    <span class="terminal-stat-label">Aktif</span>
+                                    <span class="terminal-stat-label" data-i18n="active_flights">Aktif</span>
                                 </div>
                             </div>
                             <div class="terminal-card-enter">
@@ -165,21 +170,21 @@
                         <div class="terminal-card-body">
                             <span class="terminal-card-number">T3</span>
                             <h3 class="terminal-card-name">Terminal 3</h3>
-                            <p class="terminal-card-desc">
-                                Terminal premium — Garuda Indonesia, Singapore Airlines, Emirates, Qatar Airways, ANA, Japan Airlines, Korean Air. Full-service carrier domestik & internasional.
+                            <p class="terminal-card-desc" data-i18n="term3_desc">
+                                Penerbangan Internasional Utama & Garuda Indonesia. Terminal premium Bandara Soekarno-Hatta dengan fasilitas terlengkap.
                             </p>
                             <div class="terminal-card-stats">
                                 <div class="terminal-stat">
                                     <span class="terminal-stat-value" id="t3-dep-count">-</span>
-                                    <span class="terminal-stat-label">Keberangkatan</span>
+                                    <span class="terminal-stat-label" data-i18n="tab_departures">Keberangkatan</span>
                                 </div>
                                 <div class="terminal-stat">
                                     <span class="terminal-stat-value" id="t3-arr-count">-</span>
-                                    <span class="terminal-stat-label">Kedatangan</span>
+                                    <span class="terminal-stat-label" data-i18n="tab_arrivals">Kedatangan</span>
                                 </div>
                                 <div class="terminal-stat">
                                     <span class="terminal-stat-value" id="t3-active-count">-</span>
-                                    <span class="terminal-stat-label">Aktif</span>
+                                    <span class="terminal-stat-label" data-i18n="active_flights">Aktif</span>
                                 </div>
                             </div>
                             <div class="terminal-card-enter">
@@ -198,20 +203,20 @@
             <div class="row g-4 mb-5">
                 <div class="col-lg-4 col-md-6">
                     <h3 class="brand-font text-gold fs-3 mb-3" style="letter-spacing:1px">CGK FIDS</h3>
-                    <p class="text-white-50 small mb-4" style="line-height:1.7">Sistem Informasi Layar Digital Real-time untuk jadwal keberangkatan dan kedatangan maskapai di seluruh terminal Bandara Internasional Soekarno-Hatta, Jakarta.</p>
+                    <p class="text-white-50 small mb-4" style="line-height:1.7" data-i18n="footer_desc">Sistem Informasi Layar Digital Real-time untuk jadwal keberangkatan dan kedatangan maskapai di seluruh terminal Bandara Internasional Soekarno-Hatta, Jakarta.</p>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <h5>TERMINAL</h5>
+                    <h5 data-i18n="footer_terminal">TERMINAL</h5>
                     <div class="mt-3">
-                        <a href="terminal1.html" class="footer-fids-link">Terminal 1 — Domestik</a>
-                        <a href="terminal2.html" class="footer-fids-link">Terminal 2 — Internasional LCC</a>
-                        <a href="terminal3.html" class="footer-fids-link">Terminal 3 — Premium</a>
-                        <a href="airlines.html" class="footer-fids-link">Direktori Maskapai</a>
+                        <a href="terminal1.html" class="footer-fids-link" data-i18n="footer_t1">Terminal 1 — Domestik</a>
+                        <a href="terminal2.html" class="footer-fids-link" data-i18n="footer_t2">Terminal 2 — Internasional LCC</a>
+                        <a href="terminal3.html" class="footer-fids-link" data-i18n="footer_t3">Terminal 3 — Premium</a>
+                        <a href="airlines.html" class="footer-fids-link" data-i18n="footer_dir">Direktori Maskapai</a>
                     </div>
                 </div>
                 <div class="col-lg-5 col-md-12">
-                    <h5>LAYANAN PELANGGAN BANDARA</h5>
-                    <p class="text-white-50 small mt-3">Hubungi contact center resmi Angkasa Pura II untuk konfirmasi darurat.</p>
+                    <h5 data-i18n="footer_service">LAYANAN PELANGGAN BANDARA</h5>
+                    <p class="text-white-50 small mt-3" data-i18n="footer_service_desc">Hubungi contact center resmi Angkasa Pura II untuk konfirmasi darurat.</p>
                     <span class="d-block text-white font-digital mb-2">
                         <i class="fa-solid fa-phone me-2 text-gold"></i> Call Center: 
                         <a href="tel:138" class="footer-contact-link">138</a>
@@ -224,11 +229,11 @@
             </div>
             <div class="row border-top border-secondary border-opacity-10 pt-4">
                 <div class="col-md-6 text-center text-md-start">
-                    <p class="small text-white-50 mb-0">&copy; 2026 Bandara Internasional Soekarno-Hatta (CGK). Seluruh hak cipta dilindungi.</p>
+                    <p class="small text-white-50 mb-0" data-i18n="footer_copyright">&copy; 2026 Bandara Internasional Soekarno-Hatta (CGK). Seluruh hak cipta dilindungi.</p>
                 </div>
                 <div class="col-md-6 text-center text-md-end mt-2 mt-md-0">
-                    <a href="#" class="text-white-50 small text-decoration-none me-3">Kebijakan Layanan</a>
-                    <a href="#" class="text-white-50 small text-decoration-none">Peta Terminal</a>
+                    <a href="#" class="text-white-50 small text-decoration-none me-3" data-i18n="footer_policy">Kebijakan Layanan</a>
+                    <a href="#" class="text-white-50 small text-decoration-none" data-i18n="footer_map">Peta Terminal</a>
                 </div>
             </div>
         </div>
@@ -236,6 +241,8 @@
 
     <!-- Bootstrap 5 Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Translation Script -->
+    <script src="assets/js/i18n.js"></script>
     <!-- Custom JS -->
     <script src="assets/js/main.js"></script>
 </body>

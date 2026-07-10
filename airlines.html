@@ -39,10 +39,16 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-lg-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html" id="nav-home">Dashboard</a>
+                        <a class="nav-link" href="index.html" id="nav-home" data-i18n="nav_dashboard">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="airlines.html" id="nav-airlines">Maskapai</a>
+                        <a class="nav-link active" href="airlines.html" id="nav-airlines" data-i18n="nav_airlines">Maskapai</a>
+                    </li>
+                
+                    <li class="nav-item ms-lg-3 mt-3 mt-lg-0 d-flex align-items-center">
+                        <button id="lang-id" class="btn btn-sm text-gold fw-bold px-2 py-0" onclick="setLanguage('id')" data-i18n="btn_lang_id">ID</button>
+                        <span class="text-white-50 mx-1">|</span>
+                        <button id="lang-en" class="btn btn-sm text-white-50 fw-bold px-2 py-0" onclick="setLanguage('en')" data-i18n="btn_lang_en">EN</button>
                     </li>
                 </ul>
             </div>
@@ -52,8 +58,8 @@
     <!-- Page Header Banner -->
     <header class="modern-page-banner text-center">
         <div class="container py-3">
-            <span class="text-gold font-weight-bold d-block mb-2 small text-uppercase" style="letter-spacing: 3px;">CHECK-IN AREA DIRECTORY</span>
-            <h1 class="brand-font text-white fs-1 mb-0 text-uppercase" style="letter-spacing: 1px;">Direktori Maskapai</h1>
+            <span class="text-gold font-weight-bold d-block mb-2 small text-uppercase" style="letter-spacing: 3px;" data-i18n="airlines_subtitle">CHECK-IN AREA DIRECTORY</span>
+            <h1 class="brand-font text-white fs-1 mb-0 text-uppercase" style="letter-spacing: 1px;" data-i18n="airlines_title">Direktori Maskapai</h1>
         </div>
     </header>
 
@@ -62,7 +68,7 @@
         <div class="container">
             <div class="row mb-4">
                 <div class="col-12 text-center text-md-start">
-                    <p class="text-white-50" style="max-width: 600px;">Berikut adalah daftar maskapai penerbangan utama yang beroperasi secara aktif di Bandara Internasional Soekarno-Hatta (CGK) beserta lokasi terminal dan zona pembagian konter check-in keberangkatan.</p>
+                    <p class="text-white-50" style="max-width: 600px;" data-i18n="airlines_intro">Berikut adalah daftar maskapai penerbangan utama yang beroperasi secara aktif di Bandara Internasional Soekarno-Hatta (CGK) beserta lokasi terminal dan zona pembagian konter check-in keberangkatan.</p>
                 </div>
             </div>
             
@@ -75,10 +81,10 @@
                             <span class="badge-tracker badge-status-inflight">GA</span>
                         </div>
                         <div class="border-top border-secondary border-opacity-25 pt-3">
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px">TERMINAL & ZONA</span>
+                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_term_zone">TERMINAL & ZONA</span>
                             <strong class="text-gold font-digital fs-5 d-block mb-3">T3 — Row F (Domestik & Intl)</strong>
                             
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px">KONTAK LAYANAN</span>
+                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_contact">KONTAK LAYANAN</span>
                             <span class="d-block text-white-50 font-digital" style="font-size:0.85rem;"><i class="fa-solid fa-phone me-1 text-gold"></i> 0804-1-807-807</span>
                         </div>
                     </a>
@@ -92,10 +98,10 @@
                             <span class="badge-tracker badge-status-transit">SQ</span>
                         </div>
                         <div class="border-top border-secondary border-opacity-25 pt-3">
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px">TERMINAL & ZONA</span>
+                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_term_zone">TERMINAL & ZONA</span>
                             <strong class="text-gold font-digital fs-5 d-block mb-3">T3 — Row C11 - C18 (Intl)</strong>
                             
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px">KONTAK LAYANAN</span>
+                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_contact">KONTAK LAYANAN</span>
                             <span class="d-block text-white-50 font-digital" style="font-size:0.85rem;"><i class="fa-solid fa-phone me-1 text-gold"></i> (021) 5790-3747</span>
                         </div>
                     </a>
@@ -109,10 +115,10 @@
                             <span class="badge-tracker badge-status-transit">QR</span>
                         </div>
                         <div class="border-top border-secondary border-opacity-25 pt-3">
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px">TERMINAL & ZONA</span>
+                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_term_zone">TERMINAL & ZONA</span>
                             <strong class="text-gold font-digital fs-5 d-block mb-3">T3 — Row A11 - A20 (Intl)</strong>
                             
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px">KONTAK LAYANAN</span>
+                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_contact">KONTAK LAYANAN</span>
                             <span class="d-block text-white-50 font-digital" style="font-size:0.85rem;"><i class="fa-solid fa-phone me-1 text-gold"></i> (021) 550-2525</span>
                         </div>
                     </a>
@@ -126,10 +132,10 @@
                             <span class="badge-tracker badge-status-transit">EK</span>
                         </div>
                         <div class="border-top border-secondary border-opacity-25 pt-3">
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px">TERMINAL & ZONA</span>
+                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_term_zone">TERMINAL & ZONA</span>
                             <strong class="text-gold font-digital fs-5 d-block mb-3">T3 — Row B01 - B10 (Intl)</strong>
                             
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px">KONTAK LAYANAN</span>
+                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_contact">KONTAK LAYANAN</span>
                             <span class="d-block text-white-50 font-digital" style="font-size:0.85rem;"><i class="fa-solid fa-phone me-1 text-gold"></i> (021) 2934-5555</span>
                         </div>
                     </a>
@@ -143,10 +149,10 @@
                             <span class="badge-tracker badge-status-transit">NH</span>
                         </div>
                         <div class="border-top border-secondary border-opacity-25 pt-3">
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px">TERMINAL & ZONA</span>
+                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_term_zone">TERMINAL & ZONA</span>
                             <strong class="text-gold font-digital fs-5 d-block mb-3">T3 — Row C01 - C10 (Intl)</strong>
                             
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px">KONTAK LAYANAN</span>
+                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_contact">KONTAK LAYANAN</span>
                             <span class="d-block text-white-50 font-digital" style="font-size:0.85rem;"><i class="fa-solid fa-phone me-1 text-gold"></i> (021) 5797-4382</span>
                         </div>
                     </a>
@@ -160,10 +166,10 @@
                             <span class="badge-tracker badge-status-transit">EY</span>
                         </div>
                         <div class="border-top border-secondary border-opacity-25 pt-3">
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px">TERMINAL & ZONA</span>
+                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_term_zone">TERMINAL & ZONA</span>
                             <strong class="text-gold font-digital fs-5 d-block mb-3">T3 — Row A01 - A10 (Intl)</strong>
                             
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px">KONTAK LAYANAN</span>
+                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_contact">KONTAK LAYANAN</span>
                             <span class="d-block text-white-50 font-digital" style="font-size:0.85rem;"><i class="fa-solid fa-phone me-1 text-gold"></i> (021) 520-2020</span>
                         </div>
                     </a>
@@ -177,10 +183,10 @@
                             <span class="badge-tracker badge-status-inflight">QG</span>
                         </div>
                         <div class="border-top border-secondary border-opacity-25 pt-3">
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px">TERMINAL & ZONA</span>
+                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_term_zone">TERMINAL & ZONA</span>
                             <strong class="text-gold font-digital fs-5 d-block mb-3">T3 — Row D01 - D08 (Domestik)</strong>
                             
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px">KONTAK LAYANAN</span>
+                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_contact">KONTAK LAYANAN</span>
                             <span class="d-block text-white-50 font-digital" style="font-size:0.85rem;"><i class="fa-solid fa-phone me-1 text-gold"></i> 0804-1-080-808</span>
                         </div>
                     </a>
@@ -194,10 +200,10 @@
                             <span class="badge-tracker badge-status-transit">JL</span>
                         </div>
                         <div class="border-top border-secondary border-opacity-25 pt-3">
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px">TERMINAL & ZONA</span>
+                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_term_zone">TERMINAL & ZONA</span>
                             <strong class="text-gold font-digital fs-5 d-block mb-3">T3 — Row C01 - C08 (Intl)</strong>
                             
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px">KONTAK LAYANAN</span>
+                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_contact">KONTAK LAYANAN</span>
                             <span class="d-block text-white-50 font-digital" style="font-size:0.85rem;"><i class="fa-solid fa-phone me-1 text-gold"></i> (021) 5797-3600</span>
                         </div>
                     </a>
@@ -211,10 +217,10 @@
                             <span class="badge-tracker badge-status-transit">KE</span>
                         </div>
                         <div class="border-top border-secondary border-opacity-25 pt-3">
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px">TERMINAL & ZONA</span>
+                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_term_zone">TERMINAL & ZONA</span>
                             <strong class="text-gold font-digital fs-5 d-block mb-3">T3 — Row B11 - B20 (Intl)</strong>
                             
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px">KONTAK LAYANAN</span>
+                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_contact">KONTAK LAYANAN</span>
                             <span class="d-block text-white-50 font-digital" style="font-size:0.85rem;"><i class="fa-solid fa-phone me-1 text-gold"></i> (021) 5797-3800</span>
                         </div>
                     </a>
@@ -228,10 +234,10 @@
                             <span class="badge-tracker badge-status-inflight">JT</span>
                         </div>
                         <div class="border-top border-secondary border-opacity-25 pt-3">
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px">TERMINAL & ZONA</span>
+                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_term_zone">TERMINAL & ZONA</span>
                             <strong class="text-gold font-digital fs-5 d-block mb-3">T1 (Domestik) / T2 (Intl)</strong>
                             
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px">KONTAK LAYANAN</span>
+                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_contact">KONTAK LAYANAN</span>
                             <span class="d-block text-white-50 font-digital" style="font-size:0.85rem;"><i class="fa-solid fa-phone me-1 text-gold"></i> (021) 6379-8000</span>
                         </div>
                     </a>
@@ -245,10 +251,10 @@
                             <span class="badge-tracker badge-status-inflight">ID</span>
                         </div>
                         <div class="border-top border-secondary border-opacity-25 pt-3">
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px">TERMINAL & ZONA</span>
+                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_term_zone">TERMINAL & ZONA</span>
                             <strong class="text-gold font-digital fs-5 d-block mb-3">T1 — Row 5-8 (Domestik)</strong>
                             
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px">KONTAK LAYANAN</span>
+                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_contact">KONTAK LAYANAN</span>
                             <span class="d-block text-white-50 font-digital" style="font-size:0.85rem;"><i class="fa-solid fa-phone me-1 text-gold"></i> (021) 633-8345</span>
                         </div>
                     </a>
@@ -262,10 +268,10 @@
                             <span class="badge-tracker badge-status-inflight">QZ</span>
                         </div>
                         <div class="border-top border-secondary border-opacity-25 pt-3">
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px">TERMINAL & ZONA</span>
+                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_term_zone">TERMINAL & ZONA</span>
                             <strong class="text-gold font-digital fs-5 d-block mb-3">T2 — Row E01-E06 (Intl)</strong>
                             
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px">KONTAK LAYANAN</span>
+                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_contact">KONTAK LAYANAN</span>
                             <span class="d-block text-white-50 font-digital" style="font-size:0.85rem;"><i class="fa-solid fa-phone me-1 text-gold"></i> 0804-1-333-333</span>
                         </div>
                     </a>
@@ -284,20 +290,20 @@
             <div class="row g-4 mb-5">
                 <div class="col-lg-4 col-md-6">
                     <h3 class="brand-font text-gold fs-3 mb-3" style="letter-spacing:1px">CGK FIDS</h3>
-                    <p class="text-white-50 small mb-4" style="line-height:1.7">Sistem Informasi Layar Digital Real-time untuk jadwal keberangkatan dan kedatangan maskapai di seluruh terminal Bandara Internasional Soekarno-Hatta, Jakarta.</p>
+                    <p class="text-white-50 small mb-4" style="line-height:1.7" data-i18n="footer_desc">Sistem Informasi Layar Digital Real-time untuk jadwal keberangkatan dan kedatangan maskapai di seluruh terminal Bandara Internasional Soekarno-Hatta, Jakarta.</p>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <h5>TERMINAL</h5>
+                    <h5 data-i18n="footer_terminal">TERMINAL</h5>
                     <div class="mt-3">
-                        <a href="terminal1.html" class="footer-fids-link">Terminal 1 — Domestik</a>
-                        <a href="terminal2.html" class="footer-fids-link">Terminal 2 — Internasional LCC</a>
-                        <a href="terminal3.html" class="footer-fids-link">Terminal 3 — Premium</a>
-                        <a href="airlines.html" class="footer-fids-link">Direktori Maskapai</a>
+                        <a href="terminal1.html" class="footer-fids-link" data-i18n="footer_t1">Terminal 1 — Domestik</a>
+                        <a href="terminal2.html" class="footer-fids-link" data-i18n="footer_t2">Terminal 2 — Internasional LCC</a>
+                        <a href="terminal3.html" class="footer-fids-link" data-i18n="footer_t3">Terminal 3 — Premium</a>
+                        <a href="airlines.html" class="footer-fids-link" data-i18n="footer_dir">Direktori Maskapai</a>
                     </div>
                 </div>
                 <div class="col-lg-5 col-md-12">
-                    <h5>LAYANAN PELANGGAN BANDARA</h5>
-                    <p class="text-white-50 small mt-3">Hubungi contact center resmi Angkasa Pura II untuk konfirmasi darurat.</p>
+                    <h5 data-i18n="footer_service">LAYANAN PELANGGAN BANDARA</h5>
+                    <p class="text-white-50 small mt-3" data-i18n="footer_service_desc">Hubungi contact center resmi Angkasa Pura II untuk konfirmasi darurat.</p>
                     <span class="d-block text-white font-digital mb-2">
                         <i class="fa-solid fa-phone me-2 text-gold"></i> Call Center: 
                         <a href="tel:138" class="footer-contact-link">138</a>
@@ -310,11 +316,11 @@
             </div>
             <div class="row border-top border-secondary border-opacity-10 pt-4">
                 <div class="col-md-6 text-center text-md-start">
-                    <p class="small text-white-50 mb-0">&copy; 2026 Bandara Internasional Soekarno-Hatta (CGK). Seluruh hak cipta dilindungi.</p>
+                    <p class="small text-white-50 mb-0" data-i18n="footer_copyright">&copy; 2026 Bandara Internasional Soekarno-Hatta (CGK). Seluruh hak cipta dilindungi.</p>
                 </div>
                 <div class="col-md-6 text-center text-md-end mt-2 mt-md-0">
-                    <a href="#" class="text-white-50 small text-decoration-none me-3">Kebijakan Layanan</a>
-                    <a href="#" class="text-white-50 small text-decoration-none">Peta Terminal</a>
+                    <a href="#" class="text-white-50 small text-decoration-none me-3" data-i18n="footer_policy">Kebijakan Layanan</a>
+                    <a href="#" class="text-white-50 small text-decoration-none" data-i18n="footer_map">Peta Terminal</a>
                 </div>
             </div>
         </div>
@@ -323,6 +329,7 @@
     <!-- Bootstrap 5 Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
+    <script src="assets/js/i18n.js"></script>
     <script src="assets/js/main.js"></script>
 </body>
 </html>

@@ -41,10 +41,15 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-lg-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html" id="nav-home">Dashboard</a>
+                        <a class="nav-link" href="index.html" id="nav-home" data-i18n="nav_dashboard">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="airlines.html" id="nav-airlines">Maskapai</a>
+                        <a class="nav-link" href="airlines.html" id="nav-airlines" data-i18n="nav_airlines">Maskapai</a>
+                    </li>
+                    <li class="nav-item ms-lg-3 mt-3 mt-lg-0 d-flex align-items-center">
+                        <button id="lang-id" class="btn btn-sm text-gold fw-bold px-2 py-0" onclick="setLanguage('id')" data-i18n="btn_lang_id">ID</button>
+                        <span class="text-white-50 mx-1">|</span>
+                        <button id="lang-en" class="btn btn-sm text-white-50 fw-bold px-2 py-0" onclick="setLanguage('en')" data-i18n="btn_lang_en">EN</button>
                     </li>
                 </ul>
             </div>
@@ -61,16 +66,16 @@
                         <span class="separator">&gt;</span>
                         <span>Terminal 1</span>
                     </div>
-                    <span class="hero-fids-subtitle mb-2">
+                    <span class="hero-fids-subtitle mb-2" data-i18n="hero_subtitle">
                         <span class="live-pulse"></span> Live FIDS Board
                     </span>
                     <h1 class="hero-fids-title mb-3">Terminal 1 CGK</h1>
-                    <p class="text-white-50 mb-0" style="max-width: 550px;">
+                    <p class="text-white-50 mb-0" style="max-width: 550px;" data-i18n="term1_desc">
                         Penerbangan Domestik Utama. Menampilkan jadwal real-time untuk maskapai Lion Air, Batik Air, Wings Air, Sriwijaya Air, dan NAM Air.
                     </p>
                 </div>
                 <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
-                    <span class="font-digital text-white-50 small d-block">WAKTU SISTEM</span>
+                    <span class="font-digital text-white-50 small d-block" data-i18n="sys_time">WAKTU SISTEM</span>
                     <span class="d-block font-digital text-gold fs-2 fids-live-clock">--:--:-- WIB</span>
                 </div>
             </div>
@@ -82,26 +87,26 @@
         <div class="container">
             <div class="fids-dashboard-container">
                 <!-- Search & Tabs & Filter Row -->
-                <div class="row g-3 mb-4 align-items-center">
+                <div class="row g-3 mb-4 align-items-center sticky-controls">
                     <div class="col-lg-4 col-md-6">
                         <div class="fids-tabs">
-                            <button id="tab-departures" class="btn-fids-tab active">
+                            <button id="tab-departures" class="btn-fids-tab active" data-i18n="tab_departures">
                                 <i class="fa-solid fa-plane-departure"></i> Keberangkatan
                             </button>
-                            <button id="tab-arrivals" class="btn-fids-tab">
+                            <button id="tab-arrivals" class="btn-fids-tab" data-i18n="tab_arrivals">
                                 <i class="fa-solid fa-plane-arrival"></i> Kedatangan
                             </button>
                         </div>
                     </div>
                     <div class="col-lg-5 col-md-6">
                         <div class="position-relative">
-                            <input type="text" id="fids-search-input" class="form-control fids-search-control w-100 ps-5" placeholder="Cari nomor penerbangan, maskapai, kota...">
+                            <input type="text" id="fids-search-input" class="form-control fids-search-control w-100 ps-5" placeholder="Cari nomor penerbangan, maskapai, kota..." data-i18n="search_placeholder">
                             <i class="fa-solid fa-magnifying-glass position-absolute text-muted" style="left: 18px; top: 50%; transform: translateY(-50%);"></i>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-12">
                         <select id="fids-status-filter" class="form-select fids-search-control">
-                            <option value="">Semua Status</option>
+                            <option value="" data-i18n="filter_all">Semua Status</option>
                             <option value="Scheduled">Scheduled</option>
                             <option value="Check-in">Check-in</option>
                             <option value="Boarding">Boarding</option>
@@ -116,12 +121,12 @@
                 <!-- FIDS Table Header -->
                 <div class="fids-board-header d-none d-md-block">
                     <div class="row">
-                        <div class="col-md-1">Waktu</div>
-                        <div class="col-md-2">Penerbangan</div>
-                        <div class="col-md-3" id="fids-dest-hdr">Tujuan</div>
-                        <div class="col-md-2" id="fids-gate-hdr">Gerbang / Konter</div>
-                        <div class="col-md-2">Estimasi</div>
-                        <div class="col-md-2 text-end">Status</div>
+                        <div class="col-md-1" data-i18n="col_time">Waktu</div>
+                        <div class="col-md-2" data-i18n="col_flight">Penerbangan</div>
+                        <div class="col-md-3" id="fids-dest-hdr" data-i18n="col_dest">Tujuan</div>
+                        <div class="col-md-2" id="fids-gate-hdr" data-i18n="col_gate">Gerbang / Konter</div>
+                        <div class="col-md-2" data-i18n="col_est">Estimasi</div>
+                        <div class="col-md-2 text-end" data-i18n="col_status">Status</div>
                     </div>
                 </div>
 
@@ -138,13 +143,13 @@
         <div class="fids-modal-content">
             <div class="modal-drag-handle"></div>
             <div class="text-center mb-4">
-                <span class="badge-tracker badge-status-inflight text-uppercase mb-2 d-inline-block">Detail Penerbangan</span>
+                <span class="badge-tracker badge-status-inflight text-uppercase mb-2 d-inline-block" data-i18n="modal_detail">Detail Penerbangan</span>
                 <h2 id="modal-flight-num" class="brand-font text-gold fs-1 mb-1 font-digital">-- --</h2>
                 <h5 id="modal-airline" class="text-white-50 fs-6 mb-0">--</h5>
             </div>
             
             <div class="border-top border-bottom border-secondary border-opacity-25 py-3 my-3 text-center">
-                <span class="text-muted d-block small mb-1" style="font-size:0.75rem; letter-spacing:1px">RUTE</span>
+                <span class="text-muted d-block small mb-1" style="font-size:0.75rem; letter-spacing:1px" data-i18n="modal_route">RUTE</span>
                 <span id="modal-route" class="text-white fs-5 font-digital text-uppercase">-- &rarr; --</span>
             </div>
 
@@ -162,29 +167,29 @@
 
             <div class="row g-3 text-start">
                 <div class="col-6">
-                    <span class="text-muted d-block small" style="font-size:0.7rem; letter-spacing:0.5px">JADWAL ASLI</span>
+                    <span class="text-muted d-block small" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="modal_sched">JADWAL ASLI</span>
                     <span id="modal-scheduled-time" class="text-white font-digital fs-5">--:-- WIB</span>
                 </div>
                 <div class="col-6">
-                    <span class="text-muted d-block small" style="font-size:0.7rem; letter-spacing:0.5px">ESTIMASI / AKTUAL</span>
+                    <span class="text-muted d-block small" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="modal_est">ESTIMASI / AKTUAL</span>
                     <span id="modal-actual-time" class="text-white font-digital fs-5">--:-- WIB</span>
                 </div>
                 <div class="col-6">
-                    <span class="text-muted d-block small" style="font-size:0.7rem; letter-spacing:0.5px">GERBANG</span>
+                    <span class="text-muted d-block small" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="modal_gate">GERBANG</span>
                     <span id="modal-gate" class="text-gold font-digital fs-5">--</span>
                 </div>
                 <div class="col-6" id="modal-counter-section">
-                    <span class="text-muted d-block small" style="font-size:0.7rem; letter-spacing:0.5px">KONTER CHECK-IN</span>
+                    <span class="text-muted d-block small" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="modal_counter">KONTER CHECK-IN</span>
                     <span id="modal-counter" class="text-gold font-digital fs-5">--</span>
                 </div>
                 <div class="col-6 d-none" id="modal-baggage-section">
-                    <span class="text-muted d-block small" style="font-size:0.7rem; letter-spacing:0.5px">SABUK BAGASI</span>
+                    <span class="text-muted d-block small" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="modal_belt">SABUK BAGASI</span>
                     <span id="modal-baggage" class="text-gold font-digital fs-5">--</span>
                 </div>
             </div>
             
             <div class="text-center mt-4 pt-3 border-top border-secondary border-opacity-10">
-                <button class="btn btn-modern-outline w-100 py-2 fids-modal-close">TUTUP DETAIL</button>
+                <button class="btn btn-modern-outline w-100 py-2 fids-modal-close" data-i18n="modal_close">TUTUP DETAIL</button>
             </div>
         </div>
     </div>
@@ -195,20 +200,20 @@
             <div class="row g-4 mb-5">
                 <div class="col-lg-4 col-md-6">
                     <h3 class="brand-font text-gold fs-3 mb-3" style="letter-spacing:1px">CGK FIDS</h3>
-                    <p class="text-white-50 small mb-4" style="line-height:1.7">Sistem Informasi Layar Digital Real-time untuk jadwal keberangkatan dan kedatangan maskapai di seluruh terminal Bandara Internasional Soekarno-Hatta, Jakarta.</p>
+                    <p class="text-white-50 small mb-4" style="line-height:1.7" data-i18n="footer_desc">Sistem Informasi Layar Digital Real-time untuk jadwal keberangkatan dan kedatangan maskapai di seluruh terminal Bandara Internasional Soekarno-Hatta, Jakarta.</p>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <h5>TERMINAL</h5>
+                    <h5 data-i18n="footer_terminal">TERMINAL</h5>
                     <div class="mt-3">
-                        <a href="terminal1.html" class="footer-fids-link">Terminal 1 — Domestik</a>
-                        <a href="terminal2.html" class="footer-fids-link">Terminal 2 — Internasional LCC</a>
-                        <a href="terminal3.html" class="footer-fids-link">Terminal 3 — Premium</a>
-                        <a href="airlines.html" class="footer-fids-link">Direktori Maskapai</a>
+                        <a href="terminal1.html" class="footer-fids-link" data-i18n="footer_t1">Terminal 1 — Domestik</a>
+                        <a href="terminal2.html" class="footer-fids-link" data-i18n="footer_t2">Terminal 2 — Internasional LCC</a>
+                        <a href="terminal3.html" class="footer-fids-link" data-i18n="footer_t3">Terminal 3 — Premium</a>
+                        <a href="airlines.html" class="footer-fids-link" data-i18n="footer_dir">Direktori Maskapai</a>
                     </div>
                 </div>
                 <div class="col-lg-5 col-md-12">
-                    <h5>LAYANAN PELANGGAN BANDARA</h5>
-                    <p class="text-white-50 small mt-3">Hubungi contact center resmi Angkasa Pura II untuk konfirmasi darurat.</p>
+                    <h5 data-i18n="footer_service">LAYANAN PELANGGAN BANDARA</h5>
+                    <p class="text-white-50 small mt-3" data-i18n="footer_service_desc">Hubungi contact center resmi Angkasa Pura II untuk konfirmasi darurat.</p>
                     <span class="d-block text-white font-digital mb-2">
                         <i class="fa-solid fa-phone me-2 text-gold"></i> Call Center: 
                         <a href="tel:138" class="footer-contact-link">138</a>
@@ -221,11 +226,11 @@
             </div>
             <div class="row border-top border-secondary border-opacity-10 pt-4">
                 <div class="col-md-6 text-center text-md-start">
-                    <p class="small text-white-50 mb-0">&copy; 2026 Bandara Internasional Soekarno-Hatta (CGK). Seluruh hak cipta dilindungi.</p>
+                    <p class="small text-white-50 mb-0" data-i18n="footer_copyright">&copy; 2026 Bandara Internasional Soekarno-Hatta (CGK). Seluruh hak cipta dilindungi.</p>
                 </div>
                 <div class="col-md-6 text-center text-md-end mt-2 mt-md-0">
-                    <a href="#" class="text-white-50 small text-decoration-none me-3">Kebijakan Layanan</a>
-                    <a href="#" class="text-white-50 small text-decoration-none">Peta Terminal</a>
+                    <a href="#" class="text-white-50 small text-decoration-none me-3" data-i18n="footer_policy">Kebijakan Layanan</a>
+                    <a href="#" class="text-white-50 small text-decoration-none" data-i18n="footer_map">Peta Terminal</a>
                 </div>
             </div>
         </div>
@@ -233,6 +238,8 @@
 
     <!-- Bootstrap 5 Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Translation Script -->
+    <script src="assets/js/i18n.js"></script>
     <!-- Custom JS -->
     <script src="assets/js/main.js"></script>
 </body>
