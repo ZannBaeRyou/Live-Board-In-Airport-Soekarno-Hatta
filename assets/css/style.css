@@ -25,8 +25,263 @@
     --text-white: #FFFFFF;
     --text-muted: #8E9BAE;
     
-    --transition-fids: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    --transition-fids: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     --radius-fids: 8px;
+
+    /* Light mode overlay vars */
+    --navbar-bg: rgba(6, 9, 17, 0.75);
+    --navbar-border: rgba(255, 193, 7, 0.2);
+    --hero-overlay-start: rgba(6, 9, 17, 0.4);
+    --hero-overlay-end: rgba(6, 9, 17, 0.85);
+    --modal-backdrop: rgba(6, 9, 17, 0.85);
+    --scrollbar-track: #060911;
+    --canvas-bg: #0d172e;
+    --shadow-color: rgba(0, 0, 0, 0.4);
+    --shadow-hover: rgba(255, 193, 7, 0.15);
+}
+
+/* ============================================
+   LIGHT MODE THEME OVERRIDE
+   ============================================ */
+[data-theme="light"] {
+    --fids-bg-darkest: #F5F3EC;
+    --fids-bg-board: #FEFDF9;
+    --fids-bg-row: #FBF9F4;
+    --fids-bg-row-hover: #F0EEE4;
+    --fids-border: #E8E5DA;
+    
+    --fids-amber: #C26A00;
+    --fids-amber-glow: rgba(194, 106, 0, 0.12);
+    --fids-green: #047857;
+    --fids-red: #B91C1C;
+    --fids-blue: #0369A1;
+    --fids-grey: #8A92A0;
+    
+    --text-white: #2C2C28;
+    --text-muted: #6C6B65;
+    
+    --navbar-bg: rgba(254, 253, 249, 0.9);
+    --navbar-border: rgba(194, 106, 0, 0.2);
+    --hero-overlay-start: rgba(245, 243, 236, 0.4);
+    --hero-overlay-end: rgba(245, 243, 236, 0.92);
+    --modal-backdrop: rgba(20, 20, 18, 0.65);
+    --scrollbar-track: #F5F3EC;
+    --canvas-bg: #1a2744;
+    --shadow-color: rgba(0, 0, 0, 0.05);
+    --shadow-hover: rgba(194, 106, 0, 0.1);
+}
+
+/* Smooth theme transition on all elements for colors */
+*, *::before, *::after {
+    transition-property: background-color, color, border-color, box-shadow, fill, stroke;
+    transition-duration: 0.6s;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Light mode specific overrides for hardcoded colors */
+[data-theme="light"] .navbar-brand {
+    text-shadow: none;
+}
+
+[data-theme="light"] .fids-flight {
+    text-shadow: none;
+}
+
+[data-theme="light"] .dashboard-stat-number {
+    text-shadow: none;
+}
+
+[data-theme="light"] .dashboard-hero::before {
+    opacity: 1;
+}
+
+/* We removed the [data-theme="light"] overrides for hero-fids-container here */
+
+[data-theme="light"] .terminal-card-image-wrapper::after {
+    background: linear-gradient(transparent, var(--fids-bg-board));
+}
+
+[data-theme="light"] .terminal-card:hover {
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.1), 0 0 30px var(--fids-amber-glow);
+}
+
+[data-theme="light"] .fids-board-header {
+    background-color: rgba(255, 255, 255, 0.95);
+}
+
+[data-theme="light"] .fids-board-row {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .fids-board-row:hover {
+    box-shadow: 0 8px 20px var(--shadow-hover);
+}
+
+[data-theme="light"] .fids-modal {
+    background-color: var(--modal-backdrop);
+}
+
+[data-theme="light"] .fids-modal-content {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .fids-tabs {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .btn-fids-tab:hover:not(.active) {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .fids-dashboard-container {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .modal-timeline-line {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .modal-drag-handle {
+    background: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] #flight-map-canvas {
+    background-color: var(--canvas-bg);
+}
+
+[data-theme="light"] .flight-map-wrapper {
+    box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.15), 0 0 15px rgba(217, 119, 6, 0.05);
+}
+
+[data-theme="light"] .radar-pulse {
+    border-color: rgba(217, 119, 6, 0.12);
+}
+
+[data-theme="light"] .modern-page-banner {
+    background: linear-gradient(135deg, #EEF1F8 0%, #F4F6FA 100%);
+}
+
+[data-theme="light"] .terminal-card-number {
+    color: rgba(217, 119, 6, 0.08);
+}
+
+[data-theme="light"] .terminal-breadcrumb {
+    background: rgba(217, 119, 6, 0.06);
+    border-color: rgba(217, 119, 6, 0.15);
+    color: var(--text-white);
+}
+
+[data-theme="light"] .terminal-breadcrumb .separator {
+    color: var(--text-white);
+    opacity: 0.5;
+}
+
+[data-theme="light"] .airline-card-modern:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08), 0 0 15px var(--fids-amber-glow);
+}
+
+/* Global utility class overrides for light mode */
+[data-theme="light"] .text-white-50:not(.footer-fids .text-white-50) {
+    color: var(--text-white) !important;
+}
+
+[data-theme="light"] .text-white:not(.footer-fids .text-white) {
+    color: var(--text-white) !important;
+}
+
+/* Footer stays dark in light mode for elegant contrast */
+[data-theme="light"] .footer-fids {
+    background-color: #1A1F36;
+    color: #8E9BAE;
+    border-top-color: #2A3050;
+}
+
+[data-theme="light"] .footer-fids h5 {
+    color: #D97706;
+}
+
+[data-theme="light"] .footer-fids-link {
+    color: #8E9BAE;
+}
+
+[data-theme="light"] .footer-fids-link:hover {
+    color: #D97706;
+}
+
+[data-theme="light"] .footer-fids .text-white-50 {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+[data-theme="light"] .footer-fids .text-white {
+    color: #FFFFFF !important;
+}
+
+[data-theme="light"] .footer-fids .text-gold {
+    color: #D97706 !important;
+}
+
+[data-theme="light"] .footer-fids .small.text-white-50 {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+[data-theme="light"] .footer-fids .footer-contact-link {
+    color: #FFFFFF !important;
+}
+
+/* Light mode page loader */
+[data-theme="light"] #page-loader {
+    background-color: #F4F6FA;
+}
+
+[data-theme="light"] .loader-logo {
+    text-shadow: none;
+}
+
+/* Light mode scrollbar */
+[data-theme="light"] ::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+}
+
+/* Theme Toggle Button */
+.btn-theme-toggle {
+    background: none;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    color: var(--fids-amber);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    padding: 0;
+    line-height: 1;
+}
+
+.btn-theme-toggle:hover {
+    background: var(--fids-amber);
+    color: var(--fids-bg-darkest);
+    box-shadow: 0 0 12px var(--fids-amber-glow);
+}
+
+[data-theme="light"] .btn-theme-toggle {
+    border-color: rgba(217, 119, 6, 0.3);
+}
+
+/* Light mode sticky controls */
+[data-theme="light"] .sticky-controls {
+    background: var(--fids-bg-board);
+}
+
+/* Light mode fullscreen map */
+[data-theme="light"] .flight-map-wrapper.fullscreen-map {
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.2), 0 0 35px var(--fids-amber-glow) !important;
+}
+
+[data-theme="light"] .map-fullscreen-backdrop {
+    background: rgba(244, 246, 250, 0.9);
 }
 
 /* Base Styles */
@@ -109,10 +364,10 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Navigation Bar */
 .navbar-custom {
-    background-color: rgba(6, 9, 17, 0.75);
+    background-color: var(--navbar-bg);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid rgba(255, 193, 7, 0.2);
+    border-bottom: 1px solid var(--navbar-border);
     padding: calc(15px + env(safe-area-inset-top)) 0 15px 0;
     transition: var(--transition-fids);
 }
@@ -155,17 +410,43 @@ h1, h2, h3, h4, h5, h6 {
     overflow: hidden;
 }
 
+/* Light mode crossfade layer */
 .dashboard-hero::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: 
-        radial-gradient(circle at 20% 80%, rgba(255, 193, 7, 0.06) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(0, 229, 255, 0.04) 0%, transparent 50%);
+    inset: 0;
+    background: linear-gradient(135deg, #F5F3EC 0%, #E8E5DA 40%, #FBF9F4 70%, #FEFDF9 100%);
+    opacity: 0;
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 0;
+}
+
+[data-theme="light"] .dashboard-hero::before {
+    opacity: 1;
+}
+
+.dashboard-hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+/* Subtle decorative glow */
+.dashboard-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 20% 80%, rgba(255, 193, 7, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(0, 229, 255, 0.03) 0%, transparent 50%);
+    z-index: 1;
     pointer-events: none;
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-theme="light"] .dashboard-hero::after {
+    background:
+        radial-gradient(circle at 20% 80%, rgba(194, 106, 0, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(3, 105, 161, 0.04) 0%, transparent 50%);
 }
 
 .dashboard-hero-title {
@@ -369,22 +650,51 @@ h1, h2, h3, h4, h5, h6 {
     min-height: 55vh;
     display: flex;
     align-items: center;
-    background: linear-gradient(rgba(6, 9, 17, 0.4), rgba(6, 9, 17, 0.85)), url('../images/cgk_terminal_3_header.png') no-repeat center center;
+    background: url('../images/cgk_terminal_3_header.png') no-repeat center center;
     background-size: cover;
     padding-top: 100px;
     padding-bottom: 90px;
 }
 
 .hero-fids-container.terminal-1-hero {
-    background-image: linear-gradient(rgba(6, 9, 17, 0.4), rgba(6, 9, 17, 0.85)), url('../images/cgk_terminal_1_header.png');
+    background-image: url('../images/cgk_terminal_1_header.png');
 }
 
 .hero-fids-container.terminal-2-hero {
-    background-image: linear-gradient(rgba(6, 9, 17, 0.4), rgba(6, 9, 17, 0.85)), url('../images/cgk_terminal_2_header.png');
+    background-image: url('../images/cgk_terminal_2_header.png');
 }
 
 .hero-fids-container.terminal-3-hero {
-    background-image: linear-gradient(rgba(6, 9, 17, 0.4), rgba(6, 9, 17, 0.85)), url('../images/cgk_terminal_3_header.png');
+    background-image: url('../images/cgk_terminal_3_header.png');
+}
+
+/* Smooth Crossfade Overlays */
+.hero-fids-container::before,
+.hero-fids-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1;
+}
+
+/* Dark mode gradient (default) */
+.hero-fids-container::before {
+    background: linear-gradient(rgba(6, 9, 17, 0.4), rgba(6, 9, 17, 0.85));
+    opacity: 1;
+}
+[data-theme="light"] .hero-fids-container::before {
+    opacity: 0;
+}
+
+/* Light mode gradient */
+.hero-fids-container::after {
+    background: linear-gradient(rgba(245, 243, 236, 0.4), rgba(245, 243, 236, 0.92));
+    opacity: 0;
+}
+[data-theme="light"] .hero-fids-container::after {
+    opacity: 1;
 }
 
 .hero-fids-content {
@@ -546,7 +856,7 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: var(--radius-fids);
     margin-bottom: 12px;
     padding: 18px 20px;
-    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
@@ -637,12 +947,12 @@ h1, h2, h3, h4, h5, h6 {
     padding: 35px;
     box-shadow: 0 10px 40px rgba(255, 193, 7, 0.15);
     position: relative;
-    transform: scale(0.9);
+    transform: translateY(40px) scale(0.95);
     transition: var(--transition-fids);
 }
 
 .fids-modal.show .fids-modal-content {
-    transform: scale(1);
+    transform: translateY(0) scale(1);
 }
 
 /* Drag Handle for mobile bottom sheet swipe indicator */
@@ -1210,4 +1520,40 @@ h1, h2, h3, h4, h5, h6 {
     .flight-map-wrapper {
         height: 150px !important;
     }
+}
+
+/* View Transition API for Theme Toggle */
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+}
+
+[data-theme='light']::view-transition-new(root),
+[data-theme='dark']::view-transition-old(root) {
+    z-index: 2;
+}
+
+[data-theme='light']::view-transition-old(root),
+[data-theme='dark']::view-transition-new(root) {
+    z-index: 1;
+}
+
+html.theme-transitioning *, html.theme-transitioning *::before, html.theme-transitioning *::after {
+    transition: none !important;
+}
+
+/* Split-Flap Animation for Language Toggle */
+.flap-animate {
+    animation: flipBoard 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    transform-style: preserve-3d;
+}
+span.flap-animate, a.flap-animate {
+    display: inline-block;
+}
+@keyframes flipBoard {
+    0% { transform: perspective(600px) rotateX(0deg) translateY(0); opacity: 1; filter: blur(0); }
+    45% { transform: perspective(600px) rotateX(-45deg) translateY(-5px); opacity: 0; filter: blur(2px); }
+    50% { transform: perspective(600px) rotateX(45deg) translateY(5px); opacity: 0; filter: blur(2px); }
+    100% { transform: perspective(600px) rotateX(0deg) translateY(0); opacity: 1; filter: blur(0); }
 }

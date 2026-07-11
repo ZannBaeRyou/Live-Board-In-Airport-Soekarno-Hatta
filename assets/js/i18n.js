@@ -129,15 +129,21 @@ function applyTranslations() {
     elements.forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (I18N_DICT[currentLang] && I18N_DICT[currentLang][key]) {
-            if (el.tagName === 'INPUT' && el.hasAttribute('placeholder')) {
-                el.placeholder = I18N_DICT[currentLang][key];
-            } else if (el.tagName === 'BUTTON' && el.innerHTML.includes('<i class=')) {
-                // Preserve icons inside buttons if they exist
-                el.innerHTML = el.innerHTML.replace(/(<i class="[^"]+"><\/i>\s*)(.*)/i, '$1' + I18N_DICT[currentLang][key]);
-            } else {
-                // General text replacement
-                el.innerHTML = I18N_DICT[currentLang][key];
-            }
+            // Apply the split-flap animation class
+            el.classList.remove('flap-animate');
+            void el.offsetWidth; // Trigger reflow to restart animation
+            el.classList.add('flap-animate');
+            
+            // Swap the text exactly when the text is faded out
+            setTimeout(() => {
+                if (el.tagName === 'INPUT' && el.hasAttribute('placeholder')) {
+                    el.placeholder = I18N_DICT[currentLang][key];
+                } else if (el.tagName === 'BUTTON' && el.innerHTML.includes('<i class=')) {
+                    el.innerHTML = el.innerHTML.replace(/(<i class="[^"]+"><\/i>\s*)(.*)/i, '$1' + I18N_DICT[currentLang][key]);
+                } else {
+                    el.innerHTML = I18N_DICT[currentLang][key];
+                }
+            }, 400); // ~halfway through the 0.8s animation
         }
     });
 
@@ -170,4 +176,83 @@ function __t(key) {
 // Run translation on load
 document.addEventListener('DOMContentLoaded', () => {
     applyTranslations();
+    initTheme();
 });
+
+/* ============================================
+   THEME TOGGLE LOGIC (DARK/LIGHT)
+   ============================================ */
+let currentTheme = localStorage.getItem('fids_theme') || 'dark';
+
+function initTheme() {
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    updateThemeIcon();
+}
+
+function toggleTheme(event) {
+    const isDark = currentTheme === 'dark';
+    const nextTheme = isDark ? 'light' : 'dark';
+    
+    // Fallback for browsers that do not support View Transitions API
+    if (!document.startViewTransition) {
+        executeThemeChange(nextTheme);
+        return;
+    }
+    
+    // Get click coordinates for the ripple center (fallback to center of screen)
+    const x = event?.clientX ?? window.innerWidth / 2;
+    const y = event?.clientY ?? window.innerHeight / 2;
+    
+    // Calculate the maximum radius required to cover the whole screen
+    const endRadius = Math.hypot(
+        Math.max(x, window.innerWidth - x),
+        Math.max(y, window.innerHeight - y)
+    );
+    
+    // Add a class to disable normal CSS color transitions during the view transition
+    document.documentElement.classList.add('theme-transitioning');
+    
+    const transition = document.startViewTransition(() => {
+        executeThemeChange(nextTheme);
+    });
+    
+    transition.ready.then(() => {
+        const clipPath = [
+            `circle(0px at ${x}px ${y}px)`,
+            `circle(${endRadius}px at ${x}px ${y}px)`
+        ];
+        
+        document.documentElement.animate(
+            {
+                clipPath: isDark ? clipPath : [...clipPath].reverse(),
+            },
+            {
+                duration: 600,
+                easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
+                pseudoElement: isDark ? '::view-transition-new(root)' : '::view-transition-old(root)',
+            }
+        );
+    });
+    
+    transition.finished.finally(() => {
+        document.documentElement.classList.remove('theme-transitioning');
+    });
+}
+
+function executeThemeChange(theme) {
+    currentTheme = theme;
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    localStorage.setItem('fids_theme', currentTheme);
+    updateThemeIcon();
+}
+
+function updateThemeIcon() {
+    const btn = document.getElementById('theme-toggle');
+    if (btn) {
+        if (currentTheme === 'light') {
+            btn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+        } else {
+            btn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        }
+    }
+}

@@ -456,66 +456,66 @@ const AIRPORT_COORDS = {
 // Database Label Negara untuk ditampilkan di Globe 3D
 const COUNTRY_LABELS = [
     // Asia Tenggara
-    { name: 'INDONESIA', lat: -2.5, lon: 118.0 },
-    { name: 'MALAYSIA', lat: 4.2, lon: 101.9 },
-    { name: 'SINGAPURA', lat: 1.35, lon: 103.8 },
-    { name: 'FILIPINA', lat: 12.9, lon: 121.8 },
-    { name: 'THAILAND', lat: 15.9, lon: 100.5 },
-    { name: 'VIETNAM', lat: 16.0, lon: 108.0 },
-    { name: 'MYANMAR', lat: 19.8, lon: 96.2 },
-    { name: 'KAMBOJA', lat: 12.6, lon: 104.9 },
-    { name: 'LAOS', lat: 18.2, lon: 103.9 },
+    { name: 'INDONESIA', name_en: 'INDONESIA', lat: -2.5, lon: 118.0 },
+    { name: 'MALAYSIA', name_en: 'MALAYSIA', lat: 4.2, lon: 101.9 },
+    { name: 'SINGAPURA', name_en: 'SINGAPORE', lat: 1.35, lon: 103.8 },
+    { name: 'FILIPINA', name_en: 'PHILIPPINES', lat: 12.9, lon: 121.8 },
+    { name: 'THAILAND', name_en: 'THAILAND', lat: 15.9, lon: 100.5 },
+    { name: 'VIETNAM', name_en: 'VIETNAM', lat: 16.0, lon: 108.0 },
+    { name: 'MYANMAR', name_en: 'MYANMAR', lat: 19.8, lon: 96.2 },
+    { name: 'KAMBOJA', name_en: 'CAMBODIA', lat: 12.6, lon: 104.9 },
+    { name: 'LAOS', name_en: 'LAOS', lat: 18.2, lon: 103.9 },
     // Asia Timur
-    { name: 'JEPANG', lat: 36.2, lon: 138.3 },
-    { name: 'KOREA SELATAN', lat: 35.9, lon: 127.8 },
-    { name: 'TIONGKOK', lat: 35.9, lon: 104.2 },
-    { name: 'TAIWAN', lat: 23.7, lon: 121.0 },
-    { name: 'MONGOLIA', lat: 46.9, lon: 103.8 },
+    { name: 'JEPANG', name_en: 'JAPAN', lat: 36.2, lon: 138.3 },
+    { name: 'KOREA SELATAN', name_en: 'SOUTH KOREA', lat: 35.9, lon: 127.8 },
+    { name: 'TIONGKOK', name_en: 'CHINA', lat: 35.9, lon: 104.2 },
+    { name: 'TAIWAN', name_en: 'TAIWAN', lat: 23.7, lon: 121.0 },
+    { name: 'MONGOLIA', name_en: 'MONGOLIA', lat: 46.9, lon: 103.8 },
     // Asia Selatan
-    { name: 'INDIA', lat: 20.6, lon: 79.0 },
-    { name: 'SRI LANKA', lat: 7.9, lon: 80.8 },
-    { name: 'BANGLADESH', lat: 23.7, lon: 90.4 },
-    { name: 'NEPAL', lat: 28.4, lon: 84.1 },
-    { name: 'PAKISTAN', lat: 30.4, lon: 69.3 },
+    { name: 'INDIA', name_en: 'INDIA', lat: 20.6, lon: 79.0 },
+    { name: 'SRI LANKA', name_en: 'SRI LANKA', lat: 7.9, lon: 80.8 },
+    { name: 'BANGLADESH', name_en: 'BANGLADESH', lat: 23.7, lon: 90.4 },
+    { name: 'NEPAL', name_en: 'NEPAL', lat: 28.4, lon: 84.1 },
+    { name: 'PAKISTAN', name_en: 'PAKISTAN', lat: 30.4, lon: 69.3 },
     // Timur Tengah
-    { name: 'ARAB SAUDI', lat: 23.9, lon: 45.1 },
-    { name: 'UNI EMIRAT ARAB', lat: 23.4, lon: 53.8 },
-    { name: 'QATAR', lat: 25.4, lon: 51.2 },
-    { name: 'TURKI', lat: 39.0, lon: 35.2 },
-    { name: 'IRAN', lat: 32.4, lon: 53.7 },
-    { name: 'IRAK', lat: 33.2, lon: 43.7 },
+    { name: 'ARAB SAUDI', name_en: 'SAUDI ARABIA', lat: 23.9, lon: 45.1 },
+    { name: 'UNI EMIRAT ARAB', name_en: 'UAE', lat: 23.4, lon: 53.8 },
+    { name: 'QATAR', name_en: 'QATAR', lat: 25.4, lon: 51.2 },
+    { name: 'TURKI', name_en: 'TURKEY', lat: 39.0, lon: 35.2 },
+    { name: 'IRAN', name_en: 'IRAN', lat: 32.4, lon: 53.7 },
+    { name: 'IRAK', name_en: 'IRAQ', lat: 33.2, lon: 43.7 },
     // Eropa
-    { name: 'BELANDA', lat: 52.1, lon: 5.3 },
-    { name: 'JERMAN', lat: 51.2, lon: 10.5 },
-    { name: 'PRANCIS', lat: 46.2, lon: 2.2 },
-    { name: 'INGGRIS', lat: 55.4, lon: -3.4 },
-    { name: 'ITALIA', lat: 42.5, lon: 12.6 },
-    { name: 'SPANYOL', lat: 40.5, lon: -3.7 },
-    { name: 'RUSIA', lat: 61.5, lon: 105.3 },
-    { name: 'SWEDIA', lat: 60.1, lon: 18.6 },
-    { name: 'NORWEGIA', lat: 60.5, lon: 8.5 },
-    { name: 'POLANDIA', lat: 52.0, lon: 19.1 },
-    { name: 'UKRAINA', lat: 48.4, lon: 31.2 },
+    { name: 'BELANDA', name_en: 'NETHERLANDS', lat: 52.1, lon: 5.3 },
+    { name: 'JERMAN', name_en: 'GERMANY', lat: 51.2, lon: 10.5 },
+    { name: 'PRANCIS', name_en: 'FRANCE', lat: 46.2, lon: 2.2 },
+    { name: 'INGGRIS', name_en: 'UNITED KINGDOM', lat: 55.4, lon: -3.4 },
+    { name: 'ITALIA', name_en: 'ITALY', lat: 42.5, lon: 12.6 },
+    { name: 'SPANYOL', name_en: 'SPAIN', lat: 40.5, lon: -3.7 },
+    { name: 'RUSIA', name_en: 'RUSSIA', lat: 61.5, lon: 105.3 },
+    { name: 'SWEDIA', name_en: 'SWEDEN', lat: 60.1, lon: 18.6 },
+    { name: 'NORWEGIA', name_en: 'NORWAY', lat: 60.5, lon: 8.5 },
+    { name: 'POLANDIA', name_en: 'POLAND', lat: 52.0, lon: 19.1 },
+    { name: 'UKRAINA', name_en: 'UKRAINE', lat: 48.4, lon: 31.2 },
     // Afrika
-    { name: 'MESIR', lat: 26.8, lon: 30.8 },
-    { name: 'AFRIKA SELATAN', lat: -30.6, lon: 22.9 },
-    { name: 'NIGERIA', lat: 9.1, lon: 8.7 },
-    { name: 'KENYA', lat: -0.02, lon: 37.9 },
-    { name: 'ETHIOPIA', lat: 9.1, lon: 40.5 },
-    { name: 'MAROKO', lat: 31.8, lon: -7.1 },
+    { name: 'MESIR', name_en: 'EGYPT', lat: 26.8, lon: 30.8 },
+    { name: 'AFRIKA SELATAN', name_en: 'SOUTH AFRICA', lat: -30.6, lon: 22.9 },
+    { name: 'NIGERIA', name_en: 'NIGERIA', lat: 9.1, lon: 8.7 },
+    { name: 'KENYA', name_en: 'KENYA', lat: -0.02, lon: 37.9 },
+    { name: 'ETHIOPIA', name_en: 'ETHIOPIA', lat: 9.1, lon: 40.5 },
+    { name: 'MAROKO', name_en: 'MOROCCO', lat: 31.8, lon: -7.1 },
     // Oseania
-    { name: 'AUSTRALIA', lat: -25.3, lon: 133.8 },
-    { name: 'SELANDIA BARU', lat: -40.9, lon: 174.9 },
-    { name: 'PAPUA NUGINI', lat: -6.3, lon: 147.2 },
+    { name: 'AUSTRALIA', name_en: 'AUSTRALIA', lat: -25.3, lon: 133.8 },
+    { name: 'SELANDIA BARU', name_en: 'NEW ZEALAND', lat: -40.9, lon: 174.9 },
+    { name: 'PAPUA NUGINI', name_en: 'PAPUA NEW GUINEA', lat: -6.3, lon: 147.2 },
     // Amerika
-    { name: 'AMERIKA SERIKAT', lat: 37.1, lon: -95.7 },
-    { name: 'KANADA', lat: 56.1, lon: -106.3 },
-    { name: 'MEKSIKO', lat: 23.6, lon: -102.6 },
-    { name: 'BRASIL', lat: -14.2, lon: -51.9 },
-    { name: 'ARGENTINA', lat: -38.4, lon: -63.6 },
-    { name: 'KOLOMBIA', lat: 4.6, lon: -74.3 },
-    { name: 'CHILE', lat: -35.7, lon: -71.5 },
-    { name: 'PERU', lat: -9.2, lon: -75.0 },
+    { name: 'AMERIKA SERIKAT', name_en: 'UNITED STATES', lat: 37.1, lon: -95.7 },
+    { name: 'KANADA', name_en: 'CANADA', lat: 56.1, lon: -106.3 },
+    { name: 'MEKSIKO', name_en: 'MEXICO', lat: 23.6, lon: -102.6 },
+    { name: 'BRASIL', name_en: 'BRAZIL', lat: -14.2, lon: -51.9 },
+    { name: 'ARGENTINA', name_en: 'ARGENTINA', lat: -38.4, lon: -63.6 },
+    { name: 'KOLOMBIA', name_en: 'COLOMBIA', lat: 4.6, lon: -74.3 },
+    { name: 'CHILE', name_en: 'CHILE', lat: -35.7, lon: -71.5 },
+    { name: 'PERU', name_en: 'PERU', lat: -9.2, lon: -75.0 },
 ];
 
 // Data Batas Benua (Longitude, Latitude) yang disederhanakan untuk Visualisasi 3D Globe
@@ -644,11 +644,14 @@ function getArcPoint3D(origin, dest, t, heightFactor = 0.12) {
 
 // Menggambar daratan bumi riil (dari GeoJSON) atau fallback benua lokal
 function drawRealEarth(ctx, cx, cy, R, rotX, rotY) {
+    const isLightMode = document.documentElement.getAttribute('data-theme') === 'light';
+    const strokeColor = isLightMode ? 'rgba(2, 132, 199, 0.5)' : 'rgba(56, 189, 248, 0.45)';
+    const fillColor = isLightMode ? 'rgba(2, 132, 199, 0.08)' : 'rgba(56, 189, 248, 0.05)';
     if (!worldLandGeoJSON) {
         // Fallback benua lokal jika GeoJSON belum termuat atau offline
-        ctx.strokeStyle = 'rgba(56, 189, 248, 0.45)';
+        ctx.strokeStyle = strokeColor;
         ctx.lineWidth = 1;
-        ctx.fillStyle = 'rgba(56, 189, 248, 0.05)';
+        ctx.fillStyle = fillColor;
         LAND_POLYGONS.forEach(poly => {
             ctx.beginPath();
             let first = true;
@@ -673,9 +676,9 @@ function drawRealEarth(ctx, cx, cy, R, rotX, rotY) {
     }
 
     // Gambar benua dari data GeoJSON bumi asli
-    ctx.strokeStyle = 'rgba(56, 189, 248, 0.45)'; // cyan stroke
+    ctx.strokeStyle = strokeColor; // cyan stroke
     ctx.lineWidth = 0.8;
-    ctx.fillStyle = 'rgba(56, 189, 248, 0.04)';  // transparent cyan fill
+    ctx.fillStyle = isLightMode ? 'rgba(2, 132, 199, 0.06)' : 'rgba(56, 189, 248, 0.04)';  // transparent cyan fill
 
     worldLandGeoJSON.features.forEach(feature => {
         const geom = feature.geometry;
@@ -899,6 +902,7 @@ function startFlightMapAnimation(flight) {
     
     // Loop Render Animasi Globe
     function drawGlobeLoop() {
+        const isLightMode = document.documentElement.getAttribute('data-theme') === 'light';
         animationFrame++;
         
         // Counter efek mengalir
@@ -917,20 +921,20 @@ function startFlightMapAnimation(flight) {
         const cy = canvas.height / 2;
         const R = Math.min(canvas.width, canvas.height) * 0.42;
         
-        // Background ruang angkasa (Biru Navy Premium)
-        ctx.fillStyle = '#0d172e';
+        // Background ruang angkasa (Biru Navy Premium atau Soft Cream)
+        ctx.fillStyle = isLightMode ? '#F5F3EC' : '#0d172e';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
         // 2. Lingkaran Dasar Samudera Globe
-        ctx.fillStyle = '#080f21';
+        ctx.fillStyle = isLightMode ? '#EBE8DF' : '#080f21';
         ctx.beginPath();
         ctx.arc(cx, cy, R, 0, Math.PI * 2);
         ctx.fill();
         
         // Glow tipis pada batas atmosfir
         ctx.shadowBlur = 15;
-        ctx.shadowColor = 'rgba(0, 240, 255, 0.2)';
-        ctx.strokeStyle = 'rgba(0, 240, 255, 0.3)';
+        ctx.shadowColor = isLightMode ? 'rgba(2, 132, 199, 0.2)' : 'rgba(0, 240, 255, 0.2)';
+        ctx.strokeStyle = isLightMode ? 'rgba(2, 132, 199, 0.3)' : 'rgba(0, 240, 255, 0.3)';
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.arc(cx, cy, R, 0, Math.PI * 2);
@@ -938,7 +942,7 @@ function startFlightMapAnimation(flight) {
         ctx.shadowBlur = 0; // reset shadow
         
         // 3. Grid Lintang & Bujur Globe (Latitude & Longitude Lines)
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+        ctx.strokeStyle = isLightMode ? 'rgba(0, 0, 0, 0.08)' : 'rgba(255, 255, 255, 0.05)';
         ctx.lineWidth = 0.8;
         
         // Lintang (Latitudes)
@@ -1001,7 +1005,7 @@ function startFlightMapAnimation(flight) {
                 started = false;
             }
         }
-        ctx.strokeStyle = 'rgba(255, 193, 7, 0.2)';
+        ctx.strokeStyle = isLightMode ? 'rgba(217, 119, 6, 0.3)' : 'rgba(255, 193, 7, 0.2)';
         ctx.lineWidth = 3.5;
         ctx.stroke();
         
@@ -1018,7 +1022,7 @@ function startFlightMapAnimation(flight) {
                 started = false;
             }
         }
-        ctx.strokeStyle = '#ffc107';
+        ctx.strokeStyle = isLightMode ? '#C26A00' : '#ffc107';
         ctx.lineWidth = 1.8;
         ctx.setLineDash([4, 6]);
         ctx.lineDashOffset = -animationFrame * 0.6;
@@ -1036,13 +1040,13 @@ function startFlightMapAnimation(flight) {
             ctx.arc(ptOrg.x, ptOrg.y, 4.5, 0, Math.PI * 2);
             ctx.fill();
             
-            ctx.strokeStyle = flight.type === 'departure' ? 'rgba(255, 193, 7, 0.45)' : 'rgba(13, 110, 253, 0.45)';
+            ctx.strokeStyle = flight.type === 'departure' ? (isLightMode ? 'rgba(217, 119, 6, 0.55)' : 'rgba(255, 193, 7, 0.45)') : (isLightMode ? 'rgba(2, 132, 199, 0.55)' : 'rgba(13, 110, 253, 0.45)');
             ctx.lineWidth = 1.2;
             ctx.beginPath();
             ctx.arc(ptOrg.x, ptOrg.y, 7 * pulse, 0, Math.PI * 2);
             ctx.stroke();
             
-            ctx.fillStyle = '#ffffff';
+            ctx.fillStyle = isLightMode ? '#1A1F36' : '#ffffff';
             ctx.font = 'bold 8.5px monospace';
             ctx.fillText(orgCode, ptOrg.x - 7, ptOrg.y - 10);
         }
@@ -1053,13 +1057,13 @@ function startFlightMapAnimation(flight) {
             ctx.arc(ptDst.x, ptDst.y, 4.5, 0, Math.PI * 2);
             ctx.fill();
             
-            ctx.strokeStyle = flight.type === 'departure' ? 'rgba(13, 110, 253, 0.45)' : 'rgba(255, 193, 7, 0.45)';
+            ctx.strokeStyle = flight.type === 'departure' ? (isLightMode ? 'rgba(2, 132, 199, 0.55)' : 'rgba(13, 110, 253, 0.45)') : (isLightMode ? 'rgba(217, 119, 6, 0.55)' : 'rgba(255, 193, 7, 0.45)');
             ctx.lineWidth = 1.2;
             ctx.beginPath();
             ctx.arc(ptDst.x, ptDst.y, 7 * pulse, 0, Math.PI * 2);
             ctx.stroke();
             
-            ctx.fillStyle = '#ffffff';
+            ctx.fillStyle = isLightMode ? '#1A1F36' : '#ffffff';
             ctx.font = 'bold 8.5px monospace';
             ctx.fillText(destCode, ptDst.x - 7, ptDst.y - 10);
         }
@@ -1083,8 +1087,8 @@ function startFlightMapAnimation(flight) {
             
             // Bayangan pesawat bersinar
             ctx.shadowBlur = 10;
-            ctx.shadowColor = '#ffc107';
-            ctx.fillStyle = '#ffc107';
+            ctx.shadowColor = isLightMode ? '#D97706' : '#ffc107';
+            ctx.fillStyle = isLightMode ? '#D97706' : '#ffc107';
             
             // Gambar Pesawat
             ctx.beginPath();
@@ -1130,36 +1134,37 @@ function startFlightMapAnimation(flight) {
             if (distFromCenter > R * 0.92) continue;
             
             // Titik penanda kecil
-            ctx.fillStyle = 'rgba(56, 189, 248, 0.7)';
+            ctx.fillStyle = isLightMode ? 'rgba(2, 132, 199, 0.7)' : 'rgba(56, 189, 248, 0.7)';
             ctx.beginPath();
             ctx.arc(ptC.x, ptC.y, 1.5, 0, Math.PI * 2);
             ctx.fill();
             
             // Teks nama negara
-            ctx.fillStyle = 'rgba(200, 230, 255, 0.65)';
-            ctx.fillText(country.name, ptC.x, ptC.y - 5);
+            ctx.fillStyle = isLightMode ? 'rgba(30, 64, 175, 0.7)' : 'rgba(200, 230, 255, 0.65)';
+            const dispName = (typeof currentLang !== 'undefined' && currentLang === 'en' && country.name_en) ? country.name_en : country.name;
+            ctx.fillText(dispName, ptC.x, ptC.y - 5);
             labelCount++;
         }
         
         ctx.textAlign = 'start'; // Reset text alignment
         
         // 8. Tampilan HUD Dashboard Telemetry di Kanan Atas
-        ctx.fillStyle = 'rgba(5, 7, 13, 0.8)';
+        ctx.fillStyle = isLightMode ? 'rgba(255, 255, 255, 0.85)' : 'rgba(5, 7, 13, 0.8)';
         const hudX = canvas.width - 122;
         const hudY = 10;
         const hudW = 112;
         const hudH = 75;
         ctx.fillRect(hudX, hudY, hudW, hudH);
         
-        ctx.strokeStyle = 'rgba(255, 193, 7, 0.25)';
+        ctx.strokeStyle = isLightMode ? 'rgba(217, 119, 6, 0.35)' : 'rgba(255, 193, 7, 0.25)';
         ctx.lineWidth = 1;
         ctx.strokeRect(hudX, hudY, hudW, hudH);
         
-        ctx.fillStyle = '#ffc107';
+        ctx.fillStyle = isLightMode ? '#D97706' : '#ffc107';
         ctx.font = 'bold 7px monospace';
         ctx.fillText("FLIGHT TELEMETRY", hudX + 8, hudY + 12);
         
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+        ctx.fillStyle = isLightMode ? '#6B7280' : 'rgba(255, 255, 255, 0.5)';
         ctx.font = '6.5px monospace';
         ctx.fillText("SPEED :", hudX + 8, hudY + 25);
         ctx.fillText("ALT   :", hudX + 8, hudY + 36);
@@ -1167,7 +1172,7 @@ function startFlightMapAnimation(flight) {
         ctx.fillText("HDG   :", hudX + 8, hudY + 58);
         ctx.fillText("STATUS:", hudX + 8, hudY + 69);
         
-        ctx.fillStyle = '#ffffff';
+        ctx.fillStyle = isLightMode ? '#2C2C28' : '#ffffff';
         ctx.font = 'bold 7.2px monospace';
         ctx.fillText(`${currentSpeed} km/h`, hudX + 46, hudY + 25);
         ctx.fillText(`${currentAlt.toLocaleString()} ft`, hudX + 46, hudY + 36);
@@ -1181,12 +1186,12 @@ function startFlightMapAnimation(flight) {
         } else if (flight.status === 'Delayed') {
             ctx.fillStyle = '#fd7e14';
         } else {
-            ctx.fillStyle = '#ffc107';
+            ctx.fillStyle = isLightMode ? '#C26A00' : '#ffc107';
         }
         ctx.fillText(flight.status.toUpperCase(), hudX + 46, hudY + 69);
         
         // Tampilkan petunjuk putar di kiri bawah
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.fillStyle = isLightMode ? 'rgba(0, 0, 0, 0.4)' : 'rgba(255, 255, 255, 0.3)';
         ctx.font = '7px monospace';
         ctx.fillText("◀ SERET MOUSE / TOUCH UNTUK MEMUTAR BUMI ▶", 12, canvas.height - 10);
         
