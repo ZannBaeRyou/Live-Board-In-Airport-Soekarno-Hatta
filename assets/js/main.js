@@ -8,7 +8,7 @@
 // FLIGHT DATABASES PER TERMINAL
 // ============================================
 
-const TERMINAL_1_FLIGHTS = [
+let TERMINAL_1_FLIGHTS = [
     // DEPARTURES - Terminal 1 (Domestic: Lion Air, Batik Air, Wings Air, Sriwijaya, NAM Air)
     { id: 't1-dep-jt510', type: 'departure', number: 'JT 510', airline: 'Lion Air', logo: '✈️', destination: 'Surabaya (SUB)', time: '06:15', estimatedTime: '06:15 (On Time)', status: 'Departed', progress: 100, gate: 'Gate A1', counter: 'Row 1-4' },
     { id: 't1-dep-jt370', type: 'departure', number: 'JT 370', airline: 'Lion Air', logo: '✈️', destination: 'Yogyakarta (JOG)', time: '07:00', estimatedTime: '07:00 (On Time)', status: 'Departed', progress: 100, gate: 'Gate A3', counter: 'Row 1-4' },
@@ -40,7 +40,7 @@ const TERMINAL_1_FLIGHTS = [
     { id: 't1-arr-jt919', type: 'arrival', number: 'JT 919', airline: 'Lion Air', logo: '✈️', origin: 'Manado (MDC)', time: '22:00', estimatedTime: '22:00 (On Time)', status: 'Cancelled', progress: 0, gate: 'Gate -', baggage: 'Belt -' },
 ];
 
-const TERMINAL_2_FLIGHTS = [
+let TERMINAL_2_FLIGHTS = [
     // DEPARTURES - Terminal 2 (AirAsia, Lion Intl, Scoot, Jetstar, Cebu Pacific, etc.)
     { id: 't2-dep-qz7520', type: 'departure', number: 'QZ 7520', airline: 'AirAsia Indonesia', logo: '✈️', destination: 'Kuala Lumpur (KUL)', time: '06:45', estimatedTime: '06:45 (On Time)', status: 'Departed', progress: 100, gate: 'Gate D1', counter: 'Row E01-E06' },
     { id: 't2-dep-xt272', type: 'departure', number: 'XT 272', airline: 'Indonesia AirAsia X', logo: '✈️', destination: 'Melbourne (MEL)', time: '07:30', estimatedTime: '07:30 (On Time)', status: 'Departed', progress: 100, gate: 'Gate D5', counter: 'Row E01-E06' },
@@ -71,7 +71,7 @@ const TERMINAL_2_FLIGHTS = [
     { id: 't2-arr-qz189', type: 'arrival', number: 'QZ 189', airline: 'AirAsia Indonesia', logo: '✈️', origin: 'Taipei (TPE)', time: '22:15', estimatedTime: '22:15 (On Time)', status: 'Cancelled', progress: 0, gate: 'Gate -', baggage: 'Belt -' },
 ];
 
-const TERMINAL_3_FLIGHTS = [
+let TERMINAL_3_FLIGHTS = [
     // DEPARTURES - Terminal 3 (Garuda, Citilink, SQ, EK, QR, NH, etc.)
     { id: 't3-dep-ga204', type: 'departure', number: 'GA 204', airline: 'Garuda Indonesia', logo: '✈️', destination: 'Bali (DPS)', time: '08:30', estimatedTime: '08:30 (On Time)', status: 'Departed', progress: 100, gate: 'Gate 11', counter: 'Row F01-F08' },
     { id: 't3-dep-sq951', type: 'departure', number: 'SQ 951', airline: 'Singapore Airlines', logo: '✈️', destination: 'Singapore (SIN)', time: '09:15', estimatedTime: '09:15 (On Time)', status: 'Departed', progress: 100, gate: 'Gate 22', counter: 'Row C11-C18' },
@@ -120,7 +120,7 @@ let FLIGHT_DATABASE = [];
 let mapAnimationId = null;
 let worldLandGeoJSON = null;
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     // 1. Fadeout Loader
     const loader = document.getElementById('page-loader');
     if (loader) {
@@ -130,24 +130,78 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 400);
     }
 
-    // 2. Detect which terminal page we're on
+    // 2. Initialize Supabase
+    let isConnected = false;
+    if (typeof initSupabase === 'function') {
+        isConnected = initSupabase();
+    }
+
+    // 3. Detect which terminal page we're on
     const terminalMeta = document.querySelector('meta[name="terminal"]');
     if (terminalMeta) {
         currentTerminal = terminalMeta.content;
         FLIGHT_DATABASE = TERMINAL_MAP[currentTerminal] || [];
+        
+        // Fetch Real-time Supabase Data
+        if (isConnected && typeof fetchFlights === 'function') {
+            const realData = await fetchFlights(currentTerminal);
+            if (realData && realData.length > 0) {
+                FLIGHT_DATABASE = realData;
+                
+                // Realtime Subscriptions
+                subscribeToFlights(
+                    currentTerminal,
+                    (flight) => { // Insert
+                        FLIGHT_DATABASE.push(flight);
+                        renderFIDS();
+                        updateDashboardStats();
+                    },
+                    (newF, oldF) => { // Update
+                        const idx = FLIGHT_DATABASE.findIndex(f => f.id === newF.id);
+                        if (idx !== -1) FLIGHT_DATABASE[idx] = newF;
+                        else FLIGHT_DATABASE.push(newF);
+                        renderFIDS();
+                        updateDashboardStats();
+                    },
+                    (oldF) => { // Delete
+                        FLIGHT_DATABASE = FLIGHT_DATABASE.filter(f => f.id !== oldF.id);
+                        renderFIDS();
+                        updateDashboardStats();
+                    }
+                );
+            }
+        }
         initFIDSBoard();
+    } else {
+        // We are on Dashboard
+        if (isConnected && typeof fetchAllFlights === 'function') {
+            const allData = await fetchAllFlights();
+            if (allData['1'] && allData['1'].length > 0) TERMINAL_1_FLIGHTS = allData['1'];
+            if (allData['2'] && allData['2'].length > 0) TERMINAL_2_FLIGHTS = allData['2'];
+            if (allData['3'] && allData['3'].length > 0) TERMINAL_3_FLIGHTS = allData['3'];
+            
+            // Re-render Dashboard stats
+            updateDashboardStats();
+            
+            subscribeToFlights(
+                null,
+                (f) => { window.location.reload(); },
+                (nf, of) => { window.location.reload(); },
+                (f) => { window.location.reload(); }
+            );
+        }
     }
 
-    // 3. Start Real-Time FIDS Clock (GMT+7 WIB)
+    // 4. Start Real-Time FIDS Clock (GMT+7 WIB)
     initFIDSClock();
 
-    // 4. Scroll animations
+    // 5. Scroll animations
     initScrollReveal();
 
-    // 5. Dashboard live stats
+    // 6. Dashboard live stats (initial)
     updateDashboardStats();
 
-    // 6. Ambil data peta bumi riil (Natural Earth GeoJSON)
+    // 7. Ambil data peta bumi riil (Natural Earth GeoJSON)
     fetch('https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_land.geojson')
         .then(res => {
             if (!res.ok) throw new Error("Gagal mengambil data peta");

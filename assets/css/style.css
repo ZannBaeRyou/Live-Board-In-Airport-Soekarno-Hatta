@@ -8,36 +8,37 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --fids-bg-darkest: #060911;      /* Deepest screen terminal background */
-    --fids-bg-board: #0B101D;        /* Main FIDS board background */
-    --fids-bg-row: #121829;          /* FIDS table row background */
-    --fids-bg-row-hover: #192138;    /* FIDS table row hover background */
-    --fids-border: #1E2840;          /* Hairline border for tables */
+    /* Premium Modern Dark Theme (Glassmorphism & Deep Obsidian) */
+    --fids-bg-darkest: #050505;      /* Ultra deep obsidian background */
+    --fids-bg-board: rgba(15, 15, 17, 0.7); /* Translucent glass board */
+    --fids-bg-row: rgba(255, 255, 255, 0.02); /* Glass row */
+    --fids-bg-row-hover: rgba(255, 255, 255, 0.06); /* Glass row hover */
+    --fids-border: rgba(255, 255, 255, 0.08); /* Frosted hairline border */
     
-    /* Digital LED Colors */
-    --fids-amber: #FFC107;           /* Main FIDS Amber/Yellow text */
-    --fids-amber-glow: rgba(255, 193, 7, 0.2);
-    --fids-green: #2EC4B6;           /* Landed / On Time */
-    --fids-red: #FF1744;             /* Delayed / Cancelled */
-    --fids-blue: #00E5FF;            /* Boarding / Check-in */
-    --fids-grey: #7E8B9B;            /* Departed / Closed */
+    /* Modern Sophisticated Accents */
+    --fids-amber: #F59E0B;           /* Premium Gold/Amber */
+    --fids-amber-glow: rgba(245, 158, 11, 0.15);
+    --fids-green: #10B981;           /* Emerald Green */
+    --fids-red: #EF4444;             /* Modern Rose/Red */
+    --fids-blue: #38BDF8;            /* Sky Blue */
+    --fids-grey: #94A3B8;            /* Slate Gray */
     
-    --text-white: #FFFFFF;
-    --text-muted: #8E9BAE;
+    --text-white: #F8FAFC;
+    --text-muted: #94A3B8;
     
     --transition-fids: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-    --radius-fids: 8px;
+    --radius-fids: 12px;             /* Slightly rounder for modern feel */
 
-    /* Light mode overlay vars */
-    --navbar-bg: rgba(6, 9, 17, 0.75);
-    --navbar-border: rgba(255, 193, 7, 0.2);
-    --hero-overlay-start: rgba(6, 9, 17, 0.4);
-    --hero-overlay-end: rgba(6, 9, 17, 0.85);
-    --modal-backdrop: rgba(6, 9, 17, 0.85);
-    --scrollbar-track: #060911;
-    --canvas-bg: #0d172e;
-    --shadow-color: rgba(0, 0, 0, 0.4);
-    --shadow-hover: rgba(255, 193, 7, 0.15);
+    /* Glassmorphism Overlays */
+    --navbar-bg: rgba(5, 5, 5, 0.75);
+    --navbar-border: rgba(255, 255, 255, 0.05);
+    --hero-overlay-start: rgba(5, 5, 5, 0.5);
+    --hero-overlay-end: rgba(5, 5, 5, 0.95);
+    --modal-backdrop: rgba(0, 0, 0, 0.85);
+    --scrollbar-track: #050505;
+    --canvas-bg: #09090b;
+    --shadow-color: rgba(0, 0, 0, 0.6);
+    --shadow-hover: rgba(245, 158, 11, 0.2);
 }
 
 /* ============================================
@@ -851,6 +852,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .fids-board-row {
     background-color: var(--fids-bg-row);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--fids-border);
     border-left: 3px solid transparent;
     border-radius: var(--radius-fids);
@@ -1556,4 +1559,80 @@ span.flap-animate, a.flap-animate {
     45% { transform: perspective(600px) rotateX(-45deg) translateY(-5px); opacity: 0; filter: blur(2px); }
     50% { transform: perspective(600px) rotateX(45deg) translateY(5px); opacity: 0; filter: blur(2px); }
     100% { transform: perspective(600px) rotateX(0deg) translateY(0); opacity: 1; filter: blur(0); }
+}
+\n
+/* =========================================
+   SUPABASE REAL-TIME STYLES
+   ========================================= */
+
+.sync-status-bar {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.sync-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.sync-dot-online {
+    background-color: #10b981;
+    box-shadow: 0 0 8px #10b981;
+    animation: pulse-online 2s infinite;
+}
+
+.sync-dot-offline {
+    background-color: #6b7280;
+}
+
+.sync-dot-error {
+    background-color: #ef4444;
+}
+
+.sync-dot-stale {
+    background-color: #f59e0b;
+}
+
+@keyframes pulse-online {
+    0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+    70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+/* Yellow Blink for updated rows */
+@keyframes row-update-blink {
+    0% { background-color: rgba(234, 179, 8, 0.3); }
+    100% { background-color: transparent; }
+}
+
+.fids-row-updated {
+    animation: row-update-blink 2s ease-out forwards;
+    border-left: 3px solid #eab308 !important;
+}
+
+/* Dark mode adjustments for sync status */
+[data-theme="dark"] .sync-status-bar {
+    background: rgba(15, 23, 42, 0.7);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+[data-theme="light"] .sync-status-bar {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: #333;
 }

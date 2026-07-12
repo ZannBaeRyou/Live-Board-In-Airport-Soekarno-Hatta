@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CGK FIDS | Admin System Status</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.9);
+        }
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Inter', sans-serif;
+            color: #333;
+        }
+        .admin-header {
+            background: linear-gradient(135deg, #0284c7, #0ea5e9);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .card {
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #0284c7;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .log-table {
+            font-size: 0.85rem;
+        }
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="admin-header">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="mb-0"><i class="fa-solid fa-server me-2"></i>FIDS System Status</h2>
+                <p class="mb-0 opacity-75">Supabase Real-Time Backend Monitoring</p>
+            </div>
+            <div>
+                <a href="index.html" class="btn btn-light btn-sm"><i class="fa-solid fa-arrow-left me-1"></i> Kembali ke Board</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Peringatan Koneksi -->
+        <div id="connection-warning" class="alert alert-warning d-none">
+            <i class="fa-solid fa-triangle-exclamation me-2"></i>
+            <strong>Supabase Belum Dikonfigurasi!</strong> Anda belum memasukkan Project URL dan API Key ke dalam file <code>assets/js/supabase-config.js</code>.
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h6 class="text-muted text-uppercase mb-3">API Sync Status</h6>
+                        <div id="stat-api-status" class="stat-value text-secondary">
+                            <i class="fa-solid fa-circle-question"></i>
+                        </div>
+                        <p id="stat-last-sync" class="small text-muted mt-2">Menunggu data...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h6 class="text-muted text-uppercase mb-3">Total Penerbangan Hari Ini</h6>
+                        <div id="stat-total-flights" class="stat-value">0</div>
+                        <p class="small text-muted mt-2">Di dalam database</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h6 class="text-muted text-uppercase mb-3">Koneksi Real-Time</h6>
+                        <div id="stat-realtime" class="stat-value text-success">
+                            <i class="fa-solid fa-satellite-dish"></i>
+                        </div>
+                        <p class="small text-muted mt-2">WebSocket Aktif</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fa-solid fa-clock-rotate-left me-2"></i>Log Sinkronisasi Terakhir</h5>
+                        <button class="btn btn-sm btn-outline-primary" onclick="loadStatusData()"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover log-table mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Waktu (WIB)</th>
+                                        <th>Tipe</th>
+                                        <th>Status</th>
+                                        <th>Insert</th>
+                                        <th>Update</th>
+                                        <th>Durasi</th>
+                                        <th>Pesan Error</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="log-table-body">
+                                    <tr><td colspan="7" class="text-center py-4">Memuat data log...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="mb-0"><i class="fa-solid fa-gears me-2"></i>Konfigurasi Sistem</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush" id="config-list">
+                            <li class="list-group-item text-center">Memuat konfigurasi...</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/supabase-config.js"></script>
+    <script src="assets/js/supabase-service.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const isConnected = initSupabase();
+            
+            if (!isConnected) {
+                document.getElementById('connection-warning').classList.remove('d-none');
+                document.getElementById('stat-api-status').innerHTML = '<i class="fa-solid fa-triangle-exclamation text-warning"></i>';
+                return;
+            }
+
+            loadStatusData();
+        });
+
+        async function loadStatusData() {
+            if (typeof fetchSystemStatus !== 'function') return;
+
+            const data = await fetchSystemStatus();
+            if (!data) return;
+
+            // Update Header Stats
+            document.getElementById('stat-total-flights').innerText = data.flightCount;
+
+            // Update Logs Table
+            const tbody = document.getElementById('log-table-body');
+            tbody.innerHTML = '';
+            
+            if (data.logs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-muted">Belum ada log sinkronisasi hari ini.</td></tr>';
+            } else {
+                data.logs.forEach(log => {
+                    const date = new Date(log.created_at).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
+                    let statusHtml = '';
+                    if (log.status === 'success') statusHtml = '<span class="status-badge bg-success text-white">SUCCESS</span>';
+                    else if (log.status === 'error') statusHtml = '<span class="status-badge bg-danger text-white">ERROR</span>';
+                    else statusHtml = '<span class="status-badge bg-warning text-dark">PARTIAL</span>';
+
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${date}</td>
+                            <td>${log.sync_type}</td>
+                            <td>${statusHtml}</td>
+                            <td>${log.flights_inserted}</td>
+                            <td>${log.flights_updated}</td>
+                            <td>${log.duration_ms} ms</td>
+                            <td class="text-danger">${log.error_message || '-'}</td>
+                        </tr>
+                    `;
+                });
+            }
+
+            // Update Config
+            const configList = document.getElementById('config-list');
+            configList.innerHTML = '';
+            let apiStatus = 'offline';
+            let lastSync = '-';
+
+            data.config.forEach(c => {
+                if (c.key === 'api_status') apiStatus = c.value;
+                if (c.key === 'last_sync_timestamp') lastSync = new Date(c.value).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
+                
+                // Sensor API key
+                const displayValue = c.key === 'aviation_api_key' ? 
+                    (c.value ? '••••••••••••••••' : 'Belum Dikonfigurasi') : c.value;
+
+                configList.innerHTML += `
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <code>${c.key}</code>
+                        <span class="text-muted">${displayValue}</span>
+                    </li>
+                `;
+            });
+
+            // Status Indicator
+            const statIcon = document.getElementById('stat-api-status');
+            if (apiStatus === 'online') {
+                statIcon.innerHTML = '<i class="fa-solid fa-cloud-arrow-down text-success"></i>';
+                statIcon.classList.add('text-success');
+                statIcon.classList.remove('text-secondary', 'text-danger');
+            } else {
+                statIcon.innerHTML = '<i class="fa-solid fa-cloud-xmark text-danger"></i>';
+                statIcon.classList.add('text-danger');
+                statIcon.classList.remove('text-secondary', 'text-success');
+            }
+
+            document.getElementById('stat-last-sync').innerText = `Terakhir: ${lastSync}`;
+        }
+    </script>
+</body>
+</html>
