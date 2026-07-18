@@ -1541,7 +1541,7 @@ async function initWeather() {
             
             widget.innerHTML = `<div class="d-flex align-items-center rounded-pill px-3 py-1" style="background-color: var(--fids-bg-board); border: 1px solid var(--fids-border); backdrop-filter: blur(4px);">
                 <i class="fa-solid ${icon} text-amber me-2"></i>
-                <span class="fw-bold font-monospace small" style="font-size: 0.8rem; color: var(--text-white);">CGK: ${temp}&deg;C <span class="d-none d-xl-inline">(<span data-i18n="${descKey}">${initialText}</span>)</span></span>
+                <span class="fw-bold font-monospace small" style="font-size: 0.8rem; color: var(--text-white);">CGK: ${temp}&deg;C <span class="ms-1">(<span data-i18n="${descKey}">${initialText}</span>)</span></span>
             </div>`;
         }
     } catch(err) {
