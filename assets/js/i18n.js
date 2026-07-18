@@ -24,8 +24,8 @@ const I18N_DICT = {
         col_status: "Status",
         modal_detail: "Detail Penerbangan",
         modal_route: "RUTE",
-        modal_sched: "JADWAL ASLI",
-        modal_est: "ESTIMASI / AKTUAL",
+        modal_sched: "JADWAL BERANGKAT",
+        modal_est: "ESTIMASI BERANGKAT",
         modal_gate: "GERBANG",
         modal_belt: "SABUK BAGASI",
         modal_close: "TUTUP DETAIL",
@@ -48,11 +48,19 @@ const I18N_DICT = {
         footer_dir: "Direktori Maskapai",
         footer_service: "LAYANAN PELANGGAN BANDARA",
         footer_service_desc: "Hubungi contact center resmi Angkasa Pura II untuk konfirmasi darurat.",
-        footer_copyright: "&copy; 2026 Bandara Internasional Soekarno-Hatta (CGK). Seluruh hak cipta dilindungi.",
+        footer_creator: "<em>Didesain & Dikembangkan oleh Fauzan Ayub</em>",
+        footer_copyright: "&copy; 2026 Fauzan Ayub &mdash; Liveboard. Hak cipta dilindungi.",
+        footer_disclaimer: "<strong>Disclaimer:</strong> Liveboard adalah proyek informasi penerbangan independen dan tidak berafiliasi dengan pengelola resmi Bandara Internasional Soekarno-Hatta.",
         footer_policy: "Kebijakan Layanan",
         footer_map: "Peta Terminal",
         airlines_subtitle: "DIREKTORI AREA CHECK-IN",
-        airlines_intro: "Berikut adalah daftar maskapai penerbangan utama yang beroperasi secara aktif di Bandara Internasional Soekarno-Hatta (CGK) beserta lokasi terminal dan zona pembagian konter check-in keberangkatan."
+        airlines_intro: "Berikut adalah daftar maskapai penerbangan utama yang beroperasi secara aktif di Bandara Internasional Soekarno-Hatta (CGK) beserta lokasi terminal dan zona pembagian konter check-in keberangkatan.",
+        wx_clear: "Cerah",
+        wx_cloudy: "Berawan",
+        wx_fog: "Berkabut",
+        wx_rain: "Hujan Ringan",
+        wx_snow: "Salju",
+        wx_storm: "Badai Petir"
     },
     en: {
         nav_dashboard: "Dashboard",
@@ -79,8 +87,8 @@ const I18N_DICT = {
         col_status: "Status",
         modal_detail: "Flight Details",
         modal_route: "ROUTE",
-        modal_sched: "SCHEDULED",
-        modal_est: "ESTIMATED / ACTUAL",
+        modal_sched: "SCHEDULED DEP.",
+        modal_est: "ESTIMATED DEP.",
         modal_gate: "GATE",
         modal_belt: "BAGGAGE BELT",
         modal_close: "CLOSE DETAILS",
@@ -103,11 +111,19 @@ const I18N_DICT = {
         footer_dir: "Airlines Directory",
         footer_service: "AIRPORT CUSTOMER SERVICE",
         footer_service_desc: "Contact the official Angkasa Pura II contact center for emergency confirmation.",
-        footer_copyright: "&copy; 2026 Soekarno-Hatta International Airport (CGK). All rights reserved.",
+        footer_creator: "<em>Designed & Developed by Fauzan Ayub</em>",
+        footer_copyright: "&copy; 2026 Fauzan Ayub &mdash; Liveboard. All rights reserved.",
+        footer_disclaimer: "<strong>Disclaimer:</strong> Liveboard is an independent flight information project and is not affiliated with the official management of Soekarno-Hatta International Airport.",
         footer_policy: "Service Policy",
         footer_map: "Terminal Map",
         airlines_subtitle: "CHECK-IN AREA DIRECTORY",
-        airlines_intro: "The following is a list of major airlines actively operating at Soekarno-Hatta International Airport (CGK), including terminal locations and check-in counter zone assignments."
+        airlines_intro: "The following is a list of major airlines actively operating at Soekarno-Hatta International Airport (CGK), including terminal locations and check-in counter zone assignments.",
+        wx_clear: "Clear",
+        wx_cloudy: "Cloudy",
+        wx_fog: "Foggy",
+        wx_rain: "Light Rain",
+        wx_snow: "Snow",
+        wx_storm: "Thunderstorm"
     }
 };
 
@@ -182,11 +198,25 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ============================================
    THEME TOGGLE LOGIC (DARK/LIGHT)
    ============================================ */
-let currentTheme = localStorage.getItem('fids_theme') || 'dark';
+// Deteksi tema: 1) Cek localStorage (pilihan manual user), 2) Ikuti sistem device
+function getSystemTheme() {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+        return 'light';
+    }
+    return 'dark';
+}
+let currentTheme = localStorage.getItem('fids_theme') || getSystemTheme();
 
 function initTheme() {
     document.documentElement.setAttribute('data-theme', currentTheme);
     updateThemeIcon();
+    
+    // Pantau perubahan tema sistem secara real-time (jika user belum pernah set manual)
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (!localStorage.getItem('fids_theme')) {
+            executeThemeChange(e.matches ? 'dark' : 'light');
+        }
+    });
 }
 
 function toggleTheme(event) {

@@ -194,6 +194,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 4. Start Real-Time FIDS Clock (GMT+7 WIB)
     initFIDSClock();
+    initWeather();
 
     // 5. Scroll animations
     initScrollReveal();
@@ -439,7 +440,10 @@ function renderFIDS() {
                 <div class="col-4 col-md-2 font-digital fids-flight text-truncate">${flight.number}</div>
                 <div class="col-5 col-md-3">
                     <span class="fids-destination d-block text-uppercase text-truncate">${flight.type === 'departure' ? flight.destination : flight.origin}</span>
-                    <span class="text-muted d-block d-md-inline text-truncate" style="font-size:0.8rem">${flight.airline}</span>
+                    <span class="text-muted d-flex align-items-center text-truncate mt-1" style="font-size:0.85rem">
+                        ${flight.logo ? `<img src="${flight.logo}" alt="${flight.airline}" class="me-2 rounded bg-white" style="width: 20px; height: 20px; object-fit: contain; padding: 2px;" onerror="this.style.display='none'">` : ''}
+                        <span>${flight.airline}</span>
+                    </span>
                 </div>
                 
                 <div class="col-6 col-md-2 mt-2 mt-md-0 d-md-block">
@@ -824,11 +828,14 @@ function toggleFullscreenMap() {
     }
     
     // Sesuaikan resolusi internal canvas dengan ukuran tampilannya secara instan
+    const _dpr = window.devicePixelRatio || 1;
     setTimeout(() => {
         const canvas = document.getElementById('flight-map-canvas');
         if (canvas) {
-            canvas.width = canvas.clientWidth;
-            canvas.height = canvas.clientHeight;
+            canvas.width = canvas.clientWidth * _dpr;
+            canvas.height = canvas.clientHeight * _dpr;
+            const ctx = canvas.getContext('2d');
+            ctx.scale(_dpr, _dpr);
         }
     }, 50);
 }
@@ -840,11 +847,17 @@ function startFlightMapAnimation(flight) {
     const canvas = document.getElementById('flight-map-canvas');
     if (!canvas) return;
     
-    // Atur resolusi awal canvas agar pas dengan wadahnya
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
+    // Zoom & DPI
+    const dpr = window.devicePixelRatio || 1;
+    let zoomLevel = 1.0;
+    let targetZoomLevel = 1.0;
+    let initialPinchDist = null;
     
+    // Atur resolusi awal canvas agar pas dengan wadahnya
+    canvas.width = canvas.clientWidth * dpr;
+    canvas.height = canvas.clientHeight * dpr;
     const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
     
     // Parse Rute
     const orgCode = flight.type === 'departure' ? 'CGK' : getAirportCode(flight.origin);
@@ -894,6 +907,8 @@ function startFlightMapAnimation(flight) {
     let rotY = -midLon * Math.PI / 180;
     let rotX = midLat * Math.PI / 180;
     
+    // (Zoom & DPI variables moved above canvas init)
+    
     // Mouse / Touch Drag and Drop Interaction
     let isDragging = false;
     let startX = 0;
@@ -925,29 +940,49 @@ function startFlightMapAnimation(flight) {
         isDragging = false;
     };
     
+    canvas.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        targetZoomLevel += e.deltaY > 0 ? -0.15 : 0.15;
+        targetZoomLevel = Math.max(0.8, Math.min(4.0, targetZoomLevel));
+    }, { passive: false });
+    
     // Touchscreen gesture drag (dengan preventDefault agar tidak bentrok dengan scroll/swipe modal)
     canvas.addEventListener('touchstart', (e) => {
-        if (e.touches.length !== 1) return;
         e.stopPropagation();
-        
-        isDragging = true;
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-        dragRotX = rotX;
-        dragRotY = rotY;
+        if (e.touches.length === 1) {
+            isDragging = true;
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            dragRotX = rotX;
+            dragRotY = rotY;
+        } else if (e.touches.length === 2) {
+            isDragging = false;
+            initialPinchDist = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+        }
     }, { passive: false });
     
     canvas.addEventListener('touchmove', (e) => {
-        if (!isDragging || e.touches.length !== 1) return;
         e.stopPropagation();
-        if (e.cancelable) e.preventDefault(); // Stop scroll browser
+        if (e.cancelable) e.preventDefault();
         
-        const dx = e.touches[0].clientX - startX;
-        const dy = e.touches[0].clientY - startY;
-        
-        rotY = dragRotY - dx * 0.0075;
-        rotX = dragRotX + dy * 0.0075;
-        rotX = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, rotX));
+        if (isDragging && e.touches.length === 1) {
+            const dx = e.touches[0].clientX - startX;
+            const dy = e.touches[0].clientY - startY;
+            rotY = dragRotY - (dx * 0.0075) / zoomLevel;
+            rotX = dragRotX + (dy * 0.0075) / zoomLevel;
+            rotX = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, rotX));
+        } else if (e.touches.length === 2 && initialPinchDist !== null) {
+            const currentPinchDist = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+            const pinchRatio = currentPinchDist / initialPinchDist;
+            targetZoomLevel = Math.max(0.8, Math.min(4.0, targetZoomLevel * pinchRatio));
+            initialPinchDist = currentPinchDist; // continuous pinch
+        }
     }, { passive: false });
     
     canvas.addEventListener('touchend', () => {
@@ -971,13 +1006,16 @@ function startFlightMapAnimation(flight) {
         }
         
         // 1. Skala Radius dan Posisi Globe dinamis terhadap Canvas
-        const cx = canvas.width / 2;
-        const cy = canvas.height / 2;
-        const R = Math.min(canvas.width, canvas.height) * 0.42;
+        zoomLevel += (targetZoomLevel - zoomLevel) * 0.15;
+        const logW = canvas.width / dpr;
+        const logH = canvas.height / dpr;
+        const cx = logW / 2;
+        const cy = logH / 2;
+        const R = Math.min(logW, logH) * 0.42 * zoomLevel;
         
         // Background ruang angkasa (Biru Navy Premium atau Soft Cream)
         ctx.fillStyle = isLightMode ? '#F5F3EC' : '#0d172e';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillRect(0, 0, logW, logH);
         
         // 2. Lingkaran Dasar Samudera Globe
         ctx.fillStyle = isLightMode ? '#EBE8DF' : '#080f21';
@@ -1179,6 +1217,11 @@ function startFlightMapAnimation(flight) {
         
         for (let i = 0; i < COUNTRY_LABELS.length; i++) {
             const country = COUNTRY_LABELS[i];
+            
+            // Level of Detail (LOD) - Prevent overlapping when zoomed out
+            if (zoomLevel < 1.3 && i % 4 !== 0 && country.name !== 'INDONESIA') continue;
+            if (zoomLevel < 2.0 && i % 2 !== 0 && country.name !== 'INDONESIA') continue;
+            // > 2.0 all countries show
             const ptC = project3D(country.lon, country.lat, cx, cy, R, rotX, rotY);
             
             if (!ptC.visible) continue;
@@ -1204,8 +1247,8 @@ function startFlightMapAnimation(flight) {
         
         // 8. Tampilan HUD Dashboard Telemetry di Kanan Atas
         ctx.fillStyle = isLightMode ? 'rgba(255, 255, 255, 0.85)' : 'rgba(5, 7, 13, 0.8)';
-        const hudX = canvas.width - 122;
-        const hudY = 10;
+        const hudX = logW - 122;
+        const hudY = 40; // Diturunkan dari 10 ke 40 agar tidak ketutupan tombol Close
         const hudW = 112;
         const hudH = 75;
         ctx.fillRect(hudX, hudY, hudW, hudH);
@@ -1277,7 +1320,11 @@ function openModal(flight) {
     const terminalName = currentTerminal ? `Terminal ${currentTerminal}` : 'Terminal';
 
     document.getElementById('modal-flight-num').innerText = flight.number;
-    document.getElementById('modal-airline').innerText = flight.airline;
+    if (flight.logo) {
+        document.getElementById('modal-airline').innerHTML = `<img src="${flight.logo}" alt="" class="me-2 rounded bg-white" style="width: 24px; height: 24px; object-fit: contain; padding: 2px;" onerror="this.style.display='none'"> ${flight.airline}`;
+    } else {
+        document.getElementById('modal-airline').innerText = flight.airline;
+    }
     document.getElementById('modal-route').innerHTML = flight.type === 'departure' ? `CGK ${terminalName} &rarr; ${flight.destination}` : `${flight.origin} &rarr; CGK ${terminalName}`;
     document.getElementById('modal-scheduled-time').innerText = flight.time;
     document.getElementById('modal-actual-time').innerText = flight.estimatedTime;
@@ -1467,4 +1514,37 @@ window.addEventListener('languageChanged', () => {
 });
 
     revealElements.forEach(el => observer.observe(el));
+}
+
+// ============================================
+// WEATHER WIDGET (CGK)
+// ============================================
+async function initWeather() {
+    const widget = document.getElementById('weather-widget');
+    if (!widget) return;
+    try {
+        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=-6.1256&longitude=106.6558&current_weather=true');
+        const data = await res.json();
+        if(data && data.current_weather) {
+            const temp = Math.round(data.current_weather.temperature);
+            const code = data.current_weather.weathercode;
+            let icon = 'fa-cloud';
+            let descKey = 'wx_clear';
+            if (code <= 1) { icon = 'fa-sun'; descKey = 'wx_clear'; }
+            else if (code <= 3) { icon = 'fa-cloud-sun'; descKey = 'wx_cloudy'; }
+            else if (code <= 49) { icon = 'fa-smog'; descKey = 'wx_fog'; }
+            else if (code <= 69) { icon = 'fa-cloud-rain'; descKey = 'wx_rain'; }
+            else if (code <= 79) { icon = 'fa-snowflake'; descKey = 'wx_snow'; }
+            else if (code <= 99) { icon = 'fa-cloud-showers-heavy'; descKey = 'wx_storm'; }
+            
+            const initialText = typeof I18N_DICT !== 'undefined' ? I18N_DICT[currentLang][descKey] : 'Cerah';
+            
+            widget.innerHTML = `<div class="d-flex align-items-center rounded-pill px-3 py-1" style="background-color: var(--fids-bg-board); border: 1px solid var(--fids-border); backdrop-filter: blur(4px);">
+                <i class="fa-solid ${icon} text-amber me-2"></i>
+                <span class="fw-bold font-monospace small" style="font-size: 0.8rem; color: var(--text-white);">CGK: ${temp}&deg;C <span class="d-none d-xl-inline">(<span data-i18n="${descKey}">${initialText}</span>)</span></span>
+            </div>`;
+        }
+    } catch(err) {
+        console.error('Weather fetch error:', err);
+    }
 }

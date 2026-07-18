@@ -304,13 +304,18 @@ function transformFlightData(dbFlight) {
         estLabel = `${estimatedTimeStr} (On Time)`;
     }
 
+    // Extract IATA code from flight number (e.g., 'GA 208' -> 'GA')
+    const iataCode = dbFlight.flight_number ? dbFlight.flight_number.split(' ')[0].trim() : '';
+    // Use Aviasales CDN for airline logos (supports square format and fallback)
+    const logoUrl = iataCode ? `https://pics.avs.io/64/64/${iataCode}.png` : '';
+
     return {
         id: `flight-${dbFlight.id}`,
         dbId: dbFlight.id,
         type: dbFlight.flight_type,
         number: dbFlight.flight_number,
         airline: dbFlight.airline,
-        logo: '✈️',
+        logo: logoUrl,
         origin: dbFlight.origin || '',
         destination: dbFlight.destination || '',
         terminal: dbFlight.terminal,

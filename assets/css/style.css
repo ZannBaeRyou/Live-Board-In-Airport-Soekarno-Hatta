@@ -778,8 +778,8 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Custom Search & Filters inside FIDS Board */
 .fids-search-control {
-    background: var(--fids-bg-darkest);
-    border: 1px solid var(--fids-border);
+    background-color: var(--fids-bg-darkest) !important;
+    border: 1px solid var(--fids-border) !important;
     color: var(--text-white) !important;
     border-radius: var(--radius-fids);
     padding: 14px 18px; /* Increased padding for touch targets */
@@ -788,8 +788,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .fids-search-control:focus {
-    border-color: var(--fids-amber);
-    box-shadow: 0 0 10px var(--fids-amber-glow);
+    background-color: var(--fids-bg-darkest) !important;
+    color: var(--text-white) !important;
+    border-color: var(--fids-amber) !important;
+    box-shadow: 0 0 10px var(--fids-amber-glow) !important;
     outline: none;
 }
 
@@ -1190,8 +1192,17 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--text-muted);
     text-decoration: none;
     transition: var(--transition-fids);
-    display: block;
-    margin-bottom: 8px;
+    display: block !important;
+    margin-bottom: 10px;
+    padding: 4px 0;
+}
+
+@media (max-width: 768px) {
+    .footer-fids-link {
+        margin-bottom: 12px;
+        padding: 6px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
 }
 
 .footer-fids-link:hover {
@@ -1306,7 +1317,7 @@ h1, h2, h3, h4, h5, h6 {
         font-size: 1.2rem;
     }
     .fids-tabs {
-        flex-direction: column;
+        flex-direction: row;
     }
     .btn-fids-tab {
         padding: 10px 16px;
@@ -1636,3 +1647,10 @@ span.flap-animate, a.flap-animate {
     border-color: rgba(0, 0, 0, 0.1);
     color: #333;
 }
+
+
+.footer-link-hover { transition: color 0.3s ease; }
+.footer-link-hover:hover { color: var(--fids-amber) !important; }
+
+/* Fix Bootstrap text-muted override for dark mode */
+.text-muted { color: var(--text-muted) !important; }
