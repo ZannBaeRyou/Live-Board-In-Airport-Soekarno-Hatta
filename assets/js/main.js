@@ -202,7 +202,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 6. Dashboard live stats (initial)
     updateDashboardStats();
 
-    // 7. Ambil data peta bumi riil (Natural Earth GeoJSON)
+    // 7. Background Auto-Refresh (Supabase -> UI)
+    initAutoRefresh();
+
+    // 8. Kiosk Mode
+    initKioskMode();
+
+    // 9. Manual Sync Button (Admin)
+    initSyncButton();
+
+    // 10. Ambil data peta bumi riil (Natural Earth GeoJSON)
     fetch('https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_land.geojson')
         .then(res => {
             if (!res.ok) throw new Error("Gagal mengambil data peta");
@@ -414,7 +423,7 @@ function renderFIDS() {
         let statusLabelText = flight.status.toUpperCase();
 
         if (flight.status === 'Check-in') statusClass = 'status-checkin';
-        if (flight.status === 'Boarding' || flight.status === 'Final Call') statusClass = 'status-boarding';
+        if (flight.status === 'Boarding' || flight.status === 'Final Call') statusClass = 'status-boarding status-blink';
         if (flight.status === 'Departed') statusClass = 'status-departed';
         if (flight.status === 'Delayed') statusClass = 'status-delayed';
         if (flight.status === 'Landed') statusClass = 'status-landed';
@@ -1547,4 +1556,128 @@ async function initWeather() {
     } catch(err) {
         console.error('Weather fetch error:', err);
     }
+}
+
+// ============================================
+// AUTO REFRESH (FRONTEND POLLING)
+// ============================================
+function initAutoRefresh() {
+    // Refresh quietly every 60 seconds (1 minute)
+    setInterval(async () => {
+        if (typeof supabaseClient === 'undefined' || !supabaseClient) return;
+
+        if (currentTerminal) {
+            // Kita berada di halaman Terminal
+            if (typeof fetchFlightsForTerminal === 'function') {
+                const freshFlights = await fetchFlightsForTerminal(currentTerminal);
+                if (freshFlights && freshFlights.length > 0) {
+                    FLIGHT_DATABASE = freshFlights;
+                    renderFIDS(); // Render ulang tabel tanpa kedip
+                }
+            }
+        } else {
+            // Kita berada di halaman Dashboard
+            if (typeof fetchAllFlights === 'function') {
+                const allData = await fetchAllFlights();
+                if (allData['1'] && allData['1'].length > 0) TERMINAL_1_FLIGHTS = allData['1'];
+                if (allData['2'] && allData['2'].length > 0) TERMINAL_2_FLIGHTS = allData['2'];
+                if (allData['3'] && allData['3'].length > 0) TERMINAL_3_FLIGHTS = allData['3'];
+                updateDashboardStats();
+            }
+        }
+    }, 60000);
+}
+
+
+
+// ============================================
+// KIOSK MODE (AUTO SCROLL)
+// ============================================
+function initKioskMode() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('kiosk') === 'true' && document.getElementById('fids-board-list')) {
+        console.log('Kiosk mode activated: Auto-scrolling enabled.');
+        
+        // Hide navbar controls for cleaner kiosk look
+        const navbarToggle = document.querySelector('.navbar-toggler');
+        const themeToggle = document.getElementById('theme-toggle');
+        const langBtns = document.querySelectorAll('[id^="lang-"]');
+        if(navbarToggle) navbarToggle.style.display = 'none';
+        if(themeToggle) themeToggle.style.display = 'none';
+        langBtns.forEach(btn => btn.style.display = 'none');
+        
+        let scrollPos = 0;
+        let direction = 1;
+        
+        setInterval(() => {
+            const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+            if (maxScroll <= 0) return;
+            
+            if (direction === 1 && scrollPos >= maxScroll) {
+                direction = 0;
+                setTimeout(() => { direction = -1; }, 5000); // pause 5s at bottom
+            } else if (direction === -1 && scrollPos <= 0) {
+                direction = 0;
+                setTimeout(() => { direction = 1; }, 5000); // pause 5s at top
+            }
+            
+            if (direction !== 0) {
+                scrollPos += 1.2 * direction;
+                if (scrollPos < 0) scrollPos = 0;
+                if (scrollPos > maxScroll) scrollPos = maxScroll;
+                window.scrollTo(0, scrollPos);
+            }
+        }, 30); // 33fps smooth scroll
+    }
+}
+
+// ============================================
+// MANUAL SYNC BUTTON (FOR ADMIN/DEMO)
+// ============================================
+function initSyncButton() {
+    // Sembunyikan dari user biasa. Hanya muncul jika URL mengandung ?admin=fauzan
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('admin') !== 'fauzan') return;
+
+    const themeToggle = document.getElementById('theme-toggle');
+    if (!themeToggle) return;
+    
+    const syncBtn = document.createElement('button');
+    syncBtn.className = 'btn-theme-toggle me-3';
+    syncBtn.title = 'Tarik Jadwal Hari Ini (Manual Sync)';
+    syncBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-down"></i>';
+    syncBtn.style.color = 'var(--fids-amber)'; // Make it stand out slightly
+    
+    syncBtn.addEventListener('click', async () => {
+        const isConfirm = confirm("Tarik jadwal penerbangan hari ini dari satelit AeroDataBox?\n(Akan memakan 2 Kuota API dari batas bulanan Anda)");
+        if (!isConfirm) return;
+        
+        syncBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+        syncBtn.disabled = true;
+        
+        try {
+            const res = await fetch('https://qqeyrvrekivrribftvwk.supabase.co/functions/v1/sync-flights', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer sb_publishable_2wsztIh30XZgzlreXsAu6Q_Ak5Qgntj',
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert(`Berhasil! ${data.inserted} penerbangan berhasil ditarik ke database.\nHalaman akan dimuat ulang untuk menampilkan jadwal baru.`);
+                window.location.reload();
+            } else {
+                alert("Gagal menarik data: " + (data.error || "Unknown error"));
+            }
+        } catch(err) {
+            alert("Terjadi kesalahan koneksi saat menyedot data.");
+            console.error(err);
+        } finally {
+            syncBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-down"></i>';
+            syncBtn.disabled = false;
+        }
+    });
+    
+    themeToggle.parentNode.insertBefore(syncBtn, themeToggle);
 }

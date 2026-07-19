@@ -911,7 +911,15 @@ h1, h2, h3, h4, h5, h6 {
 /* Status colors map */
 .status-scheduled { color: var(--text-white); }
 .status-checkin { color: var(--fids-blue); }
-.status-boarding { color: var(--fids-blue); font-weight: 700; }
+.status-boarding { color: var(--fids-amber); font-weight: 700; }
+@keyframes blink-status {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+}
+.status-blink {
+    animation: blink-status 1s infinite;
+    color: var(--fids-red) !important;
+}
 .status-departed { color: var(--fids-grey); }
 .status-delayed { color: var(--fids-red); font-weight: 700; }
 .status-landed { color: var(--fids-green); }
