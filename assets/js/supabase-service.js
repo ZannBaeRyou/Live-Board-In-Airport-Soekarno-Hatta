@@ -281,9 +281,40 @@ function attemptReconnect(terminal, onInsert, onUpdate, onDelete) {
  * @param {Object} dbFlight - Data mentah dari database
  * @returns {Object} Flight object dalam format UI
  */
+/**
+ * Simulate realistic flight status based on time proximity to make the board look alive
+ */
+function simulateRealisticStatus(dbFlight) {
+    const originalStatus = dbFlight.status;
+    if (!dbFlight || originalStatus === 'Cancelled' || originalStatus === 'Delayed') return originalStatus;
+    
+    const scheduledDate = new Date(dbFlight.scheduled_time);
+    const now = new Date();
+    const diffMins = Math.round((scheduledDate - now) / 60000);
+    
+    if (dbFlight.flight_type === 'departure') {
+        if (diffMins < -10) return 'Departed';
+        if (diffMins >= -10 && diffMins <= 15) return 'Final Call';
+        if (diffMins > 15 && diffMins <= 45) return 'Boarding';
+        if (diffMins > 45 && diffMins <= 180) return 'Check-in';
+        return 'Scheduled';
+    } else {
+        if (diffMins < -45) return 'Landed';
+        if (diffMins >= -45 && diffMins <= -10) return 'Baggage Claim';
+        if (diffMins > -10 && diffMins <= 15) return 'Landed';
+        return 'Scheduled';
+    }
+}
+
+/**
+ * Memetakan data dari Supabase (database) ke format yang diharapkan UI (main.js)
+ * @param {Object} dbFlight Data penerbangan dari tabel Supabase
+ * @returns {Object} Flight object dalam format UI
+ */
 function transformFlightData(dbFlight) {
     if (!dbFlight) return null;
     
+    const smartStatus = simulateRealisticStatus(dbFlight);
     const scheduledDate = new Date(dbFlight.scheduled_time);
     const estimatedDate = dbFlight.estimated_time ? new Date(dbFlight.estimated_time) : scheduledDate;
     
@@ -294,9 +325,9 @@ function transformFlightData(dbFlight) {
     
     // Generate estimated time label
     let estLabel = '';
-    if (dbFlight.status === 'Delayed') {
+    if (smartStatus === 'Delayed') {
         estLabel = `${estimatedTimeStr} (Estimasi)`;
-    } else if (['Landed', 'Departed', 'Baggage Claim'].includes(dbFlight.status)) {
+    } else if (['Landed', 'Departed', 'Baggage Claim'].includes(smartStatus)) {
         const actualDate = dbFlight.actual_time ? new Date(dbFlight.actual_time) : estimatedDate;
         const actualTimeStr = actualDate.toLocaleTimeString('id-ID', timeOptions);
         estLabel = `${actualTimeStr} (Aktual)`;
@@ -321,7 +352,7 @@ function transformFlightData(dbFlight) {
         terminal: dbFlight.terminal,
         time: scheduledTimeStr,
         estimatedTime: estLabel,
-        status: dbFlight.status,
+        status: smartStatus,
         progress: dbFlight.progress || 0,
         gate: dbFlight.gate ? `Gate ${dbFlight.gate}` : 'Gate -',
         counter: dbFlight.counter || '-',

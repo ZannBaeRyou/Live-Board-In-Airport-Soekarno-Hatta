@@ -412,7 +412,7 @@ function renderFIDS() {
         boardList.innerHTML = `
             <div class="text-center py-5 text-muted font-digital">
                 <i class="fa-solid fa-plane-slash fa-2x mb-3 text-muted"></i>
-                <p class="mb-0">TIDAK ADA DATA PENERBANGAN YANG COCOK</p>
+                <p class="mb-0" data-i18n="empty_state">${typeof __t !== 'undefined' ? __t('empty_state') : 'TIDAK ADA DATA PENERBANGAN YANG COCOK'}</p>
             </div>
         `;
         return;

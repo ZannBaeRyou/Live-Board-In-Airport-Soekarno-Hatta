@@ -60,7 +60,8 @@ const I18N_DICT = {
         wx_fog: "Berkabut",
         wx_rain: "Hujan Ringan",
         wx_snow: "Salju",
-        wx_storm: "Badai Petir"
+        wx_storm: "Badai Petir",
+        empty_state: "TIDAK ADA DATA PENERBANGAN YANG COCOK"
     },
     en: {
         nav_dashboard: "Dashboard",
@@ -123,7 +124,8 @@ const I18N_DICT = {
         wx_fog: "Foggy",
         wx_rain: "Light Rain",
         wx_snow: "Snow",
-        wx_storm: "Thunderstorm"
+        wx_storm: "Thunderstorm",
+        empty_state: "NO MATCHING FLIGHT DATA FOUND"
     }
 };
 
