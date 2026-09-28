@@ -1,400 +1,109 @@
-// ============================================
-// LIVEBOARD CGK - Supabase Edge Function: sync-flights
-// ============================================
-// Data Provider: AeroDataBox via RapidAPI
-// Deploy: Supabase Dashboard > Edge Functions > New Function > Paste kode ini
-//
-// Edge Function ini bertugas:
-// 1. Memanggil AeroDataBox API (departures & arrivals CGK)
-// 2. Mengubah format data ke skema tabel `flights`
-// 3. Menyimpan/memperbarui data ke database Supabase
-// 4. Mencatat log sinkronisasi ke tabel `sync_logs`
-// ============================================
+-- ============================================================================
+-- ðŸ›¡ï¸ CYBERSHIELD 2026 â€” Database Setup
+-- ============================================================================
+-- DISCLAIMER: Database ini HANYA untuk lab edukasi. Jangan gunakan di production!
+-- ============================================================================
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+-- Buat database
+CREATE DATABASE IF NOT EXISTS cybershield_lab CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE cybershield_lab;
 
-const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+-- ============================================================================
+-- Tabel: users
+-- ============================================================================
+-- Digunakan oleh: 01_Broken_Access_Control, 03_Injection, 07_Auth_Failures
+-- ============================================================================
 
-// CGK Airport IATA Code
-const AIRPORT_CODE = 'CGK';
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL COMMENT 'Bcrypt hash',
+    email VARCHAR(100),
+    role ENUM('admin', 'user') DEFAULT 'user',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
 
-// AeroDataBox API Host
-const RAPIDAPI_HOST = 'aerodatabox.p.rapidapi.com';
+-- ============================================================================
+-- ðŸ“‹ DAFTAR PASSWORD (PLAINTEXT â†’ HASH)
+-- ============================================================================
+-- | Username | Password (Plaintext) | Role  |
+-- |----------|----------------------|-------|
+-- | admin    | admin123             | admin |
+-- | user1    | user1234             | user  |
+-- | user2    | belajar567           | user  |
+-- ============================================================================
 
-const AIRLINE_TERMINAL_MAP: Record<string, string> = {
-    // Terminal 1 (Domestik LCC)
-    'lion': '1', 'batik': '1', 'wings': '1',
-    'sriwijaya': '1', 'nam air': '1', 'super air': '1',
-    'transnusa': '1', 'trigana': '1', 'airfast': '1',
-    'rimbun': '1', 'k-mile': '1', 'silkair': '1',
-    // Terminal 2 (Internasional LCC & Domestik sebagian)
-    'airasia': '2', 'scoot': '2', 'jetstar': '2',
-    'cebu pacific': '2', 'vietjet': '2', 'spring': '2',
-    'pelita': '2', 'malindo': '2',
-    // Terminal 3 (FSC / Full Service Carrier)
-    'garuda': '3', 'citilink': '3',
-    'singapore': '3', 'emirates': '3', 'qatar': '3',
-    'etihad': '3', 'ana': '3', 'nippon': '3',
-    'japan': '3', 'korean': '3', 'malaysia': '3',
-    'cathay': '3', 'thai': '3', 'klm': '3', 'turkish': '3',
-    'china': '3', 'eva': '3', 'saudi': '3', 'oman': '3',
-    'philippine': '3', 'xiamen': '3', 'brunei': '3',
-    'starlux': '3', 'vietnam': '3', 'srilankan': '3',
-    'qantas': '3', 'asiana': '3', 'ethiopian': '3',
-    'hainan': '3', "t'way": '3', 'baseops': '3',
-};
+INSERT INTO users (username, password, email, role) VALUES
+('admin', '$2y$12$WEQtNabzoSx1MX.huCGDwO2jcDgfpSarvYHGSikNcGA3K6dZRgpRG', 'admin@cybershield.lab', 'admin'),
+-- ^ Plaintext: admin123
 
-// Deteksi terminal berdasarkan nama maskapai
-function detectTerminal(airlineName: string | null | undefined): string {
-    if (!airlineName) return '3';
-    const lower = airlineName.toLowerCase();
+('user1', '$2y$12$W2Mpn1u.f3ZuKac7FczoD.65bwjq35YR/E2LsLJXM0Ibi/TYgIu4O', 'user1@cybershield.lab', 'user'),
+-- ^ Plaintext: user1234
 
-    for (const [keyword, terminal] of Object.entries(AIRLINE_TERMINAL_MAP)) {
-        if (lower.includes(keyword)) {
-            return terminal;
-        }
-    }
-    return '3'; // Default ke Terminal 3
-}
+('user2', '$2y$12$81/862K754/4eHORfTZxn.EHaoEHMKNyw73omHRY2eSWTDNlMUNka', 'user2@cybershield.lab', 'user');
+-- ^ Plaintext: belajar567
 
-// Mapping status dari AeroDataBox ke status FIDS kita
-function mapFlightStatus(apiStatus: string | null | undefined): string {
-    if (!apiStatus) return 'Scheduled';
-    const s = apiStatus.toLowerCase();
 
-    if (s === 'boarding') return 'Boarding';
-    if (s === 'gateclosed' || s === 'gate closed') return 'Final Call';
-    if (s === 'departed' || s === 'airborne' || s === 'enroute' || s === 'en route') return 'Departed';
-    if (s === 'landed' || s === 'arrived') return 'Landed';
-    if (s === 'approaching') return 'Departed';
-    if (s === 'taxiing') return 'Landed';
-    if (s === 'checkinopen' || s === 'check-in open' || s === 'checkin') return 'Check-in';
-    if (s === 'gateopen' || s === 'gate open') return 'Boarding';
-    if (s === 'scheduled' || s === 'confirmed' || s === 'expected') return 'Scheduled';
-    if (s === 'cancelled' || s === 'canceled') return 'Cancelled';
-    if (s === 'delayed') return 'Delayed';
-    if (s === 'diverted') return 'Delayed';
-    if (s === 'unknown') return 'Scheduled';
+-- ============================================================================
+-- Tabel: products
+-- ============================================================================
+-- Digunakan oleh: 03_Injection (SQL Injection lab)
+-- ============================================================================
 
-    return 'Scheduled';
-}
+DROP TABLE IF EXISTS products;
+CREATE TABLE products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    price DECIMAL(10,2),
+    category VARCHAR(50)
+) ENGINE=InnoDB;
 
-// Menghitung progress berdasarkan status
-function calculateProgress(status: string): number {
-    switch (status) {
-        case 'Scheduled': return 0;
-        case 'Check-in': return 15;
-        case 'Boarding': return 50;
-        case 'Final Call': return 75;
-        case 'Departed': return 100;
-        case 'Delayed': return 5;
-        case 'Cancelled': return 0;
-        case 'Landed': return 100;
-        case 'Arrived': return 100;
-        default: return 0;
-    }
-}
+INSERT INTO products (name, description, price, category) VALUES
+('Laptop Pro X1', 'Laptop premium untuk developer dengan CPU terbaru dan RAM 32GB', 15000000.00, 'elektronik'),
+('Mechanical Keyboard RGB', 'Keyboard mekanik Cherry MX Brown dengan backlight RGB', 1500000.00, 'aksesoris'),
+('Monitor 4K UltraWide', 'Monitor 34 inch 4K HDR untuk produktivitas', 5000000.00, 'elektronik'),
+('Mouse Wireless Ergonomis', 'Mouse wireless dengan desain ergonomis untuk kerja seharian', 750000.00, 'aksesoris'),
+('SSD NVMe 1TB', 'SSD M.2 NVMe Gen4 kecepatan baca 7000MB/s', 1200000.00, 'komponen'),
+('Webcam Full HD', 'Webcam 1080p dengan auto-focus dan noise cancelling mic', 650000.00, 'aksesoris'),
+('Standing Desk Electric', 'Meja berdiri elektrik dengan memory preset', 3500000.00, 'furnitur'),
+('Headphone ANC Pro', 'Headphone wireless Active Noise Cancelling premium', 2800000.00, 'aksesoris');
 
-// Format waktu lokal dari AeroDataBox ke ISO string
-function parseTime(timeObj: any): string | null {
-    if (!timeObj) return null;
-    // AeroDataBox mengembalikan { utc: "...", local: "..." }
-    return timeObj.utc || timeObj.local || null;
-}
 
-// Mendapatkan rentang waktu hari ini (UTC) untuk query
-function getTodayTimeRange(): { fromUtc: string; toUtc: string } {
-    const now = new Date();
+-- ============================================================================
+-- Tabel: comments
+-- ============================================================================
+-- Digunakan oleh: bonus_XSS (Cross-Site Scripting lab)
+-- ============================================================================
 
-    // Waktu mulai: 3 jam yang lalu
-    const from = new Date(now.getTime() - 3 * 60 * 60 * 1000);
+DROP TABLE IF EXISTS comments;
+CREATE TABLE comments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) DEFAULT 'Anonymous',
+    comment TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
 
-    // Waktu akhir: 8 jam ke depan (Total rentang 11 jam. AeroDataBox membatasi maksimal 12 jam)
-    const to = new Date(now.getTime() + 8 * 60 * 60 * 1000);
+INSERT INTO comments (username, comment) VALUES
+('Budi', 'Website ini keren! Saya belajar banyak tentang keamanan web.'),
+('Siti', 'Terima kasih materinya sangat bermanfaat untuk tugas kuliah saya.'),
+('Ahmad', 'OWASP Top 10 memang wajib dipelajari semua developer.'),
+('Dewi', 'Kapan ada workshop lanjutan tentang penetration testing?'),
+('Riko', 'Lab praktiknya sangat membantu memahami konsep secure coding.');
 
-    // Format ISO tanpa milliseconds, eg: 2026-07-18T12:00:00
-    const fmt = (d: Date) => d.toISOString().slice(0, 19);
-    return { fromUtc: fmt(from), toUtc: fmt(to) };
-}
 
-// Nama bandara dari kode IATA (opsional, untuk deskripsi)
-function getAirportName(iata: string): string {
-    const AIRPORTS: Record<string, string> = {
-        'SIN': 'Singapore', 'KUL': 'Kuala Lumpur', 'BKK': 'Bangkok',
-        'HKG': 'Hong Kong', 'NRT': 'Tokyo Narita', 'HND': 'Tokyo Haneda',
-        'ICN': 'Seoul Incheon', 'PEK': 'Beijing', 'PVG': 'Shanghai',
-        'DXB': 'Dubai', 'DOH': 'Doha', 'AUH': 'Abu Dhabi',
-        'JED': 'Jeddah', 'MED': 'Madinah', 'RUH': 'Riyadh',
-        'AMS': 'Amsterdam', 'IST': 'Istanbul', 'LHR': 'London',
-        'SYD': 'Sydney', 'MEL': 'Melbourne', 'PER': 'Perth',
-        'MNL': 'Manila', 'HAN': 'Hanoi', 'SGN': 'Ho Chi Minh',
-        'TPE': 'Taipei', 'KIX': 'Osaka Kansai', 'CTS': 'Sapporo',
-        'BWN': 'Brunei', 'RGN': 'Yangon', 'PNH': 'Phnom Penh',
-        'DEL': 'New Delhi', 'BOM': 'Mumbai', 'CMB': 'Colombo',
-        'DPS': 'Bali Denpasar', 'SUB': 'Surabaya', 'JOG': 'Yogyakarta',
-        'SRG': 'Semarang', 'SOC': 'Solo', 'MDC': 'Manado',
-        'UPG': 'Makassar', 'BPN': 'Balikpapan', 'PKU': 'Pekanbaru',
-        'PLM': 'Palembang', 'BTH': 'Batam', 'PDG': 'Padang',
-        'BDJ': 'Banjarmasin', 'PKY': 'Palangkaraya', 'PNK': 'Pontianak',
-        'KNO': 'Medan Kualanamu', 'BDO': 'Bandung', 'LOP': 'Lombok',
-        'AMQ': 'Ambon', 'DJJ': 'Jayapura', 'TIM': 'Timika',
-        'KOE': 'Kupang', 'KDI': 'Kendari', 'GTO': 'Gorontalo',
-        'TRK': 'Tarakan', 'SMQ': 'Sampit', 'TJQ': 'Tanjung Pandan',
-        'PGK': 'Pangkal Pinang', 'TKG': 'Lampung', 'DJB': 'Jambi',
-        'BKS': 'Bengkulu',
-        'CGK': 'Jakarta',
-    };
-    return AIRPORTS[iata] || iata;
-}
+-- ============================================================================
+-- Verifikasi data
+-- ============================================================================
 
-Deno.serve(async (req) => {
-    // Handle CORS
-    if (req.method === 'OPTIONS') {
-        return new Response('ok', { headers: corsHeaders });
-    }
+SELECT '=== USERS ===' AS info;
+SELECT id, username, LEFT(password, 30) AS password_hash_preview, email, role FROM users;
 
-    const startTime = Date.now();
+SELECT '=== PRODUCTS ===' AS info;
+SELECT id, name, FORMAT(price, 0) AS harga, category FROM products;
 
-    try {
-        // Inisialisasi Supabase Client (service role untuk write access)
-        const supabase = createClient(
-            Deno.env.get('SUPABASE_URL') ?? '',
-            Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-        );
+SELECT '=== COMMENTS ===' AS info;
+SELECT id, username, LEFT(comment, 50) AS comment_preview FROM comments;
 
-        // Ambil RapidAPI Key dari system_config (cek dua kemungkinan nama, handle spasi nyasar)
-        let apiKey = null;
-        const { data: configData1 } = await supabase
-            .from('system_config')
-            .select('value')
-            .ilike('key', '%rapidapi_key%')
-            .maybeSingle();
-        apiKey = configData1?.value?.trim();
-
-        if (!apiKey) {
-            const { data: configData2 } = await supabase
-                .from('system_config')
-                .select('value')
-                .ilike('key', '%aviation_api_key%')
-                .maybeSingle();
-            apiKey = configData2?.value?.trim();
-        }
-
-        if (!apiKey) {
-            await supabase.from('system_config').upsert({ key: 'api_status', value: 'no_api_key' });
-            return new Response(JSON.stringify({ error: 'RapidAPI key belum dikonfigurasi' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-        }
-
-        // HAPUS SEMUA DATA LAMA AGAR TIDAK ADA DATA NYANGKUT
-        console.log('Clearing old flight data...');
-        await supabase.from('flights').delete().neq('id', 0);
-
-        // ---- FETCH DATA DARI AERODATABOX API ----
-        const { fromUtc, toUtc } = getTodayTimeRange();
-
-        const headers = {
-            'X-RapidAPI-Key': apiKey,
-            'X-RapidAPI-Host': RAPIDAPI_HOST,
-        };
-
-        // Fetch departures & arrivals dari CGK (Dilakukan berurutan agar tidak kena limit 1 request/detik RapidAPI)
-        const depUrl = `https://${RAPIDAPI_HOST}/flights/airports/iata/${AIRPORT_CODE}/${fromUtc}/${toUtc}?direction=Departure&withCancelled=true&withCodeshared=false&withCargo=false&withPrivate=false`;
-        const arrUrl = `https://${RAPIDAPI_HOST}/flights/airports/iata/${AIRPORT_CODE}/${fromUtc}/${toUtc}?direction=Arrival&withCancelled=true&withCodeshared=false&withCargo=false&withPrivate=false`;
-
-        console.log(`Fetching departures: ${depUrl}`);
-        const depRes = await fetch(depUrl, { headers });
-        if (!depRes.ok) {
-            const body = await depRes.text();
-            throw new Error(`AeroDataBox Departures API error: ${depRes.status} ${depRes.statusText}. URL: ${depUrl}. Response: ${body}`);
-        }
-        
-        // Jeda 1.5 detik sebelum request kedua (menghindari error 429 Too Many Requests)
-        await new Promise(r => setTimeout(r, 1500));
-        
-        console.log(`Fetching arrivals: ${arrUrl}`);
-        const arrRes = await fetch(arrUrl, { headers });
-        if (!arrRes.ok) {
-            const body = await arrRes.text();
-            throw new Error(`AeroDataBox Arrivals API error: ${arrRes.status} ${arrRes.statusText}. URL: ${arrUrl}. Response: ${body}`);
-        }
-
-        const depData = await depRes.json();
-        const arrData = await arrRes.json();
-
-        // ---- PARSE DEPARTURES ----
-        const departures = (depData.departures || []).map((f: any) => {
-            const airlineName = f.airline?.name || 'Unknown';
-            const flightNumber = f.number || 'N/A';
-            const destIata = f.movement?.airport?.iata || '?';
-            const destName = f.movement?.airport?.name || getAirportName(destIata);
-            const status = mapFlightStatus(f.status);
-
-            return {
-                flight_number: flightNumber,
-                airline: airlineName,
-                flight_type: 'departure',
-                origin: `Jakarta (CGK)`,
-                destination: `${destName} (${destIata})`.toUpperCase(),
-                terminal: detectTerminal(airlineName),
-                gate: f.movement?.gate || '-',
-                counter: f.movement?.checkInDesk || f.movement?.baggageBelt || '-',
-                scheduled_time: parseTime(f.movement?.scheduledTime) || new Date().toISOString(),
-                estimated_time: parseTime(f.movement?.revisedTime) || parseTime(f.movement?.scheduledTime),
-                actual_time: parseTime(f.movement?.actualTime) || null,
-                status: status,
-                progress: calculateProgress(status),
-                source: 'aerodatabox',
-            };
-        });
-
-        // ---- PARSE ARRIVALS ----
-        const arrivals = (arrData.arrivals || []).map((f: any) => {
-            const airlineName = f.airline?.name || 'Unknown';
-            const flightNumber = f.number || 'N/A';
-            const orgIata = f.movement?.airport?.iata || '?';
-            const orgName = f.movement?.airport?.name || getAirportName(orgIata);
-            const status = mapFlightStatus(f.status);
-
-            return {
-                flight_number: flightNumber,
-                airline: airlineName,
-                flight_type: 'arrival',
-                origin: `${orgName} (${orgIata})`.toUpperCase(),
-                destination: `Jakarta (CGK)`,
-                terminal: detectTerminal(airlineName),
-                gate: f.movement?.gate || '-',
-                counter: f.movement?.baggageBelt || '-',
-                scheduled_time: parseTime(f.movement?.scheduledTime) || new Date().toISOString(),
-                estimated_time: parseTime(f.movement?.revisedTime) || parseTime(f.movement?.scheduledTime),
-                actual_time: parseTime(f.movement?.actualTime) || null,
-                status: status,
-                progress: calculateProgress(status),
-                source: 'aerodatabox',
-            };
-        });
-
-        // ---- UPSERT DATA KE DATABASE ----
-        const allFlights = [...departures, ...arrivals];
-        let insertedCount = 0;
-        let updatedCount = 0;
-        let errorCount = 0;
-
-        // Batch upsert untuk efisiensi (per 50 flight)
-        const batchSize = 50;
-        for (let i = 0; i < allFlights.length; i += batchSize) {
-            const batch = allFlights.slice(i, i + batchSize);
-
-            for (const flight of batch) {
-                try {
-                    // Cek apakah penerbangan sudah ada
-                    const { data: existing } = await supabase
-                        .from('flights')
-                        .select('id')
-                        .eq('flight_number', flight.flight_number)
-                        .eq('flight_type', flight.flight_type)
-                        .gte('scheduled_time', new Date(new Date().setHours(0, 0, 0, 0)).toISOString())
-                        .lte('scheduled_time', new Date(new Date().setHours(23, 59, 59, 999)).toISOString())
-                        .maybeSingle();
-
-                    if (existing) {
-                        await supabase
-                            .from('flights')
-                            .update({
-                                flight_number: flight.flight_number,
-                                airline: flight.airline,
-                                origin: flight.origin,
-                                destination: flight.destination,
-                                scheduled_time: flight.scheduled_time,
-                                estimated_time: flight.estimated_time,
-                                actual_time: flight.actual_time,
-                                gate: flight.gate,
-                                counter: flight.counter,
-                                terminal: flight.terminal,
-                                status: flight.status,
-                                progress: flight.progress,
-                                source: 'aerodatabox',
-                            })
-                            .eq('id', existing.id);
-                        updatedCount++;
-                    } else {
-                        await supabase
-                            .from('flights')
-                            .insert(flight);
-                        insertedCount++;
-                    }
-                } catch (e) {
-                    console.error(`Error upserting flight ${flight.flight_number}:`, e);
-                    errorCount++;
-                }
-            }
-        }
-
-        const durationMs = Date.now() - startTime;
-
-        // Update system config
-        await supabase.from('system_config').upsert([
-            { key: 'last_sync_timestamp', value: new Date().toISOString() },
-            { key: 'api_status', value: 'online' },
-            { key: 'api_provider', value: 'aerodatabox' },
-        ]);
-
-        // Log sinkronisasi berhasil
-        await supabase.from('sync_logs').insert({
-            sync_type: 'api_fetch',
-            status: 'success',
-            flights_updated: updatedCount,
-            flights_inserted: insertedCount,
-            api_source: 'aerodatabox',
-            duration_ms: durationMs,
-            error_message: errorCount > 0 ? `${errorCount} flights failed to upsert` : null,
-        });
-
-        const result = {
-            success: true,
-            provider: 'AeroDataBox (RapidAPI)',
-            airport: AIRPORT_CODE,
-            time_range: { from: fromUtc, to: toUtc },
-            departures_fetched: departures.length,
-            arrivals_fetched: arrivals.length,
-            total_flights: allFlights.length,
-            inserted: insertedCount,
-            updated: updatedCount,
-            errors: errorCount,
-            duration_ms: durationMs,
-        };
-
-        console.log('Sync complete:', JSON.stringify(result));
-
-        return new Response(
-            JSON.stringify(result),
-            { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
-
-    } catch (error) {
-        const durationMs = Date.now() - startTime;
-        console.error('Sync error:', error);
-
-        try {
-            const supabase = createClient(
-                Deno.env.get('SUPABASE_URL') ?? '',
-                Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-            );
-            await supabase.from('system_config').upsert({ key: 'api_status', value: 'error' });
-            await supabase.from('sync_logs').insert({
-                sync_type: 'api_fetch',
-                status: 'error',
-                error_message: error.message,
-                api_source: 'aerodatabox',
-                duration_ms: durationMs,
-            });
-        } catch (_) {}
-
-        return new Response(
-            JSON.stringify({ error: error.message }),
-            { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
-    }
-});
+SELECT 'âœ… Database cybershield_lab berhasil di-setup!' AS status;
