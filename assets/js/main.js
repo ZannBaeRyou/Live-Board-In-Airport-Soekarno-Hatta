@@ -247,6 +247,28 @@ function initFIDSBoard() {
     // Initial Render
     renderFIDS();
 
+    // Deep-link auto-open (?flight=...)
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetFlight = urlParams.get('flight');
+    if (targetFlight) {
+        setTimeout(() => {
+            const cleanTarget = targetFlight.toUpperCase().replace(/[^A-Z0-9]/g, '');
+            const foundFlight = FLIGHT_DATABASE.find(f => (f.number || '').toUpperCase().replace(/[^A-Z0-9]/g, '') === cleanTarget);
+            if (foundFlight) {
+                if (foundFlight.type !== activeTab) {
+                    switchTab(foundFlight.type);
+                }
+                const targetRow = document.getElementById(`flight-row-${cleanTarget}`);
+                if (targetRow) {
+                    targetRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    targetRow.style.boxShadow = '0 0 25px rgba(56, 189, 248, 0.4)';
+                    targetRow.style.borderColor = 'var(--accent-t1)';
+                }
+                openModal(foundFlight);
+            }
+        }, 350);
+    }
+
     // Modal close listeners
     const modal = document.getElementById('fids-detail-modal');
     const closeBtns = modal?.querySelectorAll('.fids-modal-close');
@@ -397,6 +419,27 @@ function populateStatusFilterOptions(tabType) {
     }
 }
 
+function getAircraftModel(flightNo, airline) {
+    const fn = (flightNo || '').toUpperCase();
+    if (fn.startsWith('GA')) return 'B737-800';
+    if (fn.startsWith('SQ')) return 'A350-900';
+    if (fn.startsWith('JT')) return 'B737-900ER';
+    if (fn.startsWith('ID')) return 'A320-200';
+    if (fn.startsWith('QZ')) return 'A320-200';
+    if (fn.startsWith('SJ')) return 'B737-800';
+    if (fn.startsWith('EK')) return 'B777-300ER';
+    if (fn.startsWith('QR')) return 'A350-1000';
+    if (fn.startsWith('MH')) return 'B737-800';
+    if (fn.startsWith('TG')) return 'A350-900';
+    if (fn.startsWith('CX')) return 'A350-900';
+    if (fn.startsWith('NH')) return 'B787-9';
+    if (fn.startsWith('JL')) return 'B787-9';
+    if (fn.startsWith('EY')) return 'B787-10';
+    if (fn.startsWith('IU')) return 'A320-200';
+    if (fn.startsWith('IP')) return 'A320-200';
+    return '';
+}
+
 /**
  * Live FIDS Renderer
  */
@@ -422,8 +465,8 @@ function renderFIDS() {
 
     if (flights.length === 0) {
         boardList.innerHTML = `
-            <div class="text-center py-5 text-muted font-digital">
-                <i class="fa-solid fa-plane-slash fa-2x mb-3 text-muted"></i>
+            <div class="text-center py-5 text-secondary font-digital">
+                <i class="fa-solid fa-plane-slash fa-2x mb-3 text-secondary"></i>
                 <p class="mb-0" data-i18n="empty_state">${typeof __t !== 'undefined' ? __t('empty_state') : 'TIDAK ADA DATA PENERBANGAN YANG COCOK'}</p>
             </div>
         `;
@@ -431,60 +474,76 @@ function renderFIDS() {
     }
 
     flights.forEach(flight => {
-        let statusClass = 'status-scheduled';
-        let statusLabelText = flight.status.toUpperCase();
+        const aircraft = getAircraftModel(flight.number, flight.airline);
+        const cleanFlightNo = (flight.number || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
 
-        if (flight.status === 'Check-in') statusClass = 'status-checkin';
-        if (flight.status === 'Boarding' || flight.status === 'Final Call') statusClass = 'status-boarding status-blink';
-        if (flight.status === 'Departed') statusClass = 'status-departed';
-        if (flight.status === 'Delayed') statusClass = 'status-delayed';
-        if (flight.status === 'Landed') statusClass = 'status-landed';
-        if (flight.status === 'Baggage Claim') statusClass = 'status-boarding';
-        if (flight.status === 'Cancelled') statusClass = 'status-cancelled';
+        let pillClass = 'status-pill-scheduled';
+        let dotClass = 'dot-slate';
 
-        let gateColText = '';
-        if (flight.type === 'departure') {
-            gateColText = `<span class="fids-gate d-block">${flight.gate}</span>
-                           <span class="text-muted d-block font-digital" style="font-size:0.75rem">${flight.counter}</span>`;
-        } else {
-            gateColText = `<span class="fids-gate d-block">${flight.gate}</span>
-                           <span class="text-muted d-block font-digital" style="font-size:0.75rem">${flight.baggage}</span>`;
+        if (flight.status === 'Boarding') {
+            pillClass = 'status-pill-boarding';
+            dotClass = 'pulse-green';
+        } else if (flight.status === 'Final Call') {
+            pillClass = 'status-pill-final-call';
+            dotClass = 'pulse-amber';
+        } else if (flight.status === 'Check-in') {
+            pillClass = 'status-pill-checkin';
+            dotClass = 'dot-blue';
+        } else if (flight.status === 'Delayed') {
+            pillClass = 'status-pill-delayed';
+            dotClass = 'dot-rose';
+        } else if (flight.status === 'Departed' || flight.status === 'Landed') {
+            pillClass = 'status-pill-scheduled';
+            dotClass = 'dot-slate';
         }
 
-        const terminalLabel = currentTerminal ? `T${currentTerminal}` : '';
+        const fallbackLetters = (flight.airline || 'FL').slice(0, 2).toUpperCase();
 
         const row = document.createElement('div');
-        row.className = 'fids-board-row';
+        row.className = 'fids-row-modern';
+        row.id = `flight-row-${cleanFlightNo}`;
         row.innerHTML = `
-            <div class="row align-items-center g-2 g-md-0">
-                <div class="col-3 col-md-1 font-digital fids-time">${flight.time}</div>
-                <div class="col-4 col-md-2 font-digital fids-flight text-truncate">${flight.number}</div>
-                <div class="col-5 col-md-3">
-                    <span class="fids-destination d-block text-uppercase text-truncate">${flight.type === 'departure' ? flight.destination : flight.origin}</span>
-                    <span class="text-muted d-flex align-items-center text-truncate mt-1" style="font-size:0.85rem">
-                        ${flight.logo ? `<img src="${flight.logo}" alt="${flight.airline}" class="me-2 rounded bg-white" style="width: 20px; height: 20px; object-fit: contain; padding: 2px;" onerror="this.style.display='none'">` : ''}
-                        <span>${flight.airline}</span>
-                    </span>
+            <div class="row align-items-center w-100 g-2 g-md-0 m-0">
+                <!-- Time -->
+                <div class="col-3 col-md-1 font-digital p-0">
+                    <div class="fw-bold text-white fs-6">${flight.time}</div>
+                    <div class="text-secondary small font-digital d-none d-md-block" style="font-size:0.7rem">WIB</div>
                 </div>
-                
-                <div class="col-6 col-md-2 mt-2 mt-md-0 d-md-block">
-                    <div class="d-md-none text-muted small mb-1 font-monospace" style="font-size:0.65rem">${typeof __t !== 'undefined' ? __t('lbl_gate') : 'GATE/SABUK'}</div>
-                    ${gateColText}
-                </div>
-                
-                <div class="col-6 col-md-2 font-digital text-end text-md-start text-white-50 mt-2 mt-md-0">
-                    <div class="d-md-none text-muted small mb-1 font-monospace" style="font-size:0.65rem">${typeof __t !== 'undefined' ? __t('lbl_est') : 'ESTIMASI'}</div>
-                    ${flight.estimatedTime.split(' ')[0]}
-                </div>
-                
-                <div class="col-12 col-md-2 text-end font-digital text-uppercase ${statusClass} mt-2 mt-md-0 d-none d-md-block">${statusLabelText}</div>
-                
-                <!-- Status badge khusus untuk mobile agar rapi -->
-                <div class="col-12 d-md-none mt-2">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-grow-1 text-center py-1 font-digital text-uppercase ${statusClass} rounded border border-secondary border-opacity-25" style="background: rgba(0,0,0,0.2);">${statusLabelText}</div>
-                        <div class="ms-3 text-white-50"><i class="fa-solid fa-chevron-right"></i></div>
+
+                <!-- Airline & Flight No -->
+                <div class="col-9 col-md-3 d-flex align-items-center gap-2 overflow-hidden px-md-2 p-0">
+                    <div class="airline-emblem-sq">
+                        ${flight.logo ? `<img src="${flight.logo}" alt="${flight.airline}" onerror="this.parentElement.innerHTML='<span class=\\'small fw-bold text-white font-digital\\'>${fallbackLetters}</span>'">` : `<span class="small fw-bold text-white font-digital">${fallbackLetters}</span>`}
                     </div>
+                    <div class="text-truncate">
+                        <div class="fw-bold font-digital text-white fs-6 text-truncate">${flight.number}</div>
+                        <div class="text-secondary small text-truncate" style="font-size:0.75rem">
+                            ${flight.airline} ${aircraft ? `&bull; <span class="font-digital text-muted">${aircraft}</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Destination / Origin -->
+                <div class="col-6 col-md-3 mt-2 mt-md-0 px-md-2 p-0">
+                    <span class="fw-semibold text-white d-block text-uppercase text-truncate">${flight.type === 'departure' ? flight.destination : flight.origin}</span>
+                    <span class="text-secondary small d-none d-md-block" style="font-size:0.72rem">${flight.type === 'departure' ? 'Tujuan' : 'Asal'}</span>
+                </div>
+
+                <!-- Gate / Belt -->
+                <div class="col-6 col-md-2 mt-2 mt-md-0 text-md-start text-end px-md-2 p-0">
+                    <span class="gate-badge-modern">${flight.gate || (flight.type === 'departure' ? flight.counter : flight.baggage) || 'Gate -'}</span>
+                </div>
+
+                <!-- Estimated Time -->
+                <div class="col-md-1 font-digital text-white-50 mt-2 mt-md-0 d-none d-md-block px-md-2 p-0">
+                    <span class="small font-digital">${flight.estimatedTime ? flight.estimatedTime.split(' ')[0] : flight.time}</span>
+                </div>
+
+                <!-- Status Pill -->
+                <div class="col-12 col-md-2 text-md-end text-center mt-2 mt-md-0 p-0">
+                    <span class="status-pill-modern ${pillClass}">
+                        <span class="status-pulse-dot ${dotClass}"></span> ${flight.status}
+                    </span>
                 </div>
             </div>
         `;
