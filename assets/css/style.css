@@ -263,16 +263,25 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Modern FIDS Table Rows */
 .fids-row-modern {
-    display: grid;
-    grid-template-columns: 85px 1.8fr 1.5fr 110px 130px;
-    align-items: center;
+    display: block;
+    width: 100%;
     background: var(--surface-card);
     border: 1px solid var(--border-subtle);
+    border-left: 3px solid transparent;
     border-radius: 10px;
     padding: 0.85rem 1.25rem;
     margin-bottom: 0.6rem;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     cursor: pointer;
+}
+.fids-row-modern.status-boarding {
+    border-left: 3px solid #22c55e;
+}
+.fids-row-modern.status-final-call {
+    border-left: 3px solid #f59e0b;
+}
+.fids-row-modern.status-delayed {
+    border-left: 3px solid #f43f5e;
 }
 .fids-row-modern:hover {
     background: var(--surface-hover);

@@ -498,9 +498,10 @@ function renderFIDS() {
         }
 
         const fallbackLetters = (flight.airline || 'FL').slice(0, 2).toUpperCase();
+        const statusSlug = (flight.status || '').toLowerCase().replace(/[^a-z0-9]/g, '-');
 
         const row = document.createElement('div');
-        row.className = 'fids-row-modern';
+        row.className = `fids-row-modern status-${statusSlug}`;
         row.id = `flight-row-${cleanFlightNo}`;
         row.innerHTML = `
             <div class="row align-items-center w-100 g-2 g-md-0 m-0">
