@@ -1965,39 +1965,47 @@ function initAirlinesDirectory() {
             html += `
                 <div class="col-md-6 col-lg-4">
                     <div class="airline-card-bento h-100">
-                        <div>
-                            <div class="d-flex justify-content-between align-items-start mb-3">
-                                <div>
-                                    <span class="badge font-digital px-2 py-1 mb-2 d-inline-block" style="background: ${termBg}; color: ${termBadgeColor}; border: 1px solid ${termBadgeColor}40; font-size: 0.95rem; font-weight: 700;">
-                                        ${a.code}
-                                    </span>
-                                    <h4 class="brand-font fs-4 text-white mb-1">${a.name}</h4>
-                                    <span class="text-secondary small d-flex align-items-center gap-1">
-                                        <i class="fa-solid fa-globe opacity-50"></i> ${a.country} &bull; ${a.category || 'Scheduled Carrier'}
-                                    </span>
-                                </div>
-                            </div>
-                            
-                            <div class="p-3 rounded-3 mb-3" style="background: #f8fafc; border: 1px solid var(--border-subtle);">
-                                <span class="text-secondary d-block small mb-1" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px;">TERMINAL & ZONA CHECK-IN</span>
-                                <strong class="fs-6 d-block" style="font-family: var(--font-mono); color: ${termBadgeColor} !important;">
-                                    Terminal ${a.terminals.join(' & ')} &mdash; ${a.zone}
-                                </strong>
-                                ${a.contact ? `
-                                <div class="mt-2 pt-2 border-top border-secondary border-opacity-10 d-flex align-items-center justify-content-between">
-                                    <span class="text-secondary small" style="font-size: 0.75rem;"><i class="fa-solid fa-phone me-1"></i> ${a.contact}</span>
-                                </div>` : ''}
-                            </div>
+                        <!-- Watermark Brand Logo (Layer 1) -->
+                        <div class="airline-card-logo-watermark">
+                            <img src="${a.logo}" alt="${a.name}" loading="lazy" onerror="this.parentElement.style.display='none'">
                         </div>
 
-                        <div class="d-flex gap-2 pt-2 mt-auto">
-                            <a href="terminal${primaryTerm}.html?search=${encodeURIComponent(a.name)}" class="btn btn-sm btn-outline-cyan flex-grow-1 d-flex align-items-center justify-content-center gap-2" style="font-size: 0.8rem; padding: 7px 12px; border-radius: 8px;">
-                                <i class="fa-solid fa-list-check"></i> <span>Lihat Jadwal</span>
-                            </a>
-                            ${a.website ? `
-                            <a href="${a.website}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center" style="width: 36px; padding: 7px 0; border-radius: 8px;" title="Website Resmi">
-                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                            </a>` : ''}
+                        <!-- Card Body Content (Layer 2) -->
+                        <div class="airline-card-body-content d-flex flex-column h-100">
+                            <div>
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div>
+                                        <span class="badge font-digital px-2 py-1 mb-2 d-inline-block" style="background: ${termBg}; color: ${termBadgeColor}; border: 1px solid ${termBadgeColor}40; font-size: 0.95rem; font-weight: 700;">
+                                            ${a.code}
+                                        </span>
+                                        <h4 class="brand-font fs-4 text-white mb-1">${a.name}</h4>
+                                        <span class="text-secondary small d-flex align-items-center gap-1">
+                                            <i class="fa-solid fa-globe opacity-50"></i> ${a.country} &bull; ${a.category || 'Scheduled Carrier'}
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <div class="p-3 rounded-3 mb-3" style="background: #f8fafc; border: 1px solid var(--border-subtle);">
+                                    <span class="text-secondary d-block small mb-1" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px;">TERMINAL & ZONA CHECK-IN</span>
+                                    <strong class="fs-6 d-block" style="font-family: var(--font-mono); color: ${termBadgeColor} !important;">
+                                        Terminal ${a.terminals.join(' & ')} &mdash; ${a.zone}
+                                    </strong>
+                                    ${a.contact ? `
+                                    <div class="mt-2 pt-2 border-top border-secondary border-opacity-10 d-flex align-items-center justify-content-between">
+                                        <span class="text-secondary small" style="font-size: 0.75rem;"><i class="fa-solid fa-phone me-1"></i> ${a.contact}</span>
+                                    </div>` : ''}
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-2 pt-2 mt-auto">
+                                <a href="terminal${primaryTerm}.html?search=${encodeURIComponent(a.name)}" class="btn btn-sm btn-outline-cyan flex-grow-1 d-flex align-items-center justify-content-center gap-2" style="font-size: 0.8rem; padding: 7px 12px; border-radius: 8px;">
+                                    <i class="fa-solid fa-list-check"></i> <span>Lihat Jadwal</span>
+                                </a>
+                                ${a.website ? `
+                                <a href="${a.website}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center" style="width: 36px; padding: 7px 0; border-radius: 8px;" title="Website Resmi">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>` : ''}
+                            </div>
                         </div>
                     </div>
                 </div>
