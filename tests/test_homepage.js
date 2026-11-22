@@ -21,7 +21,11 @@ const checks = [
   { test: html.includes('id="t2-bento-card"'), msg: 'T2 bento card exists' },
   { test: html.includes('id="t3-bento-card"'), msg: 'T3 bento card exists' },
   { test: html.includes('class="dashboard-batik-sky-backdrop"'), msg: 'index.html must contain .dashboard-batik-sky-backdrop' },
-  { test: css.includes('.dashboard-batik-sky-backdrop') && css.includes('linear-gradient(to bottom'), msg: 'style.css must define .dashboard-batik-sky-backdrop with vertical gradient mask' }
+  { test: css.includes('.dashboard-batik-sky-backdrop') && css.includes('linear-gradient(to bottom'), msg: 'style.css must define .dashboard-batik-sky-backdrop with vertical gradient mask' },
+  { test: html.includes('id="t1-bento-card"') && html.includes('cgk_terminal_1_header.png') && html.includes('class="terminal-card-photo"'), msg: 'T1 bento card must contain terminal photo banner' },
+  { test: html.includes('id="t2-bento-card"') && html.includes('cgk_terminal_2_header.png'), msg: 'T2 bento card must contain terminal photo banner' },
+  { test: html.includes('id="t3-bento-card"') && html.includes('cgk_terminal_3_header.png'), msg: 'T3 bento card must contain terminal photo banner' },
+  { test: css.includes('.terminal-card-photo') && css.includes('110px') && css.includes('.terminal-card-photo-overlay'), msg: 'style.css must define .terminal-card-photo and overlay styles' }
 ];
 
 let failed = false;
