@@ -39,7 +39,7 @@
 - Consumes: `assets/images/batik-megamendung-clean.jpg`
 - Produces: `.dashboard-batik-sky-backdrop` CSS class
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 In `tests/test_homepage.js`:
 Add assertion verifying `index.html` contains `<div class="dashboard-batik-sky-backdrop" aria-hidden="true"></div>` and `assets/css/style.css` defines `.dashboard-batik-sky-backdrop` with `linear-gradient(to bottom, ...)` mask-image.
@@ -47,12 +47,12 @@ Add assertion verifying `index.html` contains `<div class="dashboard-batik-sky-b
 In `tests/test_airlines_page.js`:
 Update assertion verifying `airlines.html` contains `<div class="dashboard-batik-sky-backdrop" aria-hidden="true"></div>` and does NOT contain `<div class="banner-batik-watermark">`.
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `node tests/test_homepage.js; node tests/test_airlines_page.js`
 Expected: FAIL on missing `.dashboard-batik-sky-backdrop`
 
-- [ ] **Step 3: Implement backdrop markup and CSS**
+- [x] **Step 3: Implement backdrop markup and CSS**
 
 1. In `index.html`:
    - Immediately after `<body>` opening (before `<nav>`), insert:
@@ -86,12 +86,12 @@ Expected: FAIL on missing `.dashboard-batik-sky-backdrop`
      ```
    - Ensure `body` has `position: relative;`.
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 Run: `node tests/test_homepage.js; node tests/test_airlines_page.js`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add index.html airlines.html assets/css/style.css tests/test_homepage.js tests/test_airlines_page.js
@@ -111,7 +111,7 @@ git commit -m "feat(ui): add unified top sky batik backdrop to dashboard and air
 - Consumes: `assets/images/cgk_terminal_1_header.png`, `assets/images/cgk_terminal_2_header.png`, `assets/images/cgk_terminal_3_header.png`
 - Produces: `.terminal-card-photo`, `.terminal-card-photo-overlay`, `.terminal-card-photo-title`
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 In `tests/test_homepage.js`:
 Add assertions verifying:
@@ -120,12 +120,12 @@ Add assertions verifying:
 3. `#t3-bento-card` contains `<div class="terminal-card-photo">` with `src="assets/images/cgk_terminal_3_header.png"`.
 4. `assets/css/style.css` contains `.terminal-card-photo` rules specifying `height: 110px`, `border-radius`, and `overflow: hidden`.
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `node tests/test_homepage.js`
 Expected: FAIL on missing `.terminal-card-photo`
 
-- [ ] **Step 3: Implement photo banners and CSS**
+- [x] **Step 3: Implement photo banners and CSS**
 
 1. In `index.html`:
    - Inside `#t1-bento-card`, `#t2-bento-card`, and `#t3-bento-card`, add at the top of the card:
@@ -176,12 +176,12 @@ Expected: FAIL on missing `.terminal-card-photo`
      }
      ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `node tests/test_homepage.js`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add index.html assets/css/style.css tests/test_homepage.js
@@ -195,16 +195,16 @@ git commit -m "feat(dashboard): add authentic terminal photo banners to t1 t2 t3
 **Files:**
 - Verify: `tests/*.js`
 
-- [ ] **Step 1: Run all test suites**
+- [x] **Step 1: Run all test suites**
 
 Run: `Get-ChildItem tests/*.js | ForEach-Object { node $_.FullName }`
 Expected: ALL 14 TEST SUITES PASS (100% green).
 
-- [ ] **Step 2: Clean up temporary session directories**
+- [x] **Step 2: Clean up temporary session directories**
 
 Clean up `.superpowers/brainstorm/session-3`.
 
-- [ ] **Step 3: Commit final verification**
+- [x] **Step 3: Commit final verification**
 
 ```bash
 git commit --allow-empty -m "chore: complete dashboard top sky batik backdrop and terminal photo banners"
