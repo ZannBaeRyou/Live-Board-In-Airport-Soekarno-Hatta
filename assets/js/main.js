@@ -312,46 +312,56 @@ function initFIDSBoard() {
         }
     });
 
-    // Swipe-down-to-close gesture for mobile bottom sheet
-    if (modal) {
-        let touchStartY = 0;
-        let touchCurrentY = 0;
-        const modalContent = modal.querySelector('.fids-modal-content');
-        
-        modalContent?.addEventListener('touchstart', (e) => {
-            // Only enable swipe-close if user is at the top of the scrollable content
-            if (modalContent.scrollTop <= 0) {
-                touchStartY = e.touches[0].clientY;
-            } else {
-                touchStartY = 0;
-            }
-        }, { passive: true });
-        
-        modalContent?.addEventListener('touchmove', (e) => {
-            if (touchStartY === 0) return;
-            touchCurrentY = e.touches[0].clientY;
-            const delta = touchCurrentY - touchStartY;
-            
-            // Visual feedback: drag the modal down
-            if (delta > 0 && modalContent.scrollTop <= 0) {
-                modalContent.style.transform = `translateY(${Math.min(delta * 0.4, 120)}px)`;
-                modalContent.style.opacity = Math.max(0.5, 1 - delta / 400);
-            }
-        }, { passive: true });
-        
-        modalContent?.addEventListener('touchend', () => {
-            const delta = touchCurrentY - touchStartY;
-            if (delta > 80) {
-                // Swipe threshold reached — close modal
+    // Close modal on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const m = document.getElementById('fids-detail-modal');
+            if (m && m.classList.contains('show')) {
                 closeModal();
             }
-            // Reset transform
-            modalContent.style.transform = '';
-            modalContent.style.opacity = '';
+        }
+    });
+}
+
+/**
+ * Mobile swipe-down gesture handler for modal
+ */
+function bindModalSwipeGestures(modal) {
+    if (!modal) return;
+    const modalContent = modal.querySelector('.fids-modal-content');
+    if (!modalContent) return;
+
+    let touchStartY = 0;
+    let touchCurrentY = 0;
+
+    modalContent.addEventListener('touchstart', (e) => {
+        if (modalContent.scrollTop <= 0) {
+            touchStartY = e.touches[0].clientY;
+        } else {
             touchStartY = 0;
-            touchCurrentY = 0;
-        });
-    }
+        }
+    }, { passive: true });
+
+    modalContent.addEventListener('touchmove', (e) => {
+        if (touchStartY === 0) return;
+        touchCurrentY = e.touches[0].clientY;
+        const delta = touchCurrentY - touchStartY;
+        if (delta > 0 && modalContent.scrollTop <= 0) {
+            modalContent.style.transform = `translateY(${Math.min(delta * 0.4, 120)}px)`;
+            modalContent.style.opacity = Math.max(0.5, 1 - delta / 400);
+        }
+    }, { passive: true });
+
+    modalContent.addEventListener('touchend', () => {
+        const delta = touchCurrentY - touchStartY;
+        if (delta > 80) {
+            closeModal();
+        }
+        modalContent.style.transform = '';
+        modalContent.style.opacity = '';
+        touchStartY = 0;
+        touchCurrentY = 0;
+    });
 }
 
 /**
@@ -1535,15 +1545,31 @@ function openModal(flight) {
     const isDep = flight.type === 'departure';
     const highlightTitle = isDep ? (typeof __t === 'function' ? __t('modal_gate_departure') : 'GERBANG KEBERANGKATAN') : (typeof __t === 'function' ? __t('modal_baggage_belt') : 'SABUK PENGAMBILAN BAGASI');
     const highlightVal = isDep ? (flight.gate || 'Gate TBA') : (flight.baggage || (termId === '1' ? 'Belt 2' : (termId === '2' ? 'Belt 5' : 'Belt 8')));
-    const subRightTitle = isDep ? (typeof __t === 'function' ? __t('modal_boarding_time_left') : 'SISA WAKTU BOARDING') : (typeof __t === 'function' ? __t('modal_landing_time') : 'WAKTU MENDARAT');
-    const subRightVal = formatEstimatedTime(flight.estimatedTime) || (flight.time + ' WIB');
+
+    let subRightTitle = '';
+    let subRightVal = formatEstimatedTime(flight.estimatedTime) || (flight.time ? `${flight.time} WIB` : '--:--');
+
+    if (isDep) {
+        if (status === 'Departed') {
+            subRightTitle = typeof __t === 'function' ? __t('modal_departed_time') : 'WAKTU BERANGKAT';
+            subRightVal = flight.time ? `${flight.time} WIB` : subRightVal;
+        } else {
+            subRightTitle = typeof __t === 'function' ? __t('modal_boarding_time_left') : 'SISA WAKTU BOARDING';
+        }
+    } else {
+        if (status === 'Landed' || status === 'Baggage Claim') {
+            subRightTitle = typeof __t === 'function' ? __t('modal_landing_time') : 'WAKTU MENDARAT';
+        } else {
+            subRightTitle = typeof __t === 'function' ? __t('modal_estimated_arrival') : 'ESTIMASI KEDATANGAN';
+        }
+    }
 
     const col1Title = isDep ? (typeof __t === 'function' ? __t('modal_destination_city') : 'KOTA TUJUAN') : (typeof __t === 'function' ? __t('modal_origin_city') : 'KOTA ASAL');
     const col1Val = isDep ? (flight.destination || 'Destination') : (flight.origin || 'Origin');
     const col1Sub = `${typeof currentLang !== 'undefined' && currentLang === 'en' ? 'Scheduled' : 'Jadwal'}: ${flight.time || '--:--'} WIB`;
 
     const col2Title = isDep ? (typeof __t === 'function' ? __t('modal_counter_island') : 'KONTER CHECK-IN') : (typeof __t === 'function' ? __t('modal_exit_gate') : 'PINTU KELUAR');
-    const col2Val = isDep ? (flight.counter || 'Row TBA') : (flight.gate || 'Gate D1');
+    const col2Val = isDep ? (flight.counter || 'Row TBA') : (flight.gate || 'Gate TBA');
     const col2Sub = isDep ? `Terminal ${termId}` : (typeof currentLang !== 'undefined' && currentLang === 'en' ? `Lobby Arrival T${termId}` : `Lobi Kedatangan T${termId}`);
 
     const col3Title = typeof __t === 'function' ? __t('modal_aircraft_type') : 'TIPE ARMADA';
@@ -1617,6 +1643,7 @@ function openModal(flight) {
     `;
 
     modal.classList.add('show');
+    bindModalSwipeGestures(modal);
 }
 
 /**

@@ -114,7 +114,9 @@ const I18N_DICT = {
         modal_exit_gate: "PINTU KELUAR",
         modal_aircraft_type: "TIPE ARMADA",
         modal_wide_body: "Badan Lebar (Wide-Body)",
-        modal_narrow_body: "Lorong Tunggal (Narrow-Body)"
+        modal_narrow_body: "Lorong Tunggal (Narrow-Body)",
+        modal_departed_time: "WAKTU BERANGKAT",
+        modal_estimated_arrival: "ESTIMASI KEDATANGAN"
     },
     en: {
         nav_dashboard: "Dashboard",
@@ -231,7 +233,9 @@ const I18N_DICT = {
         modal_exit_gate: "EXIT GATE",
         modal_aircraft_type: "AIRCRAFT MODEL",
         modal_wide_body: "Wide-Body Jet",
-        modal_narrow_body: "Narrow-Body Jet"
+        modal_narrow_body: "Narrow-Body Jet",
+        modal_departed_time: "DEPARTED AT",
+        modal_estimated_arrival: "ESTIMATED ARRIVAL"
     }
 };
 
