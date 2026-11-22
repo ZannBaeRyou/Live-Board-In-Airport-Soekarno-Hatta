@@ -34,14 +34,19 @@ if (!css.includes('.airline-card-bento')) {
     process.exit(1);
 }
 
-// 5. Check Batik Mega Mendung watermark banner presence and styling
-if (!airlinesHtml.includes('class="banner-batik-watermark"') && !airlinesHtml.includes("class='banner-batik-watermark'")) {
-    console.error("FAIL: airlines.html must contain .banner-batik-watermark in header");
+// 5. Check Batik Mega Mendung Top Sky Backdrop presence (unified with dashboard, not inside title)
+if (!airlinesHtml.includes('class="dashboard-batik-sky-backdrop"') && !airlinesHtml.includes("class='dashboard-batik-sky-backdrop'")) {
+    console.error("FAIL: airlines.html must contain .dashboard-batik-sky-backdrop unified with dashboard");
     process.exit(1);
 }
 
-if (!css.includes('.banner-batik-watermark') || !css.includes('batik-megamendung-clean.jpg')) {
-    console.error("FAIL: style.css must define .banner-batik-watermark referencing batik-megamendung-clean.jpg");
+if (airlinesHtml.includes('class="banner-batik-watermark"') || airlinesHtml.includes("class='banner-batik-watermark'")) {
+    console.error("FAIL: airlines.html must not contain local .banner-batik-watermark inside title");
+    process.exit(1);
+}
+
+if (!css.includes('.dashboard-batik-sky-backdrop') || !css.includes('batik-megamendung-clean.jpg')) {
+    console.error("FAIL: style.css must define .dashboard-batik-sky-backdrop referencing batik-megamendung-clean.jpg");
     process.exit(1);
 }
 
