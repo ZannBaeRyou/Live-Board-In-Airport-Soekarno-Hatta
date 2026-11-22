@@ -34,19 +34,19 @@
 - Consumes: `assets/images/batik-megamendung-clean.jpg`
 - Produces: `.banner-batik-watermark` CSS class and updated header banner markup
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 In `tests/test_airlines_page.js`, add assertions verifying:
 1. `airlines.html` contains `<div class="banner-batik-watermark"></div>`.
 2. `assets/css/style.css` contains `.banner-batik-watermark` with `background-image` referencing `batik-megamendung-clean.jpg` and `mask-image` linear gradient.
 3. Banner title in `airlines.html` uses `.brand-font` and has crisp Deep Slate `#0f172a` style.
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `node tests/test_airlines_page.js`
 Expected: FAIL with missing `.banner-batik-watermark`
 
-- [ ] **Step 3: Implement banner markup and CSS**
+- [x] **Step 3: Implement banner markup and CSS**
 
 1. In `airlines.html`:
    - Inside `<header class="modern-page-banner">`, add `<div class="banner-batik-watermark"></div>`.
@@ -74,12 +74,12 @@ Expected: FAIL with missing `.banner-batik-watermark`
      ```
    - Ensure `.modern-page-banner` has `position: relative; overflow: hidden;`.
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `node tests/test_airlines_page.js`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add airlines.html assets/css/style.css tests/test_airlines_page.js
@@ -99,7 +99,7 @@ git commit -m "feat(airlines): add batik mega mendung watermark banner and high-
 - Consumes: `.airline-term-btn` click handler in `assets/js/main.js` (`data-terminal="all|1|2|3"`)
 - Produces: `.segmented-terminal-dock`, `.term-dot`, and modernized `.airline-term-btn` styles
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 In `tests/test_airlines_page.js`, add assertions verifying:
 1. `airlines.html` contains `.segmented-terminal-dock` containing 4 `.airline-term-btn` buttons.
@@ -107,12 +107,12 @@ In `tests/test_airlines_page.js`, add assertions verifying:
 3. `assets/css/style.css` defines `.segmented-terminal-dock` with `height: 46px` and `border-radius: 12px`.
 4. `assets/css/style.css` defines `.airline-term-btn.active` with `background: #ffffff` and `box-shadow`.
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `node tests/test_airlines_page.js`
 Expected: FAIL with missing `.segmented-terminal-dock`
 
-- [ ] **Step 3: Implement dock markup and styles**
+- [x] **Step 3: Implement dock markup and styles**
 
 1. In `airlines.html`:
    - Replace `<div class="d-flex flex-wrap gap-2" id="terminal-filter-group">` with:
@@ -189,12 +189,12 @@ Expected: FAIL with missing `.segmented-terminal-dock`
      .dot-t3 { background-color: #d97706; }
      ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `node tests/test_airlines_page.js`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add airlines.html assets/css/style.css tests/test_airlines_page.js
@@ -208,16 +208,16 @@ git commit -m "feat(airlines): implement segmented control dock for terminal fil
 **Files:**
 - Verify: `tests/*.js`
 
-- [ ] **Step 1: Run all test suites**
+- [x] **Step 1: Run all test suites**
 
 Run: `Get-ChildItem tests/*.js | ForEach-Object { node $_.FullName }`
 Expected: ALL 14 TEST SUITES PASS (100% green).
 
-- [ ] **Step 2: Clean up scratch brainstorming sessions**
+- [x] **Step 2: Clean up scratch brainstorming sessions**
 
 Run: `node C:\Users\Fauzy Ayub\.gemini\config\plugins\superpowers\skills\brainstorming\scripts\server.cjs stop` or remove temporary scratch scripts.
 
-- [ ] **Step 3: Commit final verification**
+- [x] **Step 3: Commit final verification**
 
 ```bash
 git commit --allow-empty -m "chore: complete airlines batik watermark banner and segmented dock filter"
