@@ -1673,35 +1673,34 @@ h1, h2, h3, h4, h5, h6 {
     position: absolute;
     right: 0;
     top: 0;
-    width: 38%;
+    width: 45%;
     height: 100%;
     background-image: url('../images/batik-megamendung-clean.jpg');
     background-size: cover;
     background-position: right center;
-    opacity: 0.25;
-    -webkit-mask-image: radial-gradient(ellipse at 100% 50%, rgba(0,0,0,1) 15%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0) 85%);
-    mask-image: radial-gradient(ellipse at 100% 50%, rgba(0,0,0,1) 15%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0) 85%);
+    opacity: 0.32;
+    -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
+    mask-image: linear-gradient(to left, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
     pointer-events: none;
     z-index: 1;
-    filter: hue-rotate(285deg) saturate(1.35) contrast(1.05); /* Emerald Green */
-    transform: translate(14px, 0) scale(0.96);
+    filter: hue-rotate(285deg) saturate(1.4) contrast(1.05); /* Emerald Green */
+    transform-origin: right center;
+    transform: scale(1.0);
     transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: opacity, transform;
 }
 
 @media (max-width: 991px) {
     .banner-batik-watermark {
-        width: 48%;
-        opacity: 0.22;
+        width: 55%;
+        opacity: 0.25;
     }
 }
 
 @media (max-width: 768px) {
     .banner-batik-watermark {
-        width: 70%;
-        opacity: 0.16;
-        -webkit-mask-image: radial-gradient(ellipse at 100% 50%, rgba(0,0,0,1) 10%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 85%);
-        mask-image: radial-gradient(ellipse at 100% 50%, rgba(0,0,0,1) 10%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 85%);
+        width: 75%;
+        opacity: 0.20;
     }
 }
 
@@ -1716,8 +1715,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #airlines-hero-card:hover .banner-batik-watermark {
-    opacity: 0.38;
-    transform: translate(0, 0) scale(1.02);
+    opacity: 0.42;
+    transform: scale(1.03);
 }
 
 /* === Terminal Card Animated Batik Watermark on Hover === */
