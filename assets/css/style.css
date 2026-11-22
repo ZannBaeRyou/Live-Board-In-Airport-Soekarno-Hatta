@@ -2107,6 +2107,39 @@ h1, h2, h3, h4, h5, h6 {
     transform: scale(1.03);
 }
 
+/* ==========================================================================
+   BENTO AIRPORT HERO CARD & TITLE EMERALD GLOW (Matching Airlines Theme)
+   ========================================================================== */
+#bento-airport-hero {
+    transition: border-color 0.4s ease, box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#bento-airport-hero:hover {
+    border-color: #6ee7b7 !important;
+    box-shadow: 0 20px 45px rgba(5, 150, 105, 0.16), 0 0 35px rgba(16, 185, 129, 0.14) !important;
+    transform: translateY(-2px);
+}
+
+#bento-airport-hero:hover .hero-batik-watermark {
+    opacity: 0.35;
+    transform: scale(1.03);
+}
+
+#bento-airport-hero h1,
+#bento-airport-hero [data-i18n="hero_title"] {
+    display: inline-block;
+    transition: color 0.35s cubic-bezier(0.16, 1, 0.3, 1), text-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#bento-airport-hero:hover h1,
+#bento-airport-hero:hover [data-i18n="hero_title"],
+#bento-airport-hero h1:hover,
+#bento-airport-hero [data-i18n="hero_title"]:hover {
+    color: #059669 !important;
+    text-shadow: 0 0 16px rgba(16, 185, 129, 0.45), 0 0 32px rgba(5, 150, 105, 0.22);
+    transform: translateY(-1px);
+}
+
 /* === Terminal Card Animated Batik Watermark on Hover === */
 @keyframes batikCloudDrift {
     0% {
