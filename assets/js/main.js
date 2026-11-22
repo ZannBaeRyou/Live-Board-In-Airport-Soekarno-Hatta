@@ -497,7 +497,23 @@ function getAircraftModel(flightNo, airline) {
     if (fn.startsWith('EY')) return 'B787-10';
     if (fn.startsWith('IU')) return 'A320-200';
     if (fn.startsWith('IP')) return 'A320-200';
-    return '';
+    if (fn.startsWith('MU')) return 'A330-300';
+    if (fn.startsWith('SV')) return 'B777-300ER';
+    if (fn.startsWith('TR')) return 'A320-200';
+    if (fn.startsWith('3K')) return 'A320-200';
+    if (fn.startsWith('XT')) return 'A330-300';
+    if (fn.startsWith('IW')) return 'ATR 72-600';
+    if (fn.startsWith('QG')) return 'A320-200';
+    return 'B737-800';
+}
+
+function getAircraftCategory(aircraftModel) {
+    if (!aircraftModel) return typeof __t === 'function' ? __t('modal_narrow_body') : 'Lorong Tunggal (Narrow-Body)';
+    const m = aircraftModel.toUpperCase();
+    if (m.includes('A330') || m.includes('A350') || m.includes('B777') || m.includes('B787') || m.includes('A380') || m.includes('B747')) {
+        return typeof __t === 'function' ? __t('modal_wide_body') : 'Badan Lebar (Wide-Body)';
+    }
+    return typeof __t === 'function' ? __t('modal_narrow_body') : 'Lorong Tunggal (Narrow-Body)';
 }
 
 /**
@@ -1478,104 +1494,129 @@ function openModal(flight) {
     const modal = document.getElementById('fids-detail-modal');
     if (!modal) return;
 
-    const terminalName = currentTerminal ? `Terminal ${currentTerminal}` : 'Terminal';
-
-    document.getElementById('modal-flight-num').innerText = flight.number;
-    if (flight.logo) {
-        document.getElementById('modal-airline').innerHTML = `<img src="${flight.logo}" alt="" class="me-2 rounded bg-white" style="width: 24px; height: 24px; object-fit: contain; padding: 2px;" onerror="this.style.display='none'"> ${flight.airline}`;
+    // Detect terminal id: 1, 2, or 3
+    let termId = '3';
+    if (flight.terminal) {
+        termId = String(flight.terminal);
+    } else if (typeof currentTerminal !== 'undefined' && currentTerminal) {
+        termId = String(currentTerminal);
     } else {
-        document.getElementById('modal-airline').innerText = flight.airline;
-    }
-    document.getElementById('modal-route').innerHTML = flight.type === 'departure' ? `CGK ${terminalName} &rarr; ${flight.destination}` : `${flight.origin} &rarr; CGK ${terminalName}`;
-    document.getElementById('modal-scheduled-time').innerText = flight.time;
-    document.getElementById('modal-actual-time').innerText = formatEstimatedTime(flight.estimatedTime);
-    document.getElementById('modal-gate').innerText = flight.gate;
-    
-    const counterSec = document.getElementById('modal-counter-section');
-    const baggageSec = document.getElementById('modal-baggage-section');
-    
-    if (flight.type === 'departure') {
-        counterSec.classList.remove('d-none');
-        baggageSec.classList.add('d-none');
-        document.getElementById('modal-counter').innerText = flight.counter;
-    } else {
-        counterSec.classList.add('d-none');
-        baggageSec.classList.remove('d-none');
-        document.getElementById('modal-baggage').innerText = flight.baggage;
+        const metaTerm = document.querySelector('meta[name="terminal"]')?.content;
+        if (metaTerm) termId = metaTerm;
     }
 
-    // Generate Tracker Timeline HTML
-    const timelineContainer = document.getElementById('modal-timeline-container');
-    timelineContainer.innerHTML = '';
-    
-    const progress = flight.progress;
+    const themeClass = `modal-theme-t${termId}`;
+    const termColor = termId === '1' ? 'var(--accent-t1)' : (termId === '2' ? 'var(--accent-t2)' : 'var(--accent-t3)');
+    const termName = `Terminal ${termId} CGK`;
 
-    let nodes = [];
-    if (flight.type === 'departure') {
-        nodes = [
-            { label: 'Check-in', triggerVal: 20 },
-            { label: 'Boarding', triggerVal: 50 },
-            { label: 'Final Call', triggerVal: 80 },
-            { label: 'Departed', triggerVal: 100 }
-        ];
-    } else {
-        nodes = [
-            { label: 'Scheduled', triggerVal: 10 },
-            { label: 'In Flight', triggerVal: 50 },
-            { label: 'Landed', triggerVal: 80 },
-            { label: 'Baggage', triggerVal: 100 }
-        ];
+    const flightNum = flight.number || flight.flight_no || '--';
+    const airlineName = flight.airline || 'Airlines';
+    const model = getAircraftModel(flightNum, airlineName);
+    const category = getAircraftCategory(model);
+    const status = flight.status || 'Scheduled';
+
+    let dotColor = '#0284c7';
+    let statusBg = '#e0f2fe';
+    let statusText = '#0284c7';
+    let statusBorder = '#bae6fd';
+
+    if (status === 'Boarding') {
+        dotColor = '#059669'; statusBg = '#ecfdf5'; statusText = '#059669'; statusBorder = '#a7f3d0';
+    } else if (status === 'Final Call') {
+        dotColor = '#d97706'; statusBg = '#fffbeb'; statusText = '#d97706'; statusBorder = '#fde68a';
+    } else if (status === 'Delayed') {
+        dotColor = '#e11d48'; statusBg = '#fff1f2'; statusText = '#e11d48'; statusBorder = '#fecdd3';
+    } else if (status === 'Cancelled') {
+        dotColor = '#dc2626'; statusBg = '#fef2f2'; statusText = '#dc2626'; statusBorder = '#fca5a5';
+    } else if (status === 'Departed' || status === 'Landed') {
+        dotColor = '#64748b'; statusBg = '#f1f5f9'; statusText = '#475569'; statusBorder = '#cbd5e1';
     }
 
-    let nodesHTML = '';
-    nodes.forEach((node, idx) => {
-        const pct = (idx / (nodes.length - 1)) * 100;
-        const isActive = progress >= node.triggerVal || (idx === 0) || (flight.status === 'Cancelled' ? false : progress >= node.triggerVal);
-        nodesHTML += `
-            <div class="modal-timeline-node ${isActive ? 'active' : ''}" style="left: ${pct}%;"></div>
-            <div class="modal-timeline-label" style="left: ${pct}%;">${node.label}</div>
-        `;
-    });
+    const isDep = flight.type === 'departure';
+    const highlightTitle = isDep ? (typeof __t === 'function' ? __t('modal_gate_departure') : 'GERBANG KEBERANGKATAN') : (typeof __t === 'function' ? __t('modal_baggage_belt') : 'SABUK PENGAMBILAN BAGASI');
+    const highlightVal = isDep ? (flight.gate || 'Gate TBA') : (flight.baggage || (termId === '1' ? 'Belt 2' : (termId === '2' ? 'Belt 5' : 'Belt 8')));
+    const subRightTitle = isDep ? (typeof __t === 'function' ? __t('modal_boarding_time_left') : 'SISA WAKTU BOARDING') : (typeof __t === 'function' ? __t('modal_landing_time') : 'WAKTU MENDARAT');
+    const subRightVal = formatEstimatedTime(flight.estimatedTime) || (flight.time + ' WIB');
 
-    timelineContainer.innerHTML = `
-        <div class="modal-tracker-timeline">
-            <div class="modal-timeline-line">
-                <div class="modal-timeline-fill" style="width: ${progress}%;"></div>
-                ${nodesHTML}
-                ${progress > 0 && progress < 100 && flight.status !== 'Cancelled' ? `
-                    <i class="fa-solid fa-plane modal-timeline-plane" style="left: ${progress}%;"></i>
-                ` : ''}
+    const col1Title = isDep ? (typeof __t === 'function' ? __t('modal_destination_city') : 'KOTA TUJUAN') : (typeof __t === 'function' ? __t('modal_origin_city') : 'KOTA ASAL');
+    const col1Val = isDep ? (flight.destination || 'Destination') : (flight.origin || 'Origin');
+    const col1Sub = `${typeof currentLang !== 'undefined' && currentLang === 'en' ? 'Scheduled' : 'Jadwal'}: ${flight.time || '--:--'} WIB`;
+
+    const col2Title = isDep ? (typeof __t === 'function' ? __t('modal_counter_island') : 'KONTER CHECK-IN') : (typeof __t === 'function' ? __t('modal_exit_gate') : 'PINTU KELUAR');
+    const col2Val = isDep ? (flight.counter || 'Row TBA') : (flight.gate || 'Gate D1');
+    const col2Sub = isDep ? `Terminal ${termId}` : (typeof currentLang !== 'undefined' && currentLang === 'en' ? `Lobby Arrival T${termId}` : `Lobi Kedatangan T${termId}`);
+
+    const col3Title = typeof __t === 'function' ? __t('modal_aircraft_type') : 'TIPE ARMADA';
+    const col3Val = model;
+    const col3Sub = category;
+
+    const closeBtnText = typeof __t === 'function' ? __t('modal_close') : 'TUTUP DETAIL';
+
+    modal.innerHTML = `
+        <div class="fids-modal-content fids-modal-executive ${themeClass}" style="position: relative;">
+            <!-- Header Row -->
+            <div class="modal-header-row">
+                <div>
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <span class="modal-terminal-badge px-2 py-1 rounded small fw-bold font-digital" style="font-size: 0.75rem;">${termName}</span>
+                        <span class="text-secondary small fw-medium" data-i18n="modal_flight_status">${typeof __t === 'function' ? __t('modal_flight_status') : 'STATUS PENERBANGAN'}</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        ${flight.logo ? `<img src="${flight.logo}" alt="" class="rounded bg-white p-1" style="width: 28px; height: 28px; object-fit: contain; border: 1px solid #e2e8f0;" onerror="this.style.display='none'">` : ''}
+                        <h2 class="fs-3 fw-bold mb-0 text-white font-digital">${flightNum} <span class="fs-5 fw-normal text-secondary">&bull; ${airlineName}</span></h2>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <span class="badge rounded-pill px-3 py-2 fw-bold d-inline-flex align-items-center gap-2 font-digital" style="background: ${statusBg}; color: ${statusText}; border: 1px solid ${statusBorder}; font-size: 0.8rem;">
+                        <span class="status-pulse-dot" style="background: ${dotColor};"></span> ${status}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Big Highlight Banner -->
+            <div class="modal-highlight-banner">
+                <div>
+                    <span class="small fw-bold text-uppercase d-block" style="color: ${termColor}; letter-spacing: 0.5px; font-size: 0.75rem;">${highlightTitle}</span>
+                    <div class="modal-highlight-val fs-1 fw-bold font-digital" style="line-height: 1.1; margin-top: 4px;">${highlightVal}</div>
+                </div>
+                <div class="text-md-end text-start">
+                    <span class="small fw-bold text-uppercase d-block" style="color: ${termColor}; letter-spacing: 0.5px; font-size: 0.75rem;">${subRightTitle}</span>
+                    <div class="fs-3 fw-bold font-digital text-white" style="margin-top: 4px;">${subRightVal}</div>
+                </div>
+            </div>
+
+            <!-- 3 Info Box Grid -->
+            <div class="modal-info-grid">
+                <!-- Col 1 -->
+                <div class="modal-info-card">
+                    <span class="text-secondary small fw-bold text-uppercase" style="font-size: 0.7rem;">${col1Title}</span>
+                    <strong class="text-white fs-6 mt-1 mb-1 font-digital text-uppercase">${col1Val}</strong>
+                    <span class="text-secondary small" style="font-size: 0.72rem;">${col1Sub}</span>
+                </div>
+
+                <!-- Col 2 -->
+                <div class="modal-info-card">
+                    <span class="text-secondary small fw-bold text-uppercase" style="font-size: 0.7rem;">${col2Title}</span>
+                    <strong class="text-white fs-6 mt-1 mb-1 font-digital">${col2Val}</strong>
+                    <span class="text-secondary small" style="font-size: 0.72rem;">${col2Sub}</span>
+                </div>
+
+                <!-- Col 3: Aircraft Model -->
+                <div class="modal-info-card aircraft-card">
+                    <span class="small fw-bold text-uppercase" style="color: #166534; font-size: 0.7rem;">${col3Title}</span>
+                    <strong class="fs-6 mt-1 mb-1 font-digital" style="color: #15803d;">${col3Val}</strong>
+                    <span class="small" style="color: #16a34a; font-size: 0.72rem;">${col3Sub}</span>
+                </div>
+            </div>
+
+            <!-- Action / Close Button -->
+            <div class="mt-3">
+                <button class="btn btn-modern-outline w-100 py-2 fids-modal-close" onclick="closeModal()" data-i18n="modal_close">${closeBtnText}</button>
             </div>
         </div>
     `;
 
-    // Pastikan status zoom di-reset ketika membuka detail penerbangan baru
-    const wrapper = document.querySelector('.flight-map-wrapper');
-    if (wrapper) {
-        wrapper.classList.remove('fullscreen-map');
-        const zoomBtn = wrapper.querySelector('.btn-map-zoom');
-        if (zoomBtn) zoomBtn.innerHTML = '<i class="fa-solid fa-expand"></i> Zoom';
-        
-        // Hapus handler lama dan pasang handler klik zoom baru
-        const newZoomBtn = zoomBtn.cloneNode(true);
-        zoomBtn.parentNode.replaceChild(newZoomBtn, zoomBtn);
-        newZoomBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            toggleFullscreenMap();
-        });
-    }
-
-    // Mulai animasi radar rute map dengan delay tipis agar render canvas pas
-    setTimeout(() => {
-        startFlightMapAnimation(flight);
-    }, 150);
-
     modal.classList.add('show');
-
-    // Re-apply translations to modal labels
-    if (typeof applyTranslations === 'function') {
-        applyTranslations();
-    }
 }
 
 /**
