@@ -1938,10 +1938,19 @@ h1, h2, h3, h4, h5, h6 {
 /* Footer Section */
 .footer-fids {
     background-color: transparent;
-    color: #475569;
-    border-top: 1px solid #e2e8f0;
-    padding: 60px 0 35px;
+    color: #334155;
+    border-top: none !important;
+    padding: 30px 0 60px;
     font-size: 0.85rem;
+}
+
+.footer-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    box-shadow: 0 4px 24px rgba(15, 23, 42, 0.05);
+    position: relative;
+    overflow: hidden;
 }
 
 .footer-fids h5 {
@@ -1958,18 +1967,12 @@ h1, h2, h3, h4, h5, h6 {
     display: block !important;
     margin-bottom: 10px;
     padding: 4px 0;
-}
-
-@media (max-width: 768px) {
-    .footer-fids-link {
-        margin-bottom: 12px;
-        padding: 6px 0;
-        border-bottom: 1px solid #e2e8f0;
-    }
+    font-weight: 500;
 }
 
 .footer-fids-link:hover {
     color: #0284c7 !important;
+    transform: translateX(3px);
 }
 
 .footer-contact-link {
