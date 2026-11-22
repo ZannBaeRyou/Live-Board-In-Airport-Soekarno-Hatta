@@ -1649,6 +1649,19 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 12px 28px rgba(244, 63, 94, 0.16) !important;
 }
 
+/* Weather Bento Card Typography - Crimson Red Theme */
+#bento-weather-card #bento-temp {
+    color: #e11d48 !important;
+}
+
+#bento-weather-card #bento-weather-desc {
+    color: #be123c !important;
+}
+
+#bento-weather-card #bento-wind {
+    color: #9f1239 !important;
+}
+
 @media (max-width: 768px) {
     .weather-batik-watermark {
         width: 100%;

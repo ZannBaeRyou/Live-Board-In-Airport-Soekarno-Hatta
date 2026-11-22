@@ -36,4 +36,10 @@ if (!css.includes('#bento-weather-card:hover .weather-batik-watermark') && !css.
     process.exit(1);
 }
 
-console.log('PASS: Custom batik color themes verified for Airport Hero (Green), Airlines Banner (Green), and Weather Card (Sunset Coral with hover animation)');
+// 6. Verify weather typography uses vibrant red theme
+if (!css.includes('#bento-weather-card #bento-temp') || !css.includes('#e11d48')) {
+    console.error('FAIL: style.css must define #e11d48 red text for #bento-temp');
+    process.exit(1);
+}
+
+console.log('PASS: Custom batik color themes verified for Airport Hero (Green), Airlines Banner (Green), and Weather Card (Sunset Coral with hover animation & red typography)');

@@ -112,21 +112,21 @@
             </div>
 
             <!-- Bento 2: Metar Weather (4 cols) -->
-            <div class="bento-card bento-weather d-flex flex-column justify-content-between position-relative overflow-hidden" id="bento-weather-card" style="border-top: 3px solid #f43f5e;">
+            <div class="bento-card bento-weather d-flex flex-column justify-content-between position-relative overflow-hidden" id="bento-weather-card" style="border-top: 3px solid #e11d48;">
                 <div class="weather-batik-watermark" aria-hidden="true"></div>
                 <div class="position-relative" style="z-index: 2;">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span class="small text-secondary text-uppercase fw-semibold" style="font-size: 0.7rem; letter-spacing: 0.05em;">METAR Weather</span>
-                        <span class="badge rounded-pill bg-light border text-primary small" style="font-size: 0.7rem; color: #f43f5e !important; border-color: #fecdd3 !important;">Live Open-Meteo</span>
+                        <span class="small text-uppercase fw-semibold" style="font-size: 0.7rem; letter-spacing: 0.05em; color: #be123c;">METAR Weather</span>
+                        <span class="badge rounded-pill bg-light border small" style="font-size: 0.7rem; color: #e11d48 !important; border-color: #fecdd3 !important;">Live Open-Meteo</span>
                     </div>
                     <div class="d-flex align-items-baseline gap-2 my-2">
-                        <div class="display-5 fw-bold text-white font-digital" id="bento-temp">--°C</div>
-                        <div class="small fw-semibold text-warning" id="bento-weather-desc">Cerah</div>
+                        <div class="display-5 fw-bold font-digital" id="bento-temp" style="color: #e11d48 !important;">--°C</div>
+                        <div class="small fw-semibold" id="bento-weather-desc" style="color: #be123c !important;">Cerah</div>
                     </div>
                 </div>
-                <div class="pt-3 border-top border-secondary border-opacity-10 d-flex justify-content-between font-digital small text-secondary position-relative" style="z-index: 2;">
-                    <div><i class="fa-solid fa-wind me-1 text-cyan"></i> <span id="bento-wind-label">Angin</span>: <span class="text-white" id="bento-wind">12 km/h</span></div>
-                    <div><i class="fa-solid fa-eye me-1 text-cyan"></i> Vis: <span class="text-white">&gt; 10 km</span></div>
+                <div class="pt-3 border-top border-secondary border-opacity-10 d-flex justify-content-between font-digital small position-relative" style="z-index: 2; color: #be123c;">
+                    <div><i class="fa-solid fa-wind me-1" style="color: #e11d48;"></i> <span id="bento-wind-label">Angin</span>: <span id="bento-wind" class="fw-semibold" style="color: #9f1239;">12 km/h</span></div>
+                    <div><i class="fa-solid fa-eye me-1" style="color: #e11d48;"></i> Vis: <span class="fw-semibold" style="color: #9f1239;">&gt; 10 km</span></div>
                 </div>
             </div>
 
