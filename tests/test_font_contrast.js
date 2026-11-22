@@ -65,4 +65,13 @@ assert.ok(
 );
 console.log('PASS: terminal1.html modal map wrapper free of dark inline styles');
 
+// 4. Verify search inputs are high-contrast light theme
+assert.ok(
+    !css.includes('.quick-search-input-box {\n    display: flex;\n    align-items: center;\n    background: rgba(9, 9, 11') &&
+    css.includes('.quick-search-input-box') &&
+    css.includes('.quick-search-input'),
+    'FAIL: .quick-search-input-box must use clean light background in style.css'
+);
+console.log('PASS: .quick-search-input-box verified high-contrast light mode');
+
 console.log('ALL FONT CONTRAST TESTS PASSED SUCCESSFULLY!');
