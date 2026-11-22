@@ -6,18 +6,71 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@400;500;600;700&display=swap');
 
-:root {
-    /* Modern Vibe Coder Dark Palette */
+:root,
+[data-theme="light"] {
+    /* Changi Clean Light Palette (Default - Option A) */
+    --bg-primary: #f8fafc;
+    --bg-canvas: #f8fafc;
+    --surface-card: #ffffff;
+    --surface-hover: #f1f5f9;
+    --border-subtle: #e2e8f0;
+    --border-hover: #cbd5e1;
+    --bg-surface: #ffffff;
+    --bg-surface-elevated: #f1f5f9;
+    
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    
+    --accent-sky: #0284c7;
+    --accent-t1: #0284c7;
+    --accent-t2: #7c3aed;
+    --accent-t3: #d97706;
+    
+    --status-boarding: #16a34a;
+    --status-final-call: #ea580c;
+    --status-checkin: #0284c7;
+    --status-scheduled: #64748b;
+    --status-delayed: #dc2626;
+    
+    /* Backward Compatibility Aliases */
+    --fids-bg-darkest: var(--bg-canvas);
+    --fids-bg-board: var(--surface-card);
+    --fids-bg-row: #ffffff;
+    --fids-bg-row-hover: #f8fafc;
+    --fids-border: var(--border-subtle);
+    --fids-amber: #d97706;
+    --fids-amber-glow: rgba(217, 119, 6, 0.15);
+    --fids-green: #16a34a;
+    --fids-red: #dc2626;
+    --fids-blue: #0284c7;
+    --fids-grey: #64748b;
+    --text-white: var(--text-primary);
+    --radius-fids: 12px;
+    --navbar-bg: rgba(255, 255, 255, 0.92);
+    --navbar-border: var(--border-subtle);
+    --modal-backdrop: rgba(15, 23, 42, 0.6);
+    --canvas-bg: #f8fafc;
+    --shadow-color: rgba(15, 23, 42, 0.08);
+    --shadow-hover: rgba(2, 132, 199, 0.15);
+}
+
+[data-theme="dark"] {
+    /* Stealth Cyber Dark Palette */
+    --bg-primary: #09090b;
     --bg-canvas: #09090b;
     --surface-card: #13151b;
     --surface-hover: #181a22;
     --border-subtle: rgba(255, 255, 255, 0.08);
     --border-hover: rgba(255, 255, 255, 0.16);
+    --bg-surface: #13151b;
+    --bg-surface-elevated: #181a22;
     
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
     --text-muted: #64748b;
     
+    --accent-sky: #38bdf8;
     --accent-t1: #38bdf8;
     --accent-t2: #a855f7;
     --accent-t3: #f59e0b;
@@ -28,7 +81,6 @@
     --status-scheduled: #94a3b8;
     --status-delayed: #f43f5e;
     
-    /* Backward Compatibility Aliases */
     --fids-bg-darkest: var(--bg-canvas);
     --fids-bg-board: var(--surface-card);
     --fids-bg-row: rgba(255, 255, 255, 0.02);
@@ -351,6 +403,175 @@ h1, h2, h3, h4, h5, h6 {
     background: rgba(244, 63, 94, 0.12);
     color: #fb7185;
     border: 1px solid rgba(244, 63, 94, 0.25);
+}
+
+/* Light Mode Status Pills (High Contrast & Clear) */
+[data-theme="light"] .status-pill-boarding {
+    background: #dcfce7;
+    color: #15803d;
+    border-color: #bbf7d0;
+}
+[data-theme="light"] .status-pill-final-call {
+    background: #ffedd5;
+    color: #c2410c;
+    border-color: #fed7aa;
+}
+[data-theme="light"] .status-pill-checkin {
+    background: #e0f2fe;
+    color: #0369a1;
+    border-color: #bae6fd;
+}
+[data-theme="light"] .status-pill-scheduled {
+    background: #f1f5f9;
+    color: #475569;
+    border-color: #e2e8f0;
+}
+[data-theme="light"] .status-pill-delayed {
+    background: #fee2e2;
+    color: #b91c1c;
+    border-color: #fecaca;
+}
+
+/* Light Mode Component Overrides */
+[data-theme="light"] .fids-row-modern {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+[data-theme="light"] .fids-row-modern:hover {
+    background: #ffffff;
+    border-color: #cbd5e1;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+[data-theme="light"] .gate-badge-modern {
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+    color: #0f172a;
+}
+[data-theme="light"] .airline-emblem-sq {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+}
+[data-theme="light"] .fids-board-header {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+}
+[data-theme="light"] .fids-tabs {
+    background: #e2e8f0;
+}
+[data-theme="light"] .segmented-btn {
+    color: #475569;
+}
+[data-theme="light"] .segmented-btn.active {
+    background: #ffffff;
+    color: #0f172a;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.1);
+}
+[data-theme="light"] .hero-fids-container,
+[data-theme="light"] .modern-page-banner {
+    background: linear-gradient(180deg, #f1f5f9 0%, #f8fafc 100%) !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+[data-theme="light"] .hero-fids-title,
+[data-theme="light"] .brand-font {
+    color: #0f172a !important;
+}
+[data-theme="light"] .text-white-50 {
+    color: #475569 !important;
+}
+[data-theme="light"] .fids-live-clock {
+    color: #0284c7 !important;
+}
+[data-theme="light"] .terminal-breadcrumb a {
+    color: #0284c7;
+}
+[data-theme="light"] .terminal-breadcrumb span {
+    color: #64748b;
+}
+[data-theme="light"] .airline-filter-pill {
+    background: #ffffff;
+    border-color: #cbd5e1;
+    color: #334155;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+[data-theme="light"] .airline-filter-pill:hover,
+[data-theme="light"] .airline-filter-pill.active {
+    background: #e0f2fe;
+    border-color: #0284c7;
+    color: #0284c7;
+    box-shadow: 0 0 8px rgba(2, 132, 199, 0.2);
+}
+[data-theme="light"] .airline-term-btn {
+    background: #ffffff;
+    border-color: #cbd5e1;
+    color: #334155;
+}
+[data-theme="light"] .airline-term-btn:hover,
+[data-theme="light"] .airline-term-btn.active {
+    background: #e0f2fe;
+    border-color: #0284c7;
+    color: #0284c7;
+}
+[data-theme="light"] .airline-card-bento {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+}
+[data-theme="light"] .airline-card-bento:hover {
+    border-color: #0284c7;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08), 0 0 15px rgba(2, 132, 199, 0.1);
+}
+[data-theme="light"] .bento-card-modern {
+    background: #ffffff;
+    border-color: #e2e8f0;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+}
+[data-theme="light"] .bento-card-modern:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.09);
+}
+[data-theme="light"] .navbar-custom {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    backdrop-filter: blur(16px);
+}
+[data-theme="light"] .navbar-brand,
+[data-theme="light"] .nav-link {
+    color: #0f172a !important;
+}
+[data-theme="light"] .nav-link:hover,
+[data-theme="light"] .nav-link.active {
+    color: #0284c7 !important;
+}
+[data-theme="light"] .fids-weather-badge {
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+    color: #0f172a;
+}
+[data-theme="light"] .fids-search-input,
+[data-theme="light"] .form-control {
+    background: #ffffff !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+}
+[data-theme="light"] .fids-search-input::placeholder,
+[data-theme="light"] .form-control::placeholder {
+    color: #94a3b8 !important;
+}
+[data-theme="light"] .quick-search-dropdown {
+    background: #ffffff;
+    border-color: #cbd5e1;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+}
+[data-theme="light"] .quick-search-item {
+    border-bottom: 1px solid #f1f5f9;
+}
+[data-theme="light"] .quick-search-item:hover {
+    background: #f8fafc;
+}
+[data-theme="light"] .quick-search-item .text-white {
+    color: #0f172a !important;
 }
 
 .text-gold { color: var(--fids-amber) !important; }
