@@ -832,9 +832,10 @@ function drawRealEarth(ctx, cx, cy, R, rotX, rotY) {
     }
 
     // Gambar benua dari data GeoJSON bumi asli
-    ctx.strokeStyle = strokeColor; // cyan stroke
+    const isLightMode = document.documentElement.getAttribute('data-theme') === 'light';
+    ctx.strokeStyle = isLightMode ? '#94a3b8' : strokeColor; // daylight gray or cyan stroke
     ctx.lineWidth = 0.8;
-    ctx.fillStyle = 'rgba(56, 189, 248, 0.05)';  // transparent cyber cyan fill
+    ctx.fillStyle = isLightMode ? '#ffffff' : 'rgba(56, 189, 248, 0.05)';  // white or cyber cyan fill
 
     worldLandGeoJSON.features.forEach(feature => {
         const geom = feature.geometry;
@@ -1089,6 +1090,7 @@ function startFlightMapAnimation(flight) {
     
     // Loop Render Animasi Globe
     function drawGlobeLoop() {
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
         animationFrame++;
         
         // Counter efek mengalir
@@ -1110,20 +1112,20 @@ function startFlightMapAnimation(flight) {
         const cy = logH / 2;
         const R = Math.min(logW, logH) * 0.42 * zoomLevel;
         
-        // Background ruang angkasa (Cyber Dark)
-        ctx.fillStyle = '#09090b';
+        // Background ruang angkasa (Daylight Soft White atau Cyber Dark)
+        ctx.fillStyle = isLight ? '#f8fafc' : '#09090b';
         ctx.fillRect(0, 0, logW, logH);
         
         // 2. Lingkaran Dasar Samudera Globe
-        ctx.fillStyle = '#080f21';
+        ctx.fillStyle = isLight ? '#e0f2fe' : '#080f21';
         ctx.beginPath();
         ctx.arc(cx, cy, R, 0, Math.PI * 2);
         ctx.fill();
         
-        // Glow tipis pada batas atmosfir (Cyber Cyan)
-        ctx.shadowBlur = 15;
-        ctx.shadowColor = 'rgba(56, 189, 248, 0.35)';
-        ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+        // Glow tipis pada batas atmosfir
+        ctx.shadowBlur = isLight ? 8 : 15;
+        ctx.shadowColor = isLight ? 'rgba(2, 132, 199, 0.25)' : 'rgba(56, 189, 248, 0.35)';
+        ctx.strokeStyle = isLight ? 'rgba(2, 132, 199, 0.3)' : 'rgba(56, 189, 248, 0.4)';
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.arc(cx, cy, R, 0, Math.PI * 2);
@@ -1131,7 +1133,7 @@ function startFlightMapAnimation(flight) {
         ctx.shadowBlur = 0; // reset shadow
         
         // 3. Grid Lintang & Bujur Globe (Latitude & Longitude Lines)
-        ctx.strokeStyle = 'rgba(56, 189, 248, 0.08)';
+        ctx.strokeStyle = isLight ? 'rgba(2, 132, 199, 0.08)' : 'rgba(56, 189, 248, 0.08)';
         ctx.lineWidth = 0.8;
         
         // Lintang (Latitudes)
@@ -1194,11 +1196,11 @@ function startFlightMapAnimation(flight) {
                 started = false;
             }
         }
-        ctx.strokeStyle = 'rgba(56, 189, 248, 0.25)';
+        ctx.strokeStyle = isLight ? 'rgba(2, 132, 199, 0.25)' : 'rgba(56, 189, 248, 0.25)';
         ctx.lineWidth = 3;
         ctx.stroke();
         
-        // Garis putus-putus merayap (Cyber Neon Cyan)
+        // Garis putus-putus merayap
         ctx.beginPath();
         started = false;
         for (let i = 0; i < pathPoints.length; i++) {
@@ -1211,7 +1213,7 @@ function startFlightMapAnimation(flight) {
                 started = false;
             }
         }
-        ctx.strokeStyle = '#38bdf8';
+        ctx.strokeStyle = isLight ? '#0284c7' : '#38bdf8';
         ctx.lineWidth = 1.8;
         ctx.setLineDash([4, 6]);
         ctx.lineDashOffset = -animationFrame * 0.6;
@@ -1224,35 +1226,35 @@ function startFlightMapAnimation(flight) {
         const ptDst = project3DPoint(getArcPoint3D(origin, destination, 1, 0), cx, cy, R, rotX, rotY);
         
         if (ptOrg.visible) {
-            ctx.fillStyle = '#38bdf8';
+            ctx.fillStyle = isLight ? '#0284c7' : '#38bdf8';
             ctx.beginPath();
             ctx.arc(ptOrg.x, ptOrg.y, 4.5, 0, Math.PI * 2);
             ctx.fill();
             
-            ctx.strokeStyle = 'rgba(56, 189, 248, 0.5)';
+            ctx.strokeStyle = isLight ? 'rgba(2, 132, 199, 0.4)' : 'rgba(56, 189, 248, 0.5)';
             ctx.lineWidth = 1.2;
             ctx.beginPath();
             ctx.arc(ptOrg.x, ptOrg.y, 7 * pulse, 0, Math.PI * 2);
             ctx.stroke();
             
-            ctx.fillStyle = '#f8fafc';
+            ctx.fillStyle = isLight ? '#0f172a' : '#f8fafc';
             ctx.font = 'bold 8.5px "Roboto Mono", monospace';
             ctx.fillText(orgCode, ptOrg.x - 7, ptOrg.y - 10);
         }
         
         if (ptDst.visible) {
-            ctx.fillStyle = '#38bdf8';
+            ctx.fillStyle = isLight ? '#0284c7' : '#38bdf8';
             ctx.beginPath();
             ctx.arc(ptDst.x, ptDst.y, 4.5, 0, Math.PI * 2);
             ctx.fill();
             
-            ctx.strokeStyle = 'rgba(56, 189, 248, 0.5)';
+            ctx.strokeStyle = isLight ? 'rgba(2, 132, 199, 0.4)' : 'rgba(56, 189, 248, 0.5)';
             ctx.lineWidth = 1.2;
             ctx.beginPath();
             ctx.arc(ptDst.x, ptDst.y, 7 * pulse, 0, Math.PI * 2);
             ctx.stroke();
             
-            ctx.fillStyle = '#f8fafc';
+            ctx.fillStyle = isLight ? '#0f172a' : '#f8fafc';
             ctx.font = 'bold 8.5px "Roboto Mono", monospace';
             ctx.fillText(destCode, ptDst.x - 7, ptDst.y - 10);
         }
@@ -1343,22 +1345,22 @@ function startFlightMapAnimation(flight) {
         ctx.textAlign = 'start'; // Reset text alignment
         
         // 8. Tampilan Cockpit Radar HUD Dashboard Telemetry di Kanan Atas
-        ctx.fillStyle = 'rgba(9, 9, 11, 0.88)';
+        ctx.fillStyle = isLight ? 'rgba(255, 255, 255, 0.94)' : 'rgba(9, 9, 11, 0.88)';
         const hudX = logW - 122;
         const hudY = 40; // Diturunkan dari 10 ke 40 agar tidak ketutupan tombol Close
         const hudW = 112;
         const hudH = 75;
         ctx.fillRect(hudX, hudY, hudW, hudH);
         
-        ctx.strokeStyle = 'rgba(56, 189, 248, 0.35)';
+        ctx.strokeStyle = isLight ? 'rgba(2, 132, 199, 0.35)' : 'rgba(56, 189, 248, 0.35)';
         ctx.lineWidth = 1;
         ctx.strokeRect(hudX, hudY, hudW, hudH);
         
-        ctx.fillStyle = '#38bdf8';
+        ctx.fillStyle = isLight ? '#0284c7' : '#38bdf8';
         ctx.font = 'bold 7px "Roboto Mono", monospace';
         ctx.fillText("FLIGHT TELEMETRY", hudX + 8, hudY + 12);
         
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+        ctx.fillStyle = isLight ? '#64748b' : 'rgba(255, 255, 255, 0.5)';
         ctx.font = '6.5px "Roboto Mono", monospace';
         ctx.fillText("SPEED :", hudX + 8, hudY + 25);
         ctx.fillText("ALT   :", hudX + 8, hudY + 36);
@@ -1366,7 +1368,7 @@ function startFlightMapAnimation(flight) {
         ctx.fillText("HDG   :", hudX + 8, hudY + 58);
         ctx.fillText("STATUS:", hudX + 8, hudY + 69);
         
-        ctx.fillStyle = '#f8fafc';
+        ctx.fillStyle = isLight ? '#0f172a' : '#f8fafc';
         ctx.font = 'bold 7.2px "Roboto Mono", monospace';
         ctx.fillText(`${currentSpeed} km/h`, hudX + 46, hudY + 25);
         ctx.fillText(`${currentAlt.toLocaleString()} ft`, hudX + 46, hudY + 36);
@@ -1374,18 +1376,18 @@ function startFlightMapAnimation(flight) {
         ctx.fillText(`${heading}°`, hudX + 46, hudY + 58);
         
         if (flight.status === 'Cancelled') {
-            ctx.fillStyle = '#ef4444';
+            ctx.fillStyle = '#dc2626';
         } else if (isLanded) {
-            ctx.fillStyle = '#22c55e';
+            ctx.fillStyle = '#16a34a';
         } else if (flight.status === 'Delayed') {
-            ctx.fillStyle = '#f59e0b';
+            ctx.fillStyle = '#d97706';
         } else {
-            ctx.fillStyle = '#38bdf8';
+            ctx.fillStyle = isLight ? '#0284c7' : '#38bdf8';
         }
         ctx.fillText(flight.status.toUpperCase(), hudX + 46, hudY + 69);
         
         // Tampilkan petunjuk putar di kiri bawah
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+        ctx.fillStyle = isLight ? 'rgba(71, 85, 105, 0.6)' : 'rgba(255, 255, 255, 0.35)';
         ctx.font = '7px "Roboto Mono", monospace';
         ctx.fillText("◀ SERET MOUSE / TOUCH UNTUK MEMUTAR BUMI ▶", 12, canvas.height - 10);
         
