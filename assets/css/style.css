@@ -1728,3 +1728,93 @@ span.flap-animate, a.flap-animate {
 
 /* Fix Bootstrap text-muted override for dark mode */
 .text-muted { color: var(--text-muted) !important; }
+
+/* ==========================================================================
+   CYBER-AVIATION RADAR & FLEET BENTO STYLES (Full Renovation)
+   ========================================================================== */
+.terminal-airline-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.airline-filter-pill {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.airline-filter-pill:hover,
+.airline-filter-pill.active {
+    background: rgba(56, 189, 248, 0.12);
+    border-color: rgba(56, 189, 248, 0.5);
+    color: #38bdf8;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+    transform: translateY(-1px);
+}
+
+.airline-filter-pill .pill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #38bdf8;
+    opacity: 0.6;
+}
+
+.airline-filter-pill:hover .pill-dot,
+.airline-filter-pill.active .pill-dot {
+    opacity: 1;
+    box-shadow: 0 0 6px #38bdf8;
+}
+
+/* Airlines Bento Grid (Task 4) */
+.airline-bento-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.airline-card-bento {
+    background: rgba(18, 22, 34, 0.65);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 20px;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.airline-card-bento:hover {
+    border-color: rgba(56, 189, 248, 0.4);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 20px rgba(56, 189, 248, 0.12);
+    transform: translateY(-3px);
+}
+
+.airline-card-bento::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.6), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.airline-card-bento:hover::before {
+    opacity: 1;
+}

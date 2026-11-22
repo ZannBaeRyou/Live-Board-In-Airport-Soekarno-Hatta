@@ -244,11 +244,28 @@ function initFIDSBoard() {
     searchInput?.addEventListener('input', renderFIDS);
     statusFilter?.addEventListener('change', renderFIDS);
 
+    // Deep-link search or airline filter (?search=... or ?airline=...)
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchParam = urlParams.get('search') || urlParams.get('airline');
+    if (searchParam && searchInput) {
+        searchInput.value = searchParam;
+    }
+
+    // Expose airline pill filter
+    window.filterByAirline = function(airlineName) {
+        if (!searchInput) return;
+        if (searchInput.value.toLowerCase() === airlineName.toLowerCase()) {
+            searchInput.value = '';
+        } else {
+            searchInput.value = airlineName;
+        }
+        renderFIDS();
+    };
+
     // Initial Render
     renderFIDS();
 
     // Deep-link auto-open (?flight=...)
-    const urlParams = new URLSearchParams(window.location.search);
     const targetFlight = urlParams.get('flight');
     if (targetFlight) {
         setTimeout(() => {
@@ -1791,11 +1808,15 @@ function initQuickSearch() {
             return;
         }
 
-        const allFlights = [...TERMINAL_1_FLIGHTS, ...TERMINAL_2_FLIGHTS, ...TERMINAL_3_FLIGHTS];
+        const allFlights = [
+            ...TERMINAL_1_FLIGHTS.map(f => ({ ...f, terminal: f.terminal || '1' })),
+            ...TERMINAL_2_FLIGHTS.map(f => ({ ...f, terminal: f.terminal || '2' })),
+            ...TERMINAL_3_FLIGHTS.map(f => ({ ...f, terminal: f.terminal || '3' }))
+        ];
         const cleanQ = query.toLowerCase().replace(/[^a-z0-9]/g, '');
 
         const matches = allFlights.filter(f => {
-            const fn = (f.flight_no || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+            const fn = (f.number || f.flight_no || '').toLowerCase().replace(/[^a-z0-9]/g, '');
             const al = (f.airline || '').toLowerCase();
             const dest = (f.destination || '').toLowerCase();
             const orig = (f.origin || '').toLowerCase();
@@ -1819,6 +1840,7 @@ function initQuickSearch() {
 
         matches.forEach(f => {
             const term = f.terminal || '3';
+            const flightNum = f.number || f.flight_no || '';
             const termColor = term === '1' ? 'var(--accent-t1)' : (term === '2' ? 'var(--accent-t2)' : 'var(--accent-t3)');
             const statusKey = f.status || 'Scheduled';
             const isBoarding = statusKey === 'Boarding';
@@ -1826,9 +1848,9 @@ function initQuickSearch() {
             const dotClass = isBoarding ? 'pulse-green' : (isFinalCall ? 'pulse-amber' : 'dot-slate');
 
             html += `
-                <a href="terminal${term}.html?flight=${encodeURIComponent(f.flight_no)}" class="quick-search-item">
+                <a href="terminal${term}.html?flight=${encodeURIComponent(flightNum)}" class="quick-search-item">
                     <div class="d-flex align-items-center gap-2">
-                        <span class="badge font-digital px-2 py-1" style="background: rgba(255,255,255,0.06); color: var(--text-primary); font-size: 0.85rem; border: 1px solid var(--border-subtle);">${f.flight_no}</span>
+                        <span class="badge font-digital px-2 py-1" style="background: rgba(255,255,255,0.06); color: var(--text-primary); font-size: 0.85rem; border: 1px solid var(--border-subtle);">${flightNum}</span>
                         <div>
                             <div class="fw-bold small text-white">${f.airline || 'Airline'} &bull; ${f.destination || f.origin || 'Route'}</div>
                             <div class="text-secondary" style="font-size: 0.75rem;">${f.time || ''} WIB &bull; <span style="color: ${termColor}; font-weight: 600;">Terminal ${term}</span> &bull; ${f.gate || 'Gate -'}</div>
