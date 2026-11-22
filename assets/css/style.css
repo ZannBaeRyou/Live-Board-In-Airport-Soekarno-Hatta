@@ -1637,13 +1637,13 @@ h1, h2, h3, h4, h5, h6 {
 /* === Terminal Card Animated Batik Watermark on Hover === */
 @keyframes batikCloudDrift {
     0% {
-        transform: scale(1.02) translate(0, 0);
+        transform: scale(1.04) translate(0, 0);
     }
     50% {
-        transform: scale(1.06) translate(-5px, -3px);
+        transform: scale(1.07) translate(-6px, -4px);
     }
     100% {
-        transform: scale(1.02) translate(0, 0);
+        transform: scale(1.04) translate(0, 0);
     }
 }
 
@@ -1656,17 +1656,18 @@ h1, h2, h3, h4, h5, h6 {
     pointer-events: none;
     z-index: 1;
     opacity: 0;
-    transform: scale(0.93) translateY(8px);
-    transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-    -webkit-mask-image: radial-gradient(ellipse at 85% 75%, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 85%);
-    mask-image: radial-gradient(ellipse at 85% 75%, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 85%);
+    transform: translate(30px, 60px) scale(0.85);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    -webkit-mask-image: radial-gradient(ellipse at 88% 85%, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 85%);
+    mask-image: radial-gradient(ellipse at 88% 85%, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 85%);
+    will-change: opacity, transform;
 }
 
-/* Hover State: emerges with soft cloud drift */
+/* Hover State: emerges smoothly from the bottom-right corner */
 .bento-terminal-card:hover .terminal-card-batik-watermark {
-    opacity: 0.30;
-    transform: scale(1.02) translate(0, 0);
-    animation: batikCloudDrift 8s ease-in-out infinite alternate;
+    opacity: 0.32;
+    transform: translate(0, 0) scale(1.04);
+    transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Terminal-specific Color Schemes matching card themes */
