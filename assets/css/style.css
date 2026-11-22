@@ -1699,6 +1699,114 @@ h1, h2, h3, h4, h5, h6 {
     display: none;
 }
 
+/* ============================================
+   EXECUTIVE AIRPORT FIDS MODAL
+   ============================================ */
+.fids-modal-content.fids-modal-executive {
+    max-width: 620px;
+    padding: 28px 24px;
+    border-radius: 18px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
+}
+
+.modal-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+}
+
+.modal-highlight-banner {
+    border-radius: 14px;
+    padding: 18px 22px;
+    margin-bottom: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition-fids);
+}
+
+/* Terminal Theme 1: Crimson Red */
+.modal-theme-t1 .modal-highlight-banner {
+    background: linear-gradient(135deg, #fff1f2, #ffe4e6);
+    border: 1px solid #fecdd3;
+}
+.modal-theme-t1 .modal-highlight-val {
+    color: #e11d48 !important;
+}
+.modal-theme-t1 .modal-terminal-badge {
+    background: #ffe4e6;
+    color: #e11d48;
+    border: 1px solid #fecdd3;
+}
+
+/* Terminal Theme 2: Royal Violet */
+.modal-theme-t2 .modal-highlight-banner {
+    background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+    border: 1px solid #ddd6fe;
+}
+.modal-theme-t2 .modal-highlight-val {
+    color: #7c3aed !important;
+}
+.modal-theme-t2 .modal-terminal-badge {
+    background: #f5f3ff;
+    color: #7c3aed;
+    border: 1px solid #ddd6fe;
+}
+
+/* Terminal Theme 3: Amber Gold */
+.modal-theme-t3 .modal-highlight-banner {
+    background: linear-gradient(135deg, #fffbeb, #fef3c7);
+    border: 1px solid #fde68a;
+}
+.modal-theme-t3 .modal-highlight-val {
+    color: #d97706 !important;
+}
+.modal-theme-t3 .modal-terminal-badge {
+    background: #fffbeb;
+    color: #d97706;
+    border: 1px solid #fde68a;
+}
+
+/* 3-Column Info Grid */
+.modal-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.modal-info-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 12px 14px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.modal-info-card.aircraft-card {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+}
+
+@media (max-width: 576px) {
+    .modal-info-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    .modal-highlight-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}
+
 @media (max-width: 576px) {
     .modal-drag-handle {
         display: block;
