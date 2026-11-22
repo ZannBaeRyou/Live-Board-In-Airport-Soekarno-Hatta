@@ -1576,11 +1576,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Modern Page Banner (for airlines page etc) */
-.modern-page-banner {
+.modern-page-banner,
+[data-theme="light"] .modern-page-banner {
     position: relative;
     overflow: hidden;
-    padding-top: 100px;
-    padding-bottom: 35px;
+    padding-top: 110px;
+    padding-bottom: 36px;
     background: linear-gradient(135deg, #f8fafc 0%, #edf8ff 60%, #e2f2fe 100%) !important;
     border-bottom: 1px solid #cbd5e1 !important;
 }
@@ -1762,6 +1763,10 @@ h1, h2, h3, h4, h5, h6 {
         padding-top: 80px;
         padding-bottom: 60px;
     }
+    .modern-page-banner {
+        padding-top: 95px !important;
+        padding-bottom: 30px !important;
+    }
     .dashboard-hero-title {
         font-size: 2.2rem;
     }
@@ -1788,6 +1793,10 @@ h1, h2, h3, h4, h5, h6 {
 @media (max-width: 576px) {
     body {
         font-size: 14px;
+    }
+    .modern-page-banner {
+        padding-top: 85px !important;
+        padding-bottom: 25px !important;
     }
     .dashboard-hero-title {
         font-size: 1.8rem;
