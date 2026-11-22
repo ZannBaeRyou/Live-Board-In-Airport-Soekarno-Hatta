@@ -26,4 +26,14 @@ if (!mainJs.includes('fids-row-modern') || !mainJs.includes('getAircraftModel') 
   process.exit(1);
 }
 
+if (!t1.includes('id="fids-detail-modal"') || !t2.includes('id="fids-detail-modal"') || !t3.includes('id="fids-detail-modal"')) {
+  console.error('FAIL: #fids-detail-modal missing in terminal pages');
+  process.exit(1);
+}
+
+if (t1.includes('id="flight-map-canvas"') || t2.includes('id="flight-map-canvas"') || t3.includes('id="flight-map-canvas"')) {
+  console.error('FAIL: Obsolete flight-map-canvas still present in terminal pages');
+  process.exit(1);
+}
+
 console.log('PASS: Terminal pages and modern FIDS rows verified');
