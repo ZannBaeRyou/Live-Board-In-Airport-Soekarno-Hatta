@@ -56,4 +56,10 @@ if (!css.includes('.segmented-terminal-dock') || !css.includes('.term-dot')) {
     process.exit(1);
 }
 
+// 7. Check Airlines Directory title is styled as a Bento Hero Card
+if (!airlinesHtml.includes('id="airlines-hero-card"') && !airlinesHtml.includes("id='airlines-hero-card'")) {
+    console.error("FAIL: airlines.html must use #airlines-hero-card for directory title card");
+    process.exit(1);
+}
+
 console.log("PASS: Airlines directory bento grid architecture, Batik watermark banner, and Segmented Dock verified");

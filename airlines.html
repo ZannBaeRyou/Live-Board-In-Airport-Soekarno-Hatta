@@ -52,31 +52,35 @@
         </div>
     </nav>
 
-    <!-- Header Banner with Batik Mega Mendung Watermark -->
-    <header class="modern-page-banner position-relative overflow-hidden">
-        <div class="banner-batik-watermark"></div>
-        <div class="container position-relative" style="z-index: 2;">
-            <div class="row align-items-center">
-                <div class="col-lg-8 text-start">
-                    <div class="terminal-breadcrumb mb-2">
-                        <a href="index.html">Dashboard</a>
-                        <span class="separator">&gt;</span>
-                        <span>Direktori Maskapai</span>
-                    </div>
-                    <span class="badge rounded-pill px-3 py-1 mb-2 d-inline-flex align-items-center gap-2" style="background: #ffffff; border: 1px solid #a7f3d0; color: #059669; font-size: 0.78rem; font-weight: 700; box-shadow: 0 1px 3px rgba(5, 150, 105, 0.1);">
-                        <span class="live-pulse" style="width: 7px; height: 7px; background: #059669;"></span> CORAK RESMI BATIK MEGAMENDUNG • CGK
-                    </span>
-                    <h1 class="brand-font fs-1 mb-2" style="color: #0f172a !important; font-weight: 800; letter-spacing: -0.5px;">Direktori Maskapai Soekarno-Hatta</h1>
-                    <p class="mb-0" style="max-width: 600px; color: #334155 !important; font-size: 0.95rem; font-weight: 500; line-height: 1.6;">
-                        Pusat informasi pembagian terminal, zona konter check-in, dan kontak resmi seluruh maskapai yang aktif beroperasi di CGK.
-                    </p>
-                </div>
-                <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
-                    <div class="d-inline-block text-start p-3 rounded-3 bg-white border" style="box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);">
-                        <span class="text-secondary small d-block mb-1" style="font-size: 0.72rem; letter-spacing: 0.5px;">TOTAL MASKAPAI AKTIF</span>
-                        <div class="d-flex align-items-baseline gap-2">
-                            <span class="font-digital fs-2 fw-bold" id="active-airlines-count" style="color: #059669;">21</span>
-                            <span class="text-secondary small fw-medium">Maskapai</span>
+    <!-- Airlines Directory Hero Bento Card Section -->
+    <header class="terminal-hero-section position-relative">
+        <div class="container">
+            <div class="terminal-hero-card position-relative overflow-hidden" id="airlines-hero-card" style="border-top: 4px solid #059669;">
+                <div class="banner-batik-watermark" aria-hidden="true"></div>
+                <div class="p-4 p-md-5 position-relative" style="z-index: 2;">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8 text-start">
+                            <div class="terminal-breadcrumb mb-2">
+                                <a href="index.html">Dashboard</a>
+                                <span class="separator">&gt;</span>
+                                <span>Direktori Maskapai</span>
+                            </div>
+                            <span class="badge rounded-pill px-3 py-1 mb-2 d-inline-flex align-items-center gap-2" style="background: #ffffff; border: 1px solid #a7f3d0; color: #059669; font-size: 0.78rem; font-weight: 700; box-shadow: 0 1px 3px rgba(5, 150, 105, 0.1);">
+                                <span class="live-pulse" style="width: 7px; height: 7px; background: #059669;"></span> CORAK RESMI BATIK MEGAMENDUNG • CGK
+                            </span>
+                            <h1 class="brand-font fs-1 mb-2" style="color: #0f172a !important; font-weight: 800; letter-spacing: -0.5px;">Direktori Maskapai Soekarno-Hatta</h1>
+                            <p class="mb-0" style="max-width: 600px; color: #334155 !important; font-size: 0.95rem; font-weight: 500; line-height: 1.6;">
+                                Pusat informasi pembagian terminal, zona konter check-in, dan kontak resmi seluruh maskapai yang aktif beroperasi di CGK.
+                            </p>
+                        </div>
+                        <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+                            <div class="d-inline-block text-start p-3 rounded-3 bg-white border" style="box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);">
+                                <span class="text-secondary small d-block mb-1" style="font-size: 0.72rem; letter-spacing: 0.5px;">TOTAL MASKAPAI AKTIF</span>
+                                <div class="d-flex align-items-baseline gap-2">
+                                    <span class="font-digital fs-2 fw-bold" id="active-airlines-count" style="color: #059669;">21</span>
+                                    <span class="text-secondary small fw-medium">Maskapai</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -85,7 +89,7 @@
     </header>
 
     <!-- Main Airlines Directory Section -->
-    <section class="py-5" style="margin-bottom: 60px;">
+    <section class="pb-5" style="margin-bottom: 60px;">
         <div class="container">
             <!-- Filter & Search Toolbar -->
             <div class="row g-3 mb-4 align-items-center">

@@ -492,8 +492,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 .modern-page-banner,
 [data-theme="light"] .modern-page-banner {
-    background: linear-gradient(135deg, #f8fafc 0%, #edf8ff 60%, #e2f2fe 100%) !important;
-    border-bottom: 1px solid #cbd5e1 !important;
+    background: transparent !important;
+    border-bottom: none !important;
 }
 .hero-fids-title,
 .brand-font,
@@ -1582,10 +1582,10 @@ h1, h2, h3, h4, h5, h6 {
 [data-theme="light"] .modern-page-banner {
     position: relative;
     overflow: hidden;
-    padding-top: 110px;
-    padding-bottom: 36px;
-    background: linear-gradient(135deg, #f8fafc 0%, #edf8ff 60%, #e2f2fe 100%) !important;
-    border-bottom: 1px solid #cbd5e1 !important;
+    padding-top: 100px;
+    padding-bottom: 24px;
+    background: transparent !important;
+    border-bottom: none !important;
 }
 
 /* Bento Airport Hero Batik Mega Mendung Watermark (Dashboard) - Emerald Green */
@@ -1691,6 +1691,25 @@ h1, h2, h3, h4, h5, h6 {
         width: 100%;
         opacity: 0.18;
     }
+}
+
+/* Airlines Hero Bento Card Hover Effect */
+#airlines-hero-card {
+    transition: border-color 0.35s ease, box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#airlines-hero-card:hover {
+    border-color: #6ee7b7 !important;
+    box-shadow: 0 12px 28px rgba(5, 150, 105, 0.12) !important;
+}
+
+#airlines-hero-card .banner-batik-watermark {
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#airlines-hero-card:hover .banner-batik-watermark {
+    opacity: 0.45;
+    transform: scale(1.03);
 }
 
 /* === Terminal Card Animated Batik Watermark on Hover === */
