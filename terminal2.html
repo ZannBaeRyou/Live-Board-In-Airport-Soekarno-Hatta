@@ -64,11 +64,11 @@
                     <div class="row align-items-center">
                         <div class="col-lg-8 text-start">
                             <div class="terminal-breadcrumb mb-2">
-                                <a href="index.html">Dashboard</a>
+                                <a href="index.html" data-i18n="nav_dashboard">Dashboard</a>
                                 <span class="separator">&gt;</span>
                                 <span>Terminal 2</span>
                             </div>
-                            <span class="badge rounded-pill px-3 py-1 mb-2 d-inline-flex align-items-center gap-2" style="background: #ffffff; border: 1px solid #ddd6fe; color: #7c3aed; font-size: 0.78rem; font-weight: 700; box-shadow: 0 1px 3px rgba(124, 58, 237, 0.1);">
+                            <span class="badge rounded-pill px-3 py-1 mb-2 d-inline-flex align-items-center gap-2" style="background: #ffffff; border: 1px solid #ddd6fe; color: #7c3aed; font-size: 0.78rem; font-weight: 700; box-shadow: 0 1px 3px rgba(124, 58, 237, 0.1);" data-i18n="badge_batik_cgk">
                                 <span class="live-pulse" style="width: 7px; height: 7px; background: #7c3aed;"></span> CORAK RESMI BATIK MEGAMENDUNG • CGK
                             </span>
                             <h1 class="brand-font fs-1 mb-2" style="color: #0f172a !important; font-weight: 800; letter-spacing: -0.5px;">Terminal 2 CGK</h1>
@@ -164,7 +164,7 @@
             <!-- Flight Map Radar Visualization -->
             <div class="flight-map-wrapper mb-3 border border-secondary border-opacity-25 rounded position-relative" style="overflow: hidden; height: 220px;">
                 <canvas id="flight-map-canvas" style="display: block; width: 100%; height: 100%;"></canvas>
-                <button class="btn-map-zoom" title="Perbesar Peta" style="position: absolute; top: 10px; right: 10px; border-radius: 4px; padding: 4px 8px; font-size: 0.8rem; cursor: pointer; z-index: 10; transition: all 0.2s;"><i class="fa-solid fa-expand"></i> Zoom</button>
+                <button class="btn-map-zoom" title="Perbesar Peta" data-i18n-title="modal_zoom_title" style="position: absolute; top: 10px; right: 10px; border-radius: 4px; padding: 4px 8px; font-size: 0.8rem; cursor: pointer; z-index: 10; transition: all 0.2s;"><i class="fa-solid fa-expand"></i> <span data-i18n="modal_zoom">Zoom</span></button>
             </div>
 
             <!-- Dynamic Progress Tracker Timeline -->
@@ -258,7 +258,7 @@
     <div id="sync-status" class="sync-status-bar offline">
         <span class="sync-dot sync-dot-offline"></span>
         <i class="fa-solid fa-circle-minus text-secondary me-1"></i>
-        <span class="text-secondary">Menunggu koneksi...</span>
+        <span class="text-secondary" data-i18n="sync_waiting">Menunggu koneksi...</span>
     </div>
 
     <!-- Bootstrap 5 Bundle JS -->

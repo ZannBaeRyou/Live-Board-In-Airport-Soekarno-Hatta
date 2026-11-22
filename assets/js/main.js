@@ -377,6 +377,22 @@ function initFIDSClock() {
 }
 
 /**
+ * Format Estimated Time according to active language
+ */
+function formatEstimatedTime(timeStr) {
+    if (!timeStr) return '';
+    const isEn = typeof currentLang !== 'undefined' && currentLang === 'en';
+    const estWord = typeof __t === 'function' ? __t('status_time_est') : (isEn ? 'Estimated' : 'Estimasi');
+    const actWord = typeof __t === 'function' ? __t('status_time_act') : (isEn ? 'Actual' : 'Aktual');
+    const onTimeWord = typeof __t === 'function' ? __t('status_time_on_time') : (isEn ? 'On Time' : 'Tepat Waktu');
+
+    return timeStr
+        .replace(/\((Estimasi|Estimated)\)/gi, `(${estWord})`)
+        .replace(/\((Aktual|Actual)\)/gi, `(${actWord})`)
+        .replace(/\((Tepat Waktu|On Time)\)/gi, `(${onTimeWord})`);
+}
+
+/**
  * Tab Toggling Logic
  */
 function switchTab(tabType) {
@@ -384,17 +400,31 @@ function switchTab(tabType) {
     
     const btnDepartures = document.getElementById('tab-departures');
     const btnArrivals = document.getElementById('tab-arrivals');
+    const destHdr = document.getElementById('fids-dest-hdr');
+    const gateHdr = document.getElementById('fids-gate-hdr');
 
     if (tabType === 'departure') {
         btnDepartures?.classList.add('active');
         btnArrivals?.classList.remove('active');
-        document.getElementById('fids-dest-hdr').innerText = 'TUJUAN';
-        document.getElementById('fids-gate-hdr').innerText = 'GERBANG / KONTER';
+        if (destHdr) {
+            destHdr.setAttribute('data-i18n', 'hdr_dest_dep');
+            destHdr.innerText = typeof __t === 'function' ? __t('hdr_dest_dep') : 'TUJUAN';
+        }
+        if (gateHdr) {
+            gateHdr.setAttribute('data-i18n', 'hdr_gate_dep');
+            gateHdr.innerText = typeof __t === 'function' ? __t('hdr_gate_dep') : 'GERBANG / KONTER';
+        }
     } else {
         btnDepartures?.classList.remove('active');
         btnArrivals?.classList.add('active');
-        document.getElementById('fids-dest-hdr').innerText = 'ASAL';
-        document.getElementById('fids-gate-hdr').innerText = 'GERBANG / SABUK';
+        if (destHdr) {
+            destHdr.setAttribute('data-i18n', 'hdr_dest_arr');
+            destHdr.innerText = typeof __t === 'function' ? __t('hdr_dest_arr') : 'ASAL';
+        }
+        if (gateHdr) {
+            gateHdr.setAttribute('data-i18n', 'hdr_gate_arr');
+            gateHdr.innerText = typeof __t === 'function' ? __t('hdr_gate_arr') : 'GERBANG / SABUK';
+        }
     }
 
     // Reset filters
@@ -414,7 +444,8 @@ function populateStatusFilterOptions(tabType) {
     const statusFilter = document.getElementById('fids-status-filter');
     if (!statusFilter) return;
 
-    statusFilter.innerHTML = '<option value="">Semua Status</option>';
+    const allStatusText = typeof __t === 'function' ? __t('filter_all') : 'Semua Status';
+    statusFilter.innerHTML = `<option value="" data-i18n="filter_all">${allStatusText}</option>`;
     
     if (tabType === 'departure') {
         statusFilter.innerHTML += `
@@ -556,7 +587,7 @@ function renderFIDS() {
                 <!-- Destination / Origin -->
                 <div class="col-6 col-md-3 mt-2 mt-md-0 px-md-2 p-0">
                     <span class="fw-semibold text-white d-block text-uppercase text-truncate">${flight.type === 'departure' ? flight.destination : flight.origin}</span>
-                    <span class="text-secondary small d-none d-md-block" style="font-size:0.72rem">${flight.type === 'departure' ? 'Tujuan' : 'Asal'}</span>
+                    <span class="text-secondary small d-none d-md-block" style="font-size:0.72rem">${flight.type === 'departure' ? (typeof __t === 'function' ? __t('lbl_dest') : 'Tujuan') : (typeof __t === 'function' ? __t('lbl_origin') : 'Asal')}</span>
                 </div>
 
                 <!-- Gate / Belt -->
@@ -1400,7 +1431,8 @@ function startFlightMapAnimation(flight) {
         // Tampilkan petunjuk putar di kiri bawah
         ctx.fillStyle = isLight ? 'rgba(71, 85, 105, 0.6)' : 'rgba(255, 255, 255, 0.35)';
         ctx.font = '7px "Roboto Mono", monospace';
-        ctx.fillText("◀ SERET MOUSE / TOUCH UNTUK MEMUTAR BUMI ▶", 12, canvas.height - 10);
+        const hintText = typeof __t === 'function' ? __t('modal_hint') : "◀ SERET MOUSE / TOUCH UNTUK MEMUTAR BUMI ▶";
+        ctx.fillText(hintText, 12, canvas.height - 10);
         
         // Loop Frame
         mapAnimationId = requestAnimationFrame(drawGlobeLoop);
@@ -1437,7 +1469,7 @@ function openModal(flight) {
     }
     document.getElementById('modal-route').innerHTML = flight.type === 'departure' ? `CGK ${terminalName} &rarr; ${flight.destination}` : `${flight.origin} &rarr; CGK ${terminalName}`;
     document.getElementById('modal-scheduled-time').innerText = flight.time;
-    document.getElementById('modal-actual-time').innerText = flight.estimatedTime;
+    document.getElementById('modal-actual-time').innerText = formatEstimatedTime(flight.estimatedTime);
     document.getElementById('modal-gate').innerText = flight.gate;
     
     const counterSec = document.getElementById('modal-counter-section');
@@ -1615,23 +1647,42 @@ function initScrollReveal() {
         rootMargin: '0px 0px -20px 0px'
     });
 
-// i18n integration
+    revealElements.forEach(el => observer.observe(el));
+}
+
+// ============================================
+// I18N DYNAMIC INTEGRATION
+// ============================================
 window.addEventListener('languageChanged', () => {
-    // Re-render board list if terminal page
-    const terminalMeta = document.querySelector('meta[name="terminal"]');
-    if (terminalMeta && fidsData.length > 0) {
-        renderFidsBoard(fidsData);
+    // 1. Update dynamic FIDS table headers
+    const destHdr = document.getElementById('fids-dest-hdr');
+    const gateHdr = document.getElementById('fids-gate-hdr');
+    if (destHdr) {
+        destHdr.innerText = typeof __t === 'function' ? __t(activeTab === 'departure' ? 'hdr_dest_dep' : 'hdr_dest_arr') : (activeTab === 'departure' ? 'TUJUAN' : 'ASAL');
+    }
+    if (gateHdr) {
+        gateHdr.innerText = typeof __t === 'function' ? __t(activeTab === 'departure' ? 'hdr_gate_dep' : 'hdr_gate_arr') : (activeTab === 'departure' ? 'GERBANG / KONTER' : 'GERBANG / SABUK');
+    }
+
+    // 2. Repopulate status dropdown
+    populateStatusFilterOptions(activeTab);
+
+    // 3. Re-render FIDS board if on terminal page
+    if (document.getElementById('fids-board-list')) {
+        renderFIDS();
+    }
+
+    // 4. Re-render Airlines Directory if on airlines page
+    if (typeof window.__refreshAirlinesDirectory === 'function') {
+        window.__refreshAirlinesDirectory();
     }
     
-    // Update modal if open
+    // 5. Update modal if open
     const modal = document.getElementById('fids-detail-modal');
     if (modal && modal.classList.contains('show') && typeof currentSelectedFlight !== 'undefined' && currentSelectedFlight) {
         openModal(currentSelectedFlight);
     }
 });
-
-    revealElements.forEach(el => observer.observe(el));
-}
 
 // ============================================
 // WEATHER WIDGET (CGK)
@@ -1838,18 +1889,21 @@ function initQuickSearch() {
         }).slice(0, 5);
 
         if (matches.length === 0) {
+            const noMatchMsg = typeof __t === 'function' ? __t('no_flights_match') : 'Tidak ada penerbangan yang cocok dengan';
             dropdown.innerHTML = `
                 <div class="p-3 text-center text-secondary small" data-i18n="quick_search_no_results">
-                    <i class="fa-solid fa-plane-slash me-1"></i> Tidak ada penerbangan yang cocok dengan "${query}"
+                    <i class="fa-solid fa-plane-slash me-1"></i> ${noMatchMsg} "${query}"
                 </div>
             `;
             dropdown.classList.add('show');
             return;
         }
 
+        const foundText = typeof __t === 'function' ? __t('quick_search_found') : 'Hasil Pencarian';
+        const escText = typeof __t === 'function' ? __t('quick_search_esc') : 'Tekan ESC untuk menutup';
         let html = `<div class="px-3 py-2 small text-secondary border-bottom border-secondary border-opacity-10 d-flex justify-content-between align-items-center">
-            <span style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;"><span data-i18n="quick_search_found">Hasil Pencarian</span> (${matches.length})</span>
-            <span style="font-size: 0.7rem;">Tekan ESC untuk menutup</span>
+            <span style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;"><span data-i18n="quick_search_found">${foundText}</span> (${matches.length})</span>
+            <span style="font-size: 0.7rem;" data-i18n="quick_search_esc">${escText}</span>
         </div>`;
 
         matches.forEach(f => {
@@ -1955,17 +2009,23 @@ function initAirlinesDirectory() {
         if (countBadge) countBadge.textContent = filtered.length;
 
         if (filtered.length === 0) {
+            const noAirlinesTitle = typeof __t === 'function' ? __t('no_airlines_found') : 'Tidak Ada Maskapai Ditemukan';
+            const noAirlinesDesc = typeof __t === 'function' ? __t('no_airlines_desc') : 'Coba gunakan kata kunci pencarian lain atau pilih tab terminal yang berbeda.';
             grid.innerHTML = `
                 <div class="col-12 text-center py-5">
                     <div class="p-4 rounded-4" style="background: #f8fafc; border: 1px dashed var(--border-subtle); max-width: 480px; margin: 0 auto;">
                         <i class="fa-solid fa-plane-slash text-secondary fs-2 mb-3"></i>
-                        <h5 class="text-white">Tidak Ada Maskapai Ditemukan</h5>
-                        <p class="text-secondary small mb-0">Coba gunakan kata kunci pencarian lain atau pilih tab terminal yang berbeda.</p>
+                        <h5 class="text-white" data-i18n="no_airlines_found">${noAirlinesTitle}</h5>
+                        <p class="text-secondary small mb-0" data-i18n="no_airlines_desc">${noAirlinesDesc}</p>
                     </div>
                 </div>
             `;
             return;
         }
+
+        const termZoneLabel = typeof __t === 'function' ? __t('airlines_term_zone_checkin') : 'TERMINAL & ZONA CHECK-IN';
+        const viewSchedLabel = typeof __t === 'function' ? __t('view_schedule') : 'Lihat Jadwal';
+        const officialWebTitle = typeof __t === 'function' ? __t('official_website') : 'Website Resmi';
 
         let html = '';
         filtered.forEach(a => {
@@ -1997,7 +2057,7 @@ function initAirlinesDirectory() {
                                 </div>
                                 
                                 <div class="p-3 rounded-3 mb-3" style="background: #f8fafc; border: 1px solid var(--border-subtle);">
-                                    <span class="text-secondary d-block small mb-1" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px;">TERMINAL & ZONA CHECK-IN</span>
+                                    <span class="text-secondary d-block small mb-1" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px;" data-i18n="airlines_term_zone_checkin">${termZoneLabel}</span>
                                     <strong class="fs-6 d-block" style="font-family: var(--font-mono); color: ${termBadgeColor} !important;">
                                         Terminal ${a.terminals.join(' & ')} &mdash; ${a.zone}
                                     </strong>
@@ -2010,10 +2070,10 @@ function initAirlinesDirectory() {
 
                             <div class="d-flex gap-2 pt-2 mt-auto">
                                 <a href="terminal${primaryTerm}.html?search=${encodeURIComponent(a.name)}" class="btn btn-sm btn-outline-cyan flex-grow-1 d-flex align-items-center justify-content-center gap-2" style="font-size: 0.8rem; padding: 7px 12px; border-radius: 8px;">
-                                    <i class="fa-solid fa-list-check"></i> <span>Lihat Jadwal</span>
+                                    <i class="fa-solid fa-list-check"></i> <span data-i18n="view_schedule">${viewSchedLabel}</span>
                                 </a>
                                 ${a.website ? `
-                                <a href="${a.website}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center" style="width: 36px; padding: 7px 0; border-radius: 8px;" title="Website Resmi">
+                                <a href="${a.website}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center" style="width: 36px; padding: 7px 0; border-radius: 8px;" title="${officialWebTitle}">
                                     <i class="fa-solid fa-arrow-up-right-from-square"></i>
                                 </a>` : ''}
                             </div>
@@ -2025,6 +2085,9 @@ function initAirlinesDirectory() {
 
         grid.innerHTML = html;
     }
+
+    // Expose for dynamic i18n re-rendering
+    window.__refreshAirlinesDirectory = renderCards;
 
     searchInput?.addEventListener('input', (e) => {
         searchQuery = e.target.value;

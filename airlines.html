@@ -61,24 +61,24 @@
                     <div class="row align-items-center">
                         <div class="col-lg-8 text-start">
                             <div class="terminal-breadcrumb mb-2">
-                                <a href="index.html">Dashboard</a>
+                                <a href="index.html" data-i18n="nav_dashboard">Dashboard</a>
                                 <span class="separator">&gt;</span>
-                                <span>Direktori Maskapai</span>
+                                <span data-i18n="footer_dir">Direktori Maskapai</span>
                             </div>
                             <span class="badge rounded-pill px-3 py-1 mb-2 d-inline-flex align-items-center gap-2" style="background: #ffffff; border: 1px solid #a7f3d0; color: #059669; font-size: 0.78rem; font-weight: 700; box-shadow: 0 1px 3px rgba(5, 150, 105, 0.1);">
-                                <span class="live-pulse" style="width: 7px; height: 7px; background: #059669;"></span> CORAK RESMI BATIK MEGAMENDUNG • CGK
+                                <span class="live-pulse" style="width: 7px; height: 7px; background: #059669;"></span> <span data-i18n="badge_batik_cgk">CORAK RESMI BATIK MEGAMENDUNG • CGK</span>
                             </span>
-                            <h1 class="brand-font fs-1 mb-2" style="color: #0f172a !important; font-weight: 800; letter-spacing: -0.5px;">Direktori Maskapai Soekarno-Hatta</h1>
-                            <p class="mb-0" style="max-width: 600px; color: #334155 !important; font-size: 0.95rem; font-weight: 500; line-height: 1.6;">
+                            <h1 class="brand-font fs-1 mb-2" style="color: #0f172a !important; font-weight: 800; letter-spacing: -0.5px;" data-i18n="airlines_dir_title">Direktori Maskapai Soekarno-Hatta</h1>
+                            <p class="mb-0" style="max-width: 600px; color: #334155 !important; font-size: 0.95rem; font-weight: 500; line-height: 1.6;" data-i18n="airlines_dir_desc">
                                 Pusat informasi pembagian terminal, zona konter check-in, dan kontak resmi seluruh maskapai yang aktif beroperasi di CGK.
                             </p>
                         </div>
                         <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
                             <div class="d-inline-block text-start p-3 rounded-3 border" style="box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05); background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px); border-color: rgba(226, 232, 240, 0.8) !important;">
-                                <span class="text-secondary small d-block mb-1" style="font-size: 0.72rem; letter-spacing: 0.5px;">TOTAL MASKAPAI AKTIF</span>
+                                <span class="text-secondary small d-block mb-1" style="font-size: 0.72rem; letter-spacing: 0.5px;" data-i18n="airlines_total_active">TOTAL MASKAPAI AKTIF</span>
                                 <div class="d-flex align-items-baseline gap-2">
                                     <span class="font-digital fs-2 fw-bold" id="active-airlines-count" style="color: #059669;">21</span>
-                                    <span class="text-secondary small fw-medium">Maskapai</span>
+                                    <span class="text-secondary small fw-medium" data-i18n="airlines_unit">Maskapai</span>
                                 </div>
                             </div>
                         </div>
@@ -96,23 +96,23 @@
                 <div class="col-lg-6 col-md-12">
                     <div class="segmented-terminal-dock" id="terminal-filter-group">
                         <button class="airline-term-btn active" data-terminal="all">
-                            <span class="term-dot dot-all"></span> Semua
+                            <span class="term-dot dot-all"></span> <span data-i18n="term_filter_all">Semua</span>
                         </button>
                         <button class="airline-term-btn" data-terminal="1">
-                            <span class="term-dot dot-t1"></span> T1 Domestik
+                            <span class="term-dot dot-t1"></span> <span data-i18n="term_filter_t1">T1 Domestik</span>
                         </button>
                         <button class="airline-term-btn" data-terminal="2">
-                            <span class="term-dot dot-t2"></span> T2 LCC
+                            <span class="term-dot dot-t2"></span> <span data-i18n="term_filter_t2">T2 LCC</span>
                         </button>
                         <button class="airline-term-btn" data-terminal="3">
-                            <span class="term-dot dot-t3"></span> T3 Intl & GA
+                            <span class="term-dot dot-t3"></span> <span data-i18n="term_filter_t3">T3 Intl & GA</span>
                         </button>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12">
                     <div class="position-relative">
                         <i class="fa-solid fa-magnifying-glass position-absolute text-secondary" style="top: 50%; left: 16px; transform: translateY(-50%);"></i>
-                        <input type="text" id="airline-search-input" class="form-control" placeholder="Cari maskapai, kode IATA (GA, SQ), negara, atau zona konter..." style="padding-left: 44px; border-radius: 12px; height: 46px;">
+                        <input type="text" id="airline-search-input" class="form-control" placeholder="Cari maskapai, kode IATA (GA, SQ), negara, atau zona konter..." data-i18n="airlines_search_placeholder" style="padding-left: 44px; border-radius: 12px; height: 46px;">
                     </div>
                 </div>
             </div>

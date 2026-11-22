@@ -70,7 +70,39 @@ const I18N_DICT = {
         term_domestic: "Domestik Utama",
         term_lcc: "LCC & Regional",
         term_intl: "Internasional & Flagship",
-        view_board: "Buka FIDS Board →"
+        view_board: "Buka FIDS Board →",
+        badge_batik_cgk: "CORAK RESMI BATIK MEGAMENDUNG • CGK",
+        lbl_dest: "Tujuan",
+        lbl_origin: "Asal",
+        hdr_dest_dep: "TUJUAN",
+        hdr_dest_arr: "ASAL",
+        hdr_gate_dep: "GERBANG / KONTER",
+        hdr_gate_arr: "GERBANG / SABUK",
+        lbl_active: "aktif",
+        lbl_wind: "Angin",
+        lbl_vis: "Vis",
+        quick_search_esc: "Tekan ESC untuk menutup",
+        no_flights_match: "Tidak ada penerbangan yang cocok dengan",
+        airlines_dir_title: "Direktori Maskapai Soekarno-Hatta",
+        airlines_dir_desc: "Pusat informasi pembagian terminal, zona konter check-in, dan kontak resmi seluruh maskapai yang aktif beroperasi di CGK.",
+        airlines_total_active: "TOTAL MASKAPAI AKTIF",
+        airlines_unit: "Maskapai",
+        term_filter_all: "Semua",
+        term_filter_t1: "T1 Domestik",
+        term_filter_t2: "T2 LCC",
+        term_filter_t3: "T3 Intl & GA",
+        airlines_search_placeholder: "Cari maskapai, kode IATA (GA, SQ), negara, atau zona konter...",
+        airlines_term_zone_checkin: "TERMINAL & ZONA CHECK-IN",
+        view_schedule: "Lihat Jadwal",
+        official_website: "Website Resmi",
+        no_airlines_found: "Tidak Ada Maskapai Ditemukan",
+        no_airlines_desc: "Coba gunakan kata kunci pencarian lain atau pilih tab terminal yang berbeda.",
+        status_time_est: "Estimasi",
+        status_time_act: "Aktual",
+        status_time_on_time: "Tepat Waktu",
+        modal_zoom: "Zoom",
+        modal_zoom_title: "Perbesar Peta",
+        sync_waiting: "Menunggu koneksi..."
     },
     en: {
         nav_dashboard: "Dashboard",
@@ -143,7 +175,39 @@ const I18N_DICT = {
         term_domestic: "Domestic Hub",
         term_lcc: "LCC & Regional",
         term_intl: "International & Flagship",
-        view_board: "Open FIDS Board →"
+        view_board: "Open FIDS Board →",
+        badge_batik_cgk: "OFFICIAL BATIK MEGAMENDUNG MOTIF • CGK",
+        lbl_dest: "Destination",
+        lbl_origin: "Origin",
+        hdr_dest_dep: "DESTINATION",
+        hdr_dest_arr: "ORIGIN",
+        hdr_gate_dep: "GATE / COUNTER",
+        hdr_gate_arr: "GATE / BAGGAGE BELT",
+        lbl_active: "active",
+        lbl_wind: "Wind",
+        lbl_vis: "Vis",
+        quick_search_esc: "Press ESC to close",
+        no_flights_match: "No flights matching",
+        airlines_dir_title: "Soekarno-Hatta Airlines Directory",
+        airlines_dir_desc: "Information center for terminal assignments, check-in counter zones, and official contacts of all airlines operating at CGK.",
+        airlines_total_active: "TOTAL ACTIVE AIRLINES",
+        airlines_unit: "Airlines",
+        term_filter_all: "All",
+        term_filter_t1: "T1 Domestic",
+        term_filter_t2: "T2 LCC",
+        term_filter_t3: "T3 Intl & GA",
+        airlines_search_placeholder: "Search airline, IATA code (GA, SQ), country, or counter zone...",
+        airlines_term_zone_checkin: "TERMINAL & CHECK-IN ZONE",
+        view_schedule: "View Schedule",
+        official_website: "Official Website",
+        no_airlines_found: "No Airlines Found",
+        no_airlines_desc: "Try using different search keywords or choose a different terminal tab.",
+        status_time_est: "Estimated",
+        status_time_act: "Actual",
+        status_time_on_time: "On Time",
+        modal_zoom: "Zoom",
+        modal_zoom_title: "Enlarge Map",
+        sync_waiting: "Waiting for connection..."
     }
 };
 
@@ -153,33 +217,57 @@ function setLanguage(lang) {
     if (I18N_DICT[lang]) {
         currentLang = lang;
         localStorage.setItem('fids_lang', lang);
-        applyTranslations();
+        applyTranslations(false);
         
         // Dispatch custom event so main.js can update dynamic content
         window.dispatchEvent(new Event('languageChanged'));
     }
 }
 
-function applyTranslations() {
+function applyTranslations(isImmediate = false) {
     const elements = document.querySelectorAll('[data-i18n]');
     elements.forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (I18N_DICT[currentLang] && I18N_DICT[currentLang][key]) {
-            // Apply the split-flap animation class
-            el.classList.remove('flap-animate');
-            void el.offsetWidth; // Trigger reflow to restart animation
-            el.classList.add('flap-animate');
-            
-            // Swap the text exactly when the text is faded out
-            setTimeout(() => {
+            const translation = I18N_DICT[currentLang][key];
+
+            const doSwap = () => {
                 if (el.tagName === 'INPUT' && el.hasAttribute('placeholder')) {
-                    el.placeholder = I18N_DICT[currentLang][key];
-                } else if (el.tagName === 'BUTTON' && el.innerHTML.includes('<i class=')) {
-                    el.innerHTML = el.innerHTML.replace(/(<i class="[^"]+"><\/i>\s*)(.*)/i, '$1' + I18N_DICT[currentLang][key]);
+                    el.placeholder = translation;
+                } else if (el.tagName === 'OPTION') {
+                    el.innerText = translation;
                 } else {
-                    el.innerHTML = I18N_DICT[currentLang][key];
+                    // Check if element contains child elements like icons, badge dots, etc.
+                    const icon = el.querySelector('i');
+                    const pulse = el.querySelector('.live-pulse');
+                    if (pulse || icon) {
+                        let prefix = '';
+                        if (pulse) prefix += pulse.outerHTML + ' ';
+                        if (icon) prefix += icon.outerHTML + ' ';
+                        el.innerHTML = prefix + translation;
+                    } else {
+                        el.innerHTML = translation;
+                    }
                 }
-            }, 400); // ~halfway through the 0.8s animation
+            };
+
+            if (isImmediate) {
+                doSwap();
+            } else {
+                // Apply the split-flap animation class
+                el.classList.remove('flap-animate');
+                void el.offsetWidth; // Trigger reflow to restart animation
+                el.classList.add('flap-animate');
+                setTimeout(doSwap, 250);
+            }
+        }
+    });
+
+    // Handle data-i18n-title
+    document.querySelectorAll('[data-i18n-title]').forEach(el => {
+        const key = el.getAttribute('data-i18n-title');
+        if (I18N_DICT[currentLang] && I18N_DICT[currentLang][key]) {
+            el.setAttribute('title', I18N_DICT[currentLang][key]);
         }
     });
 
@@ -209,9 +297,9 @@ function __t(key) {
     return key; // Fallback
 }
 
-// Run translation on load
+// Run translation on load immediately without waiting
 document.addEventListener('DOMContentLoaded', () => {
-    applyTranslations();
+    applyTranslations(true);
     initTheme();
 });
 
