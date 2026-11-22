@@ -218,25 +218,43 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ============================================
    THEME TOGGLE LOGIC (DARK/LIGHT)
    ============================================ */
-// ============================================
-// THEME SYSTEM (DARK MODE ONLY)
-// ============================================
-let currentTheme = 'dark';
+/* ============================================
+   THEME TOGGLE LOGIC (LIGHT/DARK WITH PERSISTENCE)
+   ============================================ */
+let currentTheme = localStorage.getItem('liveboard_theme') || 'light';
 
 function initTheme() {
-    document.documentElement.setAttribute('data-theme', 'dark');
+    currentTheme = localStorage.getItem('liveboard_theme') || 'light';
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    updateThemeIcon(currentTheme);
 }
 
 function toggleTheme(event) {
-    // Liveboard runs in permanent modern Dark Mode
-    document.documentElement.setAttribute('data-theme', 'dark');
+    if (event) event.preventDefault();
+    currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    localStorage.setItem('liveboard_theme', currentTheme);
+    updateThemeIcon(currentTheme);
+    window.dispatchEvent(new Event('themechange'));
 }
 
 function executeThemeChange(theme) {
-    currentTheme = 'dark';
-    document.documentElement.setAttribute('data-theme', 'dark');
+    currentTheme = theme;
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('liveboard_theme', theme);
+    updateThemeIcon(theme);
+    window.dispatchEvent(new Event('themechange'));
 }
 
-function updateThemeIcon() {
-    // Legacy theme toggle deprecated in favor of unified Dark Mode
+function updateThemeIcon(theme) {
+    const icon = document.getElementById('theme-toggle-icon');
+    if (icon) {
+        if (theme === 'light') {
+            icon.className = 'fa-solid fa-moon text-slate-700';
+            icon.setAttribute('title', 'Beralih ke Mode Gelap');
+        } else {
+            icon.className = 'fa-solid fa-sun text-amber-400';
+            icon.setAttribute('title', 'Beralih ke Mode Terang');
+        }
+    }
 }
