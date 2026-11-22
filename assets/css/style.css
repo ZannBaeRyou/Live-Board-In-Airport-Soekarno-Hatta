@@ -488,20 +488,62 @@ h1, h2, h3, h4, h5, h6 {
     color: #0284c7 !important;
     box-shadow: 0 0 8px rgba(2, 132, 199, 0.2);
 }
+/* Segmented Terminal Dock (Airlines Directory Filter) */
+.segmented-terminal-dock {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 4px;
+    height: 46px;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
 .airline-term-btn,
 [data-theme="light"] .airline-term-btn {
-    background: #ffffff;
-    border: 1px solid #cbd5e1;
-    color: #334155 !important;
+    border: none !important;
+    background: transparent !important;
+    color: #475569 !important;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 8px 16px;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
 }
-.airline-term-btn:hover,
-.airline-term-btn.active,
-[data-theme="light"] .airline-term-btn:hover,
-[data-theme="light"] .airline-term-btn.active {
-    background: #e0f2fe;
-    border-color: #0284c7;
+
+.airline-term-btn:hover:not(.active),
+[data-theme="light"] .airline-term-btn:hover:not(.active) {
+    background: rgba(2, 132, 199, 0.08) !important;
     color: #0284c7 !important;
 }
+
+.airline-term-btn.active,
+[data-theme="light"] .airline-term-btn.active {
+    background: #ffffff !important;
+    color: #0284c7 !important;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+}
+
+.term-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+.dot-all { background-color: #0284c7; }
+.dot-t1 { background-color: #0284c7; }
+.dot-t2 { background-color: #7c3aed; }
+.dot-t3 { background-color: #d97706; }
 .airline-card-bento,
 [data-theme="light"] .airline-card-bento {
     background: #ffffff;

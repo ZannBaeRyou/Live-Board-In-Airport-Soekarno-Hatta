@@ -91,11 +91,19 @@
             <!-- Filter & Search Toolbar -->
             <div class="row g-3 mb-4 align-items-center">
                 <div class="col-lg-6 col-md-12">
-                    <div class="d-flex flex-wrap gap-2" id="terminal-filter-group">
-                        <button class="airline-term-btn active" data-terminal="all">Semua Terminal</button>
-                        <button class="airline-term-btn" data-terminal="1">Terminal 1 (Domestik)</button>
-                        <button class="airline-term-btn" data-terminal="2">Terminal 2 (LCC)</button>
-                        <button class="airline-term-btn" data-terminal="3">Terminal 3 (Intl & GA)</button>
+                    <div class="segmented-terminal-dock" id="terminal-filter-group">
+                        <button class="airline-term-btn active" data-terminal="all">
+                            <span class="term-dot dot-all"></span> Semua
+                        </button>
+                        <button class="airline-term-btn" data-terminal="1">
+                            <span class="term-dot dot-t1"></span> T1 Domestik
+                        </button>
+                        <button class="airline-term-btn" data-terminal="2">
+                            <span class="term-dot dot-t2"></span> T2 LCC
+                        </button>
+                        <button class="airline-term-btn" data-terminal="3">
+                            <span class="term-dot dot-t3"></span> T3 Intl & GA
+                        </button>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12">

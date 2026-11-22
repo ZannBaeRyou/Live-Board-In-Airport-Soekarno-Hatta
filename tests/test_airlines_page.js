@@ -45,4 +45,15 @@ if (!css.includes('.banner-batik-watermark') || !css.includes('batik-megamendung
     process.exit(1);
 }
 
-console.log("PASS: Airlines directory bento grid architecture and Batik watermark banner verified");
+// 6. Check Segmented Control Dock for terminal filtering
+if (!airlinesHtml.includes('segmented-terminal-dock') || !airlinesHtml.includes('term-dot dot-all')) {
+    console.error("FAIL: airlines.html must contain .segmented-terminal-dock with .term-dot indicators");
+    process.exit(1);
+}
+
+if (!css.includes('.segmented-terminal-dock') || !css.includes('.term-dot')) {
+    console.error("FAIL: style.css must define .segmented-terminal-dock and .term-dot styling");
+    process.exit(1);
+}
+
+console.log("PASS: Airlines directory bento grid architecture, Batik watermark banner, and Segmented Dock verified");
