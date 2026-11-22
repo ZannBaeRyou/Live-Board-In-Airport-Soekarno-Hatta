@@ -143,6 +143,10 @@ h1, h2, h3, h4, h5, h6 {
     position: relative;
     overflow: hidden;
 }
+.bento-card.overflow-visible,
+.overflow-visible {
+    overflow: visible !important;
+}
 .bento-card:hover {
     background: var(--surface-hover);
     border-color: var(--border-hover);
@@ -168,13 +172,13 @@ h1, h2, h3, h4, h5, h6 {
 .quick-search-wrapper {
     position: relative;
     width: 100%;
-    max-width: 680px;
-    margin: 1.5rem auto;
+    max-width: 100%;
+    margin: 1.25rem 0 0 0;
 }
 .quick-search-input-box {
     display: flex;
     align-items: center;
-    background: var(--surface-card);
+    background: rgba(9, 9, 11, 0.75);
     border: 1px solid var(--border-subtle);
     border-radius: 12px;
     padding: 0.75rem 1.25rem;

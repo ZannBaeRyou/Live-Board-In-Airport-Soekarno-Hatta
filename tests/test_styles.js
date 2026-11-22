@@ -14,7 +14,9 @@ const requiredTokens = [
   '--accent-t1',
   '--accent-t2',
   '--accent-t3',
-  'pulse-ring'
+  'pulse-ring',
+  'overflow-visible',
+  'z-index: 100'
 ];
 
 let failed = false;

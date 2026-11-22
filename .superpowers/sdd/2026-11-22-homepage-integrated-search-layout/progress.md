@@ -2,3 +2,4 @@
 Pre-flight: no shared interface conflicts detected.
 
 Task 1: complete (tests: node tests/test_homepage.js -> PASS)
+Task 2: complete (tests: node tests/test_styles.js && node tests/test_search_dom.js -> PASS)
