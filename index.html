@@ -112,26 +112,26 @@
             </div>
 
             <!-- Bento 2: Metar Weather (4 cols) -->
-            <div class="bento-card bento-weather d-flex flex-column justify-content-between position-relative overflow-hidden" id="bento-weather-card" style="border-top: 3px solid #e11d48;">
+            <div class="bento-card bento-weather d-flex flex-column justify-content-between position-relative overflow-hidden" id="bento-weather-card" style="border-top: 3px solid #0284c7;">
                 <div class="weather-batik-watermark" aria-hidden="true"></div>
                 <div class="position-relative" style="z-index: 2;">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span class="small text-uppercase fw-semibold" style="font-size: 0.7rem; letter-spacing: 0.05em; color: #be123c;">METAR Weather</span>
-                        <span class="badge rounded-pill bg-light border small" style="font-size: 0.7rem; color: #e11d48 !important; border-color: #fecdd3 !important;">Live Open-Meteo</span>
+                        <span class="small text-uppercase fw-semibold" style="font-size: 0.7rem; letter-spacing: 0.05em; color: #0284c7;">METAR Weather</span>
+                        <span class="badge rounded-pill bg-light border small" style="font-size: 0.7rem; color: #0284c7 !important; border-color: #bae6fd !important; background: #e0f2fe !important;">Live Open-Meteo</span>
                     </div>
                     <div class="d-flex align-items-baseline gap-2 my-2">
-                        <div class="display-5 fw-bold font-digital" id="bento-temp" style="color: #e11d48 !important;">--°C</div>
-                        <div class="small fw-semibold" id="bento-weather-desc" style="color: #be123c !important;">Cerah</div>
+                        <div class="display-5 fw-bold font-digital" id="bento-temp" style="color: #0284c7 !important;">--°C</div>
+                        <div class="small fw-semibold" id="bento-weather-desc" style="color: #0369a1 !important;">Cerah</div>
                     </div>
                 </div>
-                <div class="pt-3 border-top border-secondary border-opacity-10 d-flex justify-content-between font-digital small position-relative" style="z-index: 2; color: #be123c;">
-                    <div><i class="fa-solid fa-wind me-1" style="color: #e11d48;"></i> <span id="bento-wind-label">Angin</span>: <span id="bento-wind" class="fw-semibold" style="color: #9f1239;">12 km/h</span></div>
-                    <div><i class="fa-solid fa-eye me-1" style="color: #e11d48;"></i> Vis: <span class="fw-semibold" style="color: #9f1239;">&gt; 10 km</span></div>
+                <div class="pt-3 border-top border-secondary border-opacity-10 d-flex justify-content-between font-digital small position-relative" style="z-index: 2; color: #0369a1;">
+                    <div><i class="fa-solid fa-wind me-1" style="color: #0284c7;"></i> <span id="bento-wind-label">Angin</span>: <span id="bento-wind" class="fw-semibold" style="color: #0284c7;">12 km/h</span></div>
+                    <div><i class="fa-solid fa-eye me-1" style="color: #0284c7;"></i> Vis: <span class="fw-semibold" style="color: #0284c7;">&gt; 10 km</span></div>
                 </div>
             </div>
 
             <!-- Bento 3: Terminal 1 Card (4 cols) -->
-            <div class="bento-card bento-terminal-card d-flex flex-column justify-content-between position-relative overflow-hidden" id="t1-bento-card" style="border-top: 3px solid var(--accent-t1);">
+            <div class="bento-card bento-terminal-card d-flex flex-column justify-content-between position-relative overflow-hidden" id="t1-bento-card" style="border-top: 3px solid #e11d48;">
                 <!-- Animated Batik Hover Watermark -->
                 <div class="terminal-card-batik-watermark batik-t1" aria-hidden="true"></div>
                 <div class="position-relative" style="z-index: 2;">
@@ -141,8 +141,8 @@
                         <span class="terminal-card-photo-title">Terminal 1</span>
                     </div>
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="font-digital fs-3 fw-bold text-cyan">T1</span>
-                        <span class="badge rounded-pill px-3 py-1" style="background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;" data-i18n="term_domestic">Domestik Utama</span>
+                        <span class="font-digital fs-3 fw-bold" style="color: #e11d48;">T1</span>
+                        <span class="badge rounded-pill px-3 py-1" style="background: #ffe4e6; color: #e11d48; border: 1px solid #fecdd3;" data-i18n="term_domestic">Domestik Utama</span>
                     </div>
                     <h3 class="fs-5 fw-bold mb-1 text-white">Terminal 1</h3>
                     <p class="small text-secondary mb-3" style="line-height: 1.5;" data-i18n="term1_desc">
@@ -155,7 +155,12 @@
                         <span class="text-secondary">|</span>
                         <span><strong class="text-white" id="t1-arr-count">-</strong> <span class="text-secondary" data-i18n="tab_arrivals">Kedatangan</span></span>
                     </div>
-                    <a href="terminal1.html" class="d-flex justify-content-between align-items-center text-cyan text-decoration-none fw-semibold small">
+                    <a href="terminal1.html" class="d-flex justify-content-between align-items-center text-decoration-none fw-semibold small" style="color: #e11d48;">
+                        <span data-i18n="view_board">Buka FIDS Board &rarr;</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
                         <span data-i18n="view_board">Buka FIDS Board →</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </a>

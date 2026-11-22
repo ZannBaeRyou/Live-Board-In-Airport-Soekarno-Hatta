@@ -24,9 +24,9 @@ if (!css.includes('.banner-batik-watermark') || !css.includes('hue-rotate(285deg
     process.exit(1);
 }
 
-// 4. Verify weather-batik-watermark has unique sunset coral/rose filter
-if (!css.includes('.weather-batik-watermark') || !css.includes('hue-rotate(135deg)')) {
-    console.error('FAIL: style.css must define unique color filter for .weather-batik-watermark');
+// 4. Verify weather-batik-watermark has blue filter
+if (!css.includes('.weather-batik-watermark') || !css.includes('hue-rotate(0deg)')) {
+    console.error('FAIL: style.css must define blue color filter for .weather-batik-watermark');
     process.exit(1);
 }
 
@@ -36,10 +36,16 @@ if (!css.includes('#bento-weather-card:hover .weather-batik-watermark') && !css.
     process.exit(1);
 }
 
-// 6. Verify weather typography uses vibrant red theme
-if (!css.includes('#bento-weather-card #bento-temp') || !css.includes('#e11d48')) {
-    console.error('FAIL: style.css must define #e11d48 red text for #bento-temp');
+// 6. Verify weather typography uses vibrant blue theme
+if (!css.includes('#bento-weather-card #bento-temp') || !css.includes('#0284c7')) {
+    console.error('FAIL: style.css must define #0284c7 blue text for #bento-temp');
     process.exit(1);
 }
 
-console.log('PASS: Custom batik color themes verified for Airport Hero (Green), Airlines Banner (Green), and Weather Card (Sunset Coral with hover animation & red typography)');
+// 7. Verify T1 terminal-card-batik-watermark has sunset coral/crimson red filter
+if (!css.includes('.terminal-card-batik-watermark.batik-t1') || !css.includes('hue-rotate(135deg)')) {
+    console.error('FAIL: style.css must define red hue-rotate(135deg) filter for .terminal-card-batik-watermark.batik-t1');
+    process.exit(1);
+}
+
+console.log('PASS: Custom batik color themes verified for Airport Hero (Green), Airlines Banner (Green), Weather Card (Sky Blue), and Terminal 1 (Crimson Red)');

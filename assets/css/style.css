@@ -23,7 +23,7 @@
     --text-muted: #475569;
     
     --accent-sky: #0284c7;
-    --accent-t1: #0284c7;
+    --accent-t1: #e11d48;
     --accent-t2: #7c3aed;
     --accent-t3: #d97706;
     
@@ -594,7 +594,7 @@ h1, h2, h3, h4, h5, h6 {
     flex-shrink: 0;
 }
 .dot-all { background-color: #0284c7; }
-.dot-t1 { background-color: #0284c7; }
+.dot-t1 { background-color: #e11d48; }
 .dot-t2 { background-color: #7c3aed; }
 .dot-t3 { background-color: #d97706; }
 .airline-card-bento,
@@ -1662,7 +1662,7 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
-/* Weather Bento Card Batik Mega Mendung Watermark (Dashboard) - Sunset Rose / Coral */
+/* Weather Bento Card Batik Mega Mendung Watermark (Dashboard) - CGK Ocean / Sky Blue */
 .weather-batik-watermark {
     position: absolute;
     inset: 0;
@@ -1679,7 +1679,7 @@ h1, h2, h3, h4, h5, h6 {
     pointer-events: none;
     z-index: 1;
     border-radius: 16px;
-    filter: hue-rotate(135deg) saturate(1.6) contrast(1.05); /* Sunset Rose / Coral */
+    filter: hue-rotate(0deg) saturate(1.25) contrast(1.05); /* CGK Ocean / Sky Blue */
     will-change: opacity, transform;
 }
 
@@ -1692,21 +1692,21 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #bento-weather-card:hover {
-    border-color: #fb7185 !important;
-    box-shadow: 0 12px 28px rgba(244, 63, 94, 0.16) !important;
+    border-color: #38bdf8 !important;
+    box-shadow: 0 12px 28px rgba(2, 132, 199, 0.16) !important;
 }
 
-/* Weather Bento Card Typography - Crimson Red Theme */
+/* Weather Bento Card Typography - CGK Ocean / Sky Blue Theme */
 #bento-weather-card #bento-temp {
-    color: #e11d48 !important;
+    color: #0284c7 !important;
 }
 
 #bento-weather-card #bento-weather-desc {
-    color: #be123c !important;
+    color: #0369a1 !important;
 }
 
 #bento-weather-card #bento-wind {
-    color: #9f1239 !important;
+    color: #0369a1 !important;
 }
 
 @media (max-width: 768px) {
@@ -1803,9 +1803,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Terminal-specific Color Schemes matching card themes */
-/* T1 (Domestik): CGK Ocean / Sky Blue (#0284c7) */
+/* T1 (Domestik): Sunset Coral / Crimson Red (#e11d48) */
 .terminal-card-batik-watermark.batik-t1 {
-    filter: hue-rotate(0deg) saturate(1.25) contrast(1.05);
+    filter: hue-rotate(135deg) saturate(1.6) contrast(1.05);
 }
 
 /* T2 (LCC & Regional): Royal Violet / Purple (#7c3aed) */
@@ -1820,8 +1820,8 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Matching Card Hover Border & Glow */
 #t1-bento-card:hover {
-    border-color: #38bdf8 !important;
-    box-shadow: 0 12px 28px rgba(2, 132, 199, 0.16) !important;
+    border-color: #fb7185 !important;
+    box-shadow: 0 12px 28px rgba(225, 29, 72, 0.16) !important;
 }
 
 #t2-bento-card:hover {
@@ -1867,9 +1867,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Color thematic filters for terminal hero cards */
-/* T1 (Domestik): CGK Ocean / Sky Blue (#0284c7) */
+/* T1 (Domestik): Sunset Coral / Crimson Red (#e11d48) */
 .terminal-hero-batik-watermark.batik-t1 {
-    filter: hue-rotate(0deg) saturate(1.25) contrast(1.05);
+    filter: hue-rotate(135deg) saturate(1.6) contrast(1.05);
 }
 
 /* T2 (LCC & Regional): Royal Violet / Purple (#7c3aed) */
