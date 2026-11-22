@@ -1673,29 +1673,41 @@ h1, h2, h3, h4, h5, h6 {
     position: absolute;
     right: 0;
     top: 0;
-    width: 52%;
+    width: 38%;
     height: 100%;
     background-image: url('../images/batik-megamendung-clean.jpg');
     background-size: cover;
-    background-position: center;
-    opacity: 0.35;
-    -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
-    mask-image: linear-gradient(to left, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
+    background-position: right center;
+    opacity: 0.25;
+    -webkit-mask-image: radial-gradient(ellipse at 100% 50%, rgba(0,0,0,1) 15%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0) 85%);
+    mask-image: radial-gradient(ellipse at 100% 50%, rgba(0,0,0,1) 15%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0) 85%);
     pointer-events: none;
     z-index: 1;
-    filter: hue-rotate(285deg) saturate(1.4) contrast(1.05); /* Emerald Green */
+    filter: hue-rotate(285deg) saturate(1.35) contrast(1.05); /* Emerald Green */
+    transform: translate(14px, 0) scale(0.96);
+    transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+@media (max-width: 991px) {
+    .banner-batik-watermark {
+        width: 48%;
+        opacity: 0.22;
+    }
 }
 
 @media (max-width: 768px) {
     .banner-batik-watermark {
-        width: 100%;
-        opacity: 0.18;
+        width: 70%;
+        opacity: 0.16;
+        -webkit-mask-image: radial-gradient(ellipse at 100% 50%, rgba(0,0,0,1) 10%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 85%);
+        mask-image: radial-gradient(ellipse at 100% 50%, rgba(0,0,0,1) 10%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 85%);
     }
 }
 
 /* Airlines Hero Bento Card Hover Effect */
 #airlines-hero-card {
-    transition: border-color 0.35s ease, box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: border-color 0.35s ease, box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 #airlines-hero-card:hover {
@@ -1703,13 +1715,9 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 12px 28px rgba(5, 150, 105, 0.12) !important;
 }
 
-#airlines-hero-card .banner-batik-watermark {
-    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
 #airlines-hero-card:hover .banner-batik-watermark {
-    opacity: 0.45;
-    transform: scale(1.03);
+    opacity: 0.38;
+    transform: translate(0, 0) scale(1.02);
 }
 
 /* === Terminal Card Animated Batik Watermark on Hover === */
