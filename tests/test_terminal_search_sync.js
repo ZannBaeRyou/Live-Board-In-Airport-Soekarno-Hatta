@@ -25,9 +25,9 @@ if (!mainJs.includes("urlParams.get('search')") && !mainJs.includes("urlParams.g
     process.exit(1);
 }
 
-// 4. Check terminal pages have interactive filterByAirline quick pills
-if (!t1.includes("filterByAirline") || !t2.includes("filterByAirline") || !t3.includes("filterByAirline")) {
-    console.error("FAIL: terminal pages must include filterByAirline quick filter pills");
+// 4. Check terminal pages have clean hero descriptions without redundant instant pill clutter
+if (t1.includes("airline-filter-pill") || t2.includes("airline-filter-pill") || t3.includes("airline-filter-pill")) {
+    console.error("FAIL: terminal pages must have instant airline filter pills removed per user request");
     process.exit(1);
 }
 
@@ -37,4 +37,4 @@ if (!css.includes(".airline-filter-pill")) {
     process.exit(1);
 }
 
-console.log("PASS: Quick search data sync and terminal quick-filters verified");
+console.log("PASS: Quick search data sync and clean terminal hero verified");
