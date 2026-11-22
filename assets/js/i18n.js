@@ -61,7 +61,16 @@ const I18N_DICT = {
         wx_rain: "Hujan Ringan",
         wx_snow: "Salju",
         wx_storm: "Badai Petir",
-        empty_state: "TIDAK ADA DATA PENERBANGAN YANG COCOK"
+        empty_state: "TIDAK ADA DATA PENERBANGAN YANG COCOK",
+        stat_runway: "STATUS LANDASAN",
+        stat_otp: "KETEPATAN WAKTU",
+        quick_search_placeholder: "Cari nomor pesawat (GA-206), maskapai, kota tujuan...",
+        quick_search_found: "Hasil Pencarian",
+        quick_search_no_results: "Tidak ada penerbangan ditemukan",
+        term_domestic: "Domestik Utama",
+        term_lcc: "LCC & Regional",
+        term_intl: "Internasional & Flagship",
+        view_board: "Buka FIDS Board →"
     },
     en: {
         nav_dashboard: "Dashboard",
@@ -125,7 +134,16 @@ const I18N_DICT = {
         wx_rain: "Light Rain",
         wx_snow: "Snow",
         wx_storm: "Thunderstorm",
-        empty_state: "NO MATCHING FLIGHT DATA FOUND"
+        empty_state: "NO MATCHING FLIGHT DATA FOUND",
+        stat_runway: "RUNWAY STATUS",
+        stat_otp: "ON-TIME PERFORMANCE",
+        quick_search_placeholder: "Search flight number (GA-206), airline, city...",
+        quick_search_found: "Search Results",
+        quick_search_no_results: "No flights found",
+        term_domestic: "Domestic Hub",
+        term_lcc: "LCC & Regional",
+        term_intl: "International & Flagship",
+        view_board: "Open FIDS Board →"
     }
 };
 
