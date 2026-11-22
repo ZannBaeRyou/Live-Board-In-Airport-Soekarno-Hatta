@@ -1853,7 +1853,7 @@ function initQuickSearch() {
             html += `
                 <a href="terminal${term}.html?flight=${encodeURIComponent(flightNum)}" class="quick-search-item">
                     <div class="d-flex align-items-center gap-2">
-                        <span class="badge font-digital px-2 py-1" style="background: rgba(255,255,255,0.06); color: var(--text-primary); font-size: 0.85rem; border: 1px solid var(--border-subtle);">${flightNum}</span>
+                        <span class="badge font-digital px-2 py-1" style="background: #f1f5f9; color: var(--text-primary); font-size: 0.85rem; border: 1px solid #cbd5e1;">${flightNum}</span>
                         <div>
                             <div class="fw-bold small text-white">${f.airline || 'Airline'} &bull; ${f.destination || f.origin || 'Route'}</div>
                             <div class="text-secondary" style="font-size: 0.75rem;">${f.time || ''} WIB &bull; <span style="color: ${termColor}; font-weight: 600;">Terminal ${term}</span> &bull; ${f.gate || 'Gate -'}</div>
@@ -1946,7 +1946,7 @@ function initAirlinesDirectory() {
         if (filtered.length === 0) {
             grid.innerHTML = `
                 <div class="col-12 text-center py-5">
-                    <div class="p-4 rounded-4" style="background: rgba(18, 22, 34, 0.5); border: 1px dashed var(--border-subtle); max-width: 480px; margin: 0 auto;">
+                    <div class="p-4 rounded-4" style="background: #f8fafc; border: 1px dashed var(--border-subtle); max-width: 480px; margin: 0 auto;">
                         <i class="fa-solid fa-plane-slash text-secondary fs-2 mb-3"></i>
                         <h5 class="text-white">Tidak Ada Maskapai Ditemukan</h5>
                         <p class="text-secondary small mb-0">Coba gunakan kata kunci pencarian lain atau pilih tab terminal yang berbeda.</p>
@@ -1960,7 +1960,7 @@ function initAirlinesDirectory() {
         filtered.forEach(a => {
             const primaryTerm = a.terminals[0] || '3';
             const termBadgeColor = primaryTerm === '1' ? 'var(--accent-t1)' : (primaryTerm === '2' ? 'var(--accent-t2)' : 'var(--accent-t3)');
-            const termBg = primaryTerm === '1' ? 'rgba(56, 189, 248, 0.1)' : (primaryTerm === '2' ? 'rgba(168, 85, 247, 0.1)' : 'rgba(234, 179, 8, 0.1)');
+            const termBg = primaryTerm === '1' ? '#e0f2fe' : (primaryTerm === '2' ? '#f5f3ff' : '#fffbeb');
 
             html += `
                 <div class="col-md-6 col-lg-4">
@@ -1978,7 +1978,7 @@ function initAirlinesDirectory() {
                                 </div>
                             </div>
                             
-                            <div class="p-3 rounded-3 mb-3" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-subtle);">
+                            <div class="p-3 rounded-3 mb-3" style="background: #f8fafc; border: 1px solid var(--border-subtle);">
                                 <span class="text-secondary d-block small mb-1" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px;">TERMINAL & ZONA CHECK-IN</span>
                                 <strong class="fs-6 d-block" style="font-family: var(--font-mono); color: ${termBadgeColor} !important;">
                                     Terminal ${a.terminals.join(' & ')} &mdash; ${a.zone}
