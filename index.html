@@ -65,7 +65,7 @@
     <main class="container my-4" style="margin-top: 100px !important;">
         <div class="bento-grid">
             <!-- Bento 1: Hero Airport Hub (8 cols) -->
-            <div class="bento-card bento-hero" id="bento-airport-hero">
+            <div class="bento-card bento-hero overflow-visible" id="bento-airport-hero">
                 <div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
                     <div>
                         <span class="badge rounded-pill mb-2 px-3 py-1 text-uppercase" style="background: rgba(56, 189, 248, 0.12); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.25); font-size: 0.75rem; letter-spacing: 0.05em; font-weight: 700;">
@@ -97,6 +97,16 @@
                         <span class="small text-secondary ms-1">(<span id="total-active">0</span> aktif)</span>
                     </div>
                 </div>
+
+                <!-- Integrated Quick Search Bar inside Hero -->
+                <div class="quick-search-wrapper mt-3" id="quick-search-container">
+                    <div class="quick-search-input-box">
+                        <i class="fa-solid fa-magnifying-glass text-cyan"></i>
+                        <input type="text" id="quick-search-input" class="quick-search-input" placeholder="Cari nomor pesawat (GA-206), maskapai, kota tujuan..." data-i18n="quick_search_placeholder">
+                        <span class="badge bg-secondary bg-opacity-25 text-secondary font-digital small">ESC</span>
+                    </div>
+                    <div id="quick-search-dropdown" class="quick-search-dropdown"></div>
+                </div>
             </div>
 
             <!-- Bento 2: Metar Weather (4 cols) -->
@@ -114,18 +124,6 @@
                 <div class="pt-3 border-top border-secondary border-opacity-10 d-flex justify-content-between font-digital small text-secondary">
                     <div><i class="fa-solid fa-wind me-1 text-cyan"></i> <span id="bento-wind-label">Angin</span>: <span class="text-white" id="bento-wind">12 km/h</span></div>
                     <div><i class="fa-solid fa-eye me-1 text-cyan"></i> Vis: <span class="text-white">&gt; 10 km</span></div>
-                </div>
-            </div>
-
-            <!-- Quick Search Bar (12 cols) -->
-            <div class="col-12" id="quick-search-section">
-                <div class="quick-search-wrapper" id="quick-search-container">
-                    <div class="quick-search-input-box">
-                        <i class="fa-solid fa-magnifying-glass text-cyan"></i>
-                        <input type="text" id="quick-search-input" class="quick-search-input" placeholder="Cari nomor pesawat (GA-206), maskapai, kota tujuan..." data-i18n="quick_search_placeholder">
-                        <span class="badge bg-secondary bg-opacity-25 text-secondary font-digital small">ESC</span>
-                    </div>
-                    <div id="quick-search-dropdown" class="quick-search-dropdown"></div>
                 </div>
             </div>
 
