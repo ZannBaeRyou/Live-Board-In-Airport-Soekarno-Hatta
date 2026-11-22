@@ -318,6 +318,17 @@ function initFIDSClock() {
         clockElements.forEach(el => {
             el.innerText = formatted;
         });
+
+        const clockWib = document.getElementById('live-clock-wib');
+        if (clockWib) clockWib.innerHTML = `${hrs}:${mins}:${secs} <span class="fs-6 text-cyan">WIB</span>`;
+        
+        const clockUtc = document.getElementById('live-clock-utc');
+        if (clockUtc) {
+            const uHrs = String(now.getUTCHours()).padStart(2, '0');
+            const uMins = String(now.getUTCMinutes()).padStart(2, '0');
+            const uSecs = String(now.getUTCSeconds()).padStart(2, '0');
+            clockUtc.innerText = `${uHrs}:${uMins}:${uSecs} UTC`;
+        }
     }
 
     updateClock();
@@ -1489,6 +1500,13 @@ function updateDashboardStats() {
     const elTotalActive = document.getElementById('total-active');
     if (elTotal) elTotal.innerText = totalFlights;
     if (elTotalActive) elTotalActive.innerText = totalActive;
+
+    // Dynamic OTP calculation
+    const allFlights = [...TERMINAL_1_FLIGHTS, ...TERMINAL_2_FLIGHTS, ...TERMINAL_3_FLIGHTS];
+    const delayedCount = allFlights.filter(f => f.status === 'Delayed' || f.status === 'Cancelled').length;
+    const otp = allFlights.length > 0 ? Math.round(((allFlights.length - delayedCount) / allFlights.length) * 100) : 95;
+    const elOtp = document.getElementById('stat-otp');
+    if (elOtp) elOtp.innerHTML = `<i class="fa-solid fa-chart-line text-cyan me-1"></i> ${otp}% On-Time`;
 }
 
 /**
@@ -1552,6 +1570,17 @@ async function initWeather() {
                 <i class="fa-solid ${icon} text-amber me-2"></i>
                 <span class="fw-bold font-monospace small" style="font-size: 0.8rem; color: var(--text-white);">CGK: ${temp}&deg;C <span class="ms-1">(<span data-i18n="${descKey}">${initialText}</span>)</span></span>
             </div>`;
+
+            const bentoTemp = document.getElementById('bento-temp');
+            const bentoDesc = document.getElementById('bento-weather-desc');
+            const bentoWind = document.getElementById('bento-wind');
+            if (bentoTemp) bentoTemp.innerHTML = `${temp}&deg;C`;
+            if (bentoDesc) {
+                bentoDesc.innerHTML = `<span data-i18n="${descKey}">${initialText}</span>`;
+            }
+            if (bentoWind && data.current_weather.windspeed) {
+                bentoWind.innerText = `${Math.round(data.current_weather.windspeed)} km/h`;
+            }
         }
     } catch(err) {
         console.error('Weather fetch error:', err);

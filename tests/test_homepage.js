@@ -1,0 +1,30 @@
+// tests/test_homepage.js
+const fs = require('fs');
+const path = require('path');
+
+const htmlPath = path.join(__dirname, '..', 'index.html');
+const html = fs.readFileSync(htmlPath, 'utf-8');
+
+const checks = [
+  { test: !html.includes('id="theme-toggle"'), msg: 'Theme toggle removed' },
+  { test: html.includes('id="bento-airport-hero"'), msg: 'Bento hero exists' },
+  { test: html.includes('id="live-clock-utc"'), msg: 'UTC clock exists' },
+  { test: html.includes('id="stat-otp"'), msg: 'OTP stat container exists' },
+  { test: html.includes('id="t1-bento-card"'), msg: 'T1 bento card exists' },
+  { test: html.includes('id="t2-bento-card"'), msg: 'T2 bento card exists' },
+  { test: html.includes('id="t3-bento-card"'), msg: 'T3 bento card exists' }
+];
+
+let failed = false;
+for (const c of checks) {
+  if (!c.test) {
+    console.error(`FAIL: ${c.msg}`);
+    failed = true;
+  }
+}
+
+if (failed) {
+  process.exit(1);
+}
+
+console.log('PASS: Homepage Bento structure verified');
