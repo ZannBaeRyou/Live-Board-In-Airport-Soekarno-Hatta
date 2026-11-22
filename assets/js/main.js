@@ -195,6 +195,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 4. Start Real-Time FIDS Clock (GMT+7 WIB)
     initFIDSClock();
     initWeather();
+    initQuickSearch();
 
     // 5. Scroll animations
     initScrollReveal();
@@ -1663,13 +1664,16 @@ function initKioskMode() {
 // ============================================
 // MANUAL SYNC BUTTON (FOR ADMIN/DEMO)
 // ============================================
+// ADMIN SYNC BUTTON
+// ============================================
 function initSyncButton() {
     // Sembunyikan dari user biasa. Hanya muncul jika URL mengandung ?admin=fauzan
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('admin') !== 'fauzan') return;
 
-    const themeToggle = document.getElementById('theme-toggle');
-    if (!themeToggle) return;
+    const langBtn = document.getElementById('lang-id');
+    const targetParent = langBtn ? langBtn.parentNode : null;
+    if (!targetParent) return;
     
     const syncBtn = document.createElement('button');
     syncBtn.className = 'btn-theme-toggle me-3';
@@ -1708,5 +1712,98 @@ function initSyncButton() {
         }
     });
     
-    themeToggle.parentNode.insertBefore(syncBtn, themeToggle);
+    targetParent.insertBefore(syncBtn, langBtn);
+}
+
+// ============================================
+// HOMEPAGE QUICK FLIGHT SEARCH
+// ============================================
+function initQuickSearch() {
+    const input = document.getElementById('quick-search-input');
+    const dropdown = document.getElementById('quick-search-dropdown');
+    if (!input || !dropdown) return;
+
+    let debounceTimer = null;
+
+    function doSearch() {
+        const query = (input.value || '').trim();
+        if (query.length === 0) {
+            dropdown.classList.remove('show');
+            dropdown.innerHTML = '';
+            return;
+        }
+
+        const allFlights = [...TERMINAL_1_FLIGHTS, ...TERMINAL_2_FLIGHTS, ...TERMINAL_3_FLIGHTS];
+        const cleanQ = query.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+        const matches = allFlights.filter(f => {
+            const fn = (f.flight_no || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+            const al = (f.airline || '').toLowerCase();
+            const dest = (f.destination || '').toLowerCase();
+            const orig = (f.origin || '').toLowerCase();
+            return fn.includes(cleanQ) || al.includes(query.toLowerCase()) || dest.includes(query.toLowerCase()) || orig.includes(query.toLowerCase());
+        }).slice(0, 5);
+
+        if (matches.length === 0) {
+            dropdown.innerHTML = `
+                <div class="p-3 text-center text-secondary small" data-i18n="quick_search_no_results">
+                    <i class="fa-solid fa-plane-slash me-1"></i> Tidak ada penerbangan yang cocok dengan "${query}"
+                </div>
+            `;
+            dropdown.classList.add('show');
+            return;
+        }
+
+        let html = `<div class="px-3 py-2 small text-secondary border-bottom border-secondary border-opacity-10 d-flex justify-content-between align-items-center">
+            <span style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;"><span data-i18n="quick_search_found">Hasil Pencarian</span> (${matches.length})</span>
+            <span style="font-size: 0.7rem;">Tekan ESC untuk menutup</span>
+        </div>`;
+
+        matches.forEach(f => {
+            const term = f.terminal || '3';
+            const termColor = term === '1' ? 'var(--accent-t1)' : (term === '2' ? 'var(--accent-t2)' : 'var(--accent-t3)');
+            const statusKey = f.status || 'Scheduled';
+            const isBoarding = statusKey === 'Boarding';
+            const isFinalCall = statusKey === 'Final Call';
+            const dotClass = isBoarding ? 'pulse-green' : (isFinalCall ? 'pulse-amber' : 'dot-slate');
+
+            html += `
+                <a href="terminal${term}.html?flight=${encodeURIComponent(f.flight_no)}" class="quick-search-item">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge font-digital px-2 py-1" style="background: rgba(255,255,255,0.06); color: var(--text-primary); font-size: 0.85rem; border: 1px solid var(--border-subtle);">${f.flight_no}</span>
+                        <div>
+                            <div class="fw-bold small text-white">${f.airline || 'Airline'} &bull; ${f.destination || f.origin || 'Route'}</div>
+                            <div class="text-secondary" style="font-size: 0.75rem;">${f.time || ''} WIB &bull; <span style="color: ${termColor}; font-weight: 600;">Terminal ${term}</span> &bull; ${f.gate || 'Gate -'}</div>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="status-pill-modern ${isBoarding ? 'status-pill-boarding' : (isFinalCall ? 'status-pill-final-call' : 'status-pill-scheduled')}">
+                            <span class="status-pulse-dot ${dotClass}"></span> ${statusKey}
+                        </span>
+                    </div>
+                </a>
+            `;
+        });
+
+        dropdown.innerHTML = html;
+        dropdown.classList.add('show');
+    }
+
+    input.addEventListener('input', () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(doSearch, 150);
+    });
+
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            dropdown.classList.remove('show');
+            input.blur();
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.classList.remove('show');
+        }
+    });
 }
