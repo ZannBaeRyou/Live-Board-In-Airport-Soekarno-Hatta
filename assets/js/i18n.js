@@ -102,7 +102,19 @@ const I18N_DICT = {
         status_time_on_time: "Tepat Waktu",
         modal_zoom: "Zoom",
         modal_zoom_title: "Perbesar Peta",
-        sync_waiting: "Menunggu koneksi..."
+        sync_waiting: "Menunggu koneksi...",
+        modal_flight_status: "STATUS PENERBANGAN",
+        modal_gate_departure: "GERBANG KEBERANGKATAN",
+        modal_boarding_time_left: "SISA WAKTU BOARDING",
+        modal_baggage_belt: "SABUK PENGAMBILAN BAGASI",
+        modal_landing_time: "WAKTU MENDARAT",
+        modal_destination_city: "KOTA TUJUAN",
+        modal_origin_city: "KOTA ASAL",
+        modal_counter_island: "KONTER CHECK-IN",
+        modal_exit_gate: "PINTU KELUAR",
+        modal_aircraft_type: "TIPE ARMADA",
+        modal_wide_body: "Badan Lebar (Wide-Body)",
+        modal_narrow_body: "Lorong Tunggal (Narrow-Body)"
     },
     en: {
         nav_dashboard: "Dashboard",
@@ -207,7 +219,19 @@ const I18N_DICT = {
         status_time_on_time: "On Time",
         modal_zoom: "Zoom",
         modal_zoom_title: "Enlarge Map",
-        sync_waiting: "Waiting for connection..."
+        sync_waiting: "Waiting for connection...",
+        modal_flight_status: "FLIGHT STATUS",
+        modal_gate_departure: "DEPARTURE GATE",
+        modal_boarding_time_left: "TIME UNTIL BOARDING",
+        modal_baggage_belt: "BAGGAGE CLAIM BELT",
+        modal_landing_time: "LANDED TIME",
+        modal_destination_city: "DESTINATION",
+        modal_origin_city: "ORIGIN",
+        modal_counter_island: "CHECK-IN COUNTER",
+        modal_exit_gate: "EXIT GATE",
+        modal_aircraft_type: "AIRCRAFT MODEL",
+        modal_wide_body: "Wide-Body Jet",
+        modal_narrow_body: "Narrow-Body Jet"
     }
 };
 
