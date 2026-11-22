@@ -783,9 +783,8 @@ function getArcPoint3D(origin, dest, t, heightFactor = 0.12) {
 
 // Menggambar daratan bumi riil (dari GeoJSON) atau fallback benua lokal
 function drawRealEarth(ctx, cx, cy, R, rotX, rotY) {
-    const isLightMode = document.documentElement.getAttribute('data-theme') === 'light';
-    const strokeColor = isLightMode ? 'rgba(2, 132, 199, 0.5)' : 'rgba(56, 189, 248, 0.45)';
-    const fillColor = isLightMode ? 'rgba(2, 132, 199, 0.08)' : 'rgba(56, 189, 248, 0.05)';
+    const strokeColor = 'rgba(56, 189, 248, 0.45)';
+    const fillColor = 'rgba(56, 189, 248, 0.06)';
     if (!worldLandGeoJSON) {
         // Fallback benua lokal jika GeoJSON belum termuat atau offline
         ctx.strokeStyle = strokeColor;
@@ -817,7 +816,7 @@ function drawRealEarth(ctx, cx, cy, R, rotX, rotY) {
     // Gambar benua dari data GeoJSON bumi asli
     ctx.strokeStyle = strokeColor; // cyan stroke
     ctx.lineWidth = 0.8;
-    ctx.fillStyle = isLightMode ? 'rgba(2, 132, 199, 0.06)' : 'rgba(56, 189, 248, 0.04)';  // transparent cyan fill
+    ctx.fillStyle = 'rgba(56, 189, 248, 0.05)';  // transparent cyber cyan fill
 
     worldLandGeoJSON.features.forEach(feature => {
         const geom = feature.geometry;
@@ -1072,7 +1071,6 @@ function startFlightMapAnimation(flight) {
     
     // Loop Render Animasi Globe
     function drawGlobeLoop() {
-        const isLightMode = document.documentElement.getAttribute('data-theme') === 'light';
         animationFrame++;
         
         // Counter efek mengalir
@@ -1094,28 +1092,28 @@ function startFlightMapAnimation(flight) {
         const cy = logH / 2;
         const R = Math.min(logW, logH) * 0.42 * zoomLevel;
         
-        // Background ruang angkasa (Biru Navy Premium atau Soft Cream)
-        ctx.fillStyle = isLightMode ? '#F5F3EC' : '#0d172e';
+        // Background ruang angkasa (Cyber Dark)
+        ctx.fillStyle = '#09090b';
         ctx.fillRect(0, 0, logW, logH);
         
         // 2. Lingkaran Dasar Samudera Globe
-        ctx.fillStyle = isLightMode ? '#EBE8DF' : '#080f21';
+        ctx.fillStyle = '#080f21';
         ctx.beginPath();
         ctx.arc(cx, cy, R, 0, Math.PI * 2);
         ctx.fill();
         
-        // Glow tipis pada batas atmosfir
+        // Glow tipis pada batas atmosfir (Cyber Cyan)
         ctx.shadowBlur = 15;
-        ctx.shadowColor = isLightMode ? 'rgba(2, 132, 199, 0.2)' : 'rgba(0, 240, 255, 0.2)';
-        ctx.strokeStyle = isLightMode ? 'rgba(2, 132, 199, 0.3)' : 'rgba(0, 240, 255, 0.3)';
-        ctx.lineWidth = 2;
+        ctx.shadowColor = 'rgba(56, 189, 248, 0.35)';
+        ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+        ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.arc(cx, cy, R, 0, Math.PI * 2);
         ctx.stroke();
         ctx.shadowBlur = 0; // reset shadow
         
         // 3. Grid Lintang & Bujur Globe (Latitude & Longitude Lines)
-        ctx.strokeStyle = isLightMode ? 'rgba(0, 0, 0, 0.08)' : 'rgba(255, 255, 255, 0.05)';
+        ctx.strokeStyle = 'rgba(56, 189, 248, 0.08)';
         ctx.lineWidth = 0.8;
         
         // Lintang (Latitudes)
@@ -1178,11 +1176,11 @@ function startFlightMapAnimation(flight) {
                 started = false;
             }
         }
-        ctx.strokeStyle = isLightMode ? 'rgba(217, 119, 6, 0.3)' : 'rgba(255, 193, 7, 0.2)';
-        ctx.lineWidth = 3.5;
+        ctx.strokeStyle = 'rgba(56, 189, 248, 0.25)';
+        ctx.lineWidth = 3;
         ctx.stroke();
         
-        // Garis putus-putus merayap
+        // Garis putus-putus merayap (Cyber Neon Cyan)
         ctx.beginPath();
         started = false;
         for (let i = 0; i < pathPoints.length; i++) {
@@ -1195,7 +1193,7 @@ function startFlightMapAnimation(flight) {
                 started = false;
             }
         }
-        ctx.strokeStyle = isLightMode ? '#C26A00' : '#ffc107';
+        ctx.strokeStyle = '#38bdf8';
         ctx.lineWidth = 1.8;
         ctx.setLineDash([4, 6]);
         ctx.lineDashOffset = -animationFrame * 0.6;
@@ -1208,36 +1206,36 @@ function startFlightMapAnimation(flight) {
         const ptDst = project3DPoint(getArcPoint3D(origin, destination, 1, 0), cx, cy, R, rotX, rotY);
         
         if (ptOrg.visible) {
-            ctx.fillStyle = flight.type === 'departure' ? '#ffc107' : '#0d6efd';
+            ctx.fillStyle = '#38bdf8';
             ctx.beginPath();
             ctx.arc(ptOrg.x, ptOrg.y, 4.5, 0, Math.PI * 2);
             ctx.fill();
             
-            ctx.strokeStyle = flight.type === 'departure' ? (isLightMode ? 'rgba(217, 119, 6, 0.55)' : 'rgba(255, 193, 7, 0.45)') : (isLightMode ? 'rgba(2, 132, 199, 0.55)' : 'rgba(13, 110, 253, 0.45)');
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.5)';
             ctx.lineWidth = 1.2;
             ctx.beginPath();
             ctx.arc(ptOrg.x, ptOrg.y, 7 * pulse, 0, Math.PI * 2);
             ctx.stroke();
             
-            ctx.fillStyle = isLightMode ? '#1A1F36' : '#ffffff';
-            ctx.font = 'bold 8.5px monospace';
+            ctx.fillStyle = '#f8fafc';
+            ctx.font = 'bold 8.5px "Roboto Mono", monospace';
             ctx.fillText(orgCode, ptOrg.x - 7, ptOrg.y - 10);
         }
         
         if (ptDst.visible) {
-            ctx.fillStyle = flight.type === 'departure' ? '#0d6efd' : '#ffc107';
+            ctx.fillStyle = '#38bdf8';
             ctx.beginPath();
             ctx.arc(ptDst.x, ptDst.y, 4.5, 0, Math.PI * 2);
             ctx.fill();
             
-            ctx.strokeStyle = flight.type === 'departure' ? (isLightMode ? 'rgba(2, 132, 199, 0.55)' : 'rgba(13, 110, 253, 0.45)') : (isLightMode ? 'rgba(217, 119, 6, 0.55)' : 'rgba(255, 193, 7, 0.45)');
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.5)';
             ctx.lineWidth = 1.2;
             ctx.beginPath();
             ctx.arc(ptDst.x, ptDst.y, 7 * pulse, 0, Math.PI * 2);
             ctx.stroke();
             
-            ctx.fillStyle = isLightMode ? '#1A1F36' : '#ffffff';
-            ctx.font = 'bold 8.5px monospace';
+            ctx.fillStyle = '#f8fafc';
+            ctx.font = 'bold 8.5px "Roboto Mono", monospace';
             ctx.fillText(destCode, ptDst.x - 7, ptDst.y - 10);
         }
         
@@ -1258,10 +1256,10 @@ function startFlightMapAnimation(flight) {
             ctx.translate(ptPlane.x, ptPlane.y);
             ctx.rotate(planeAngle);
             
-            // Bayangan pesawat bersinar
-            ctx.shadowBlur = 10;
-            ctx.shadowColor = isLightMode ? '#D97706' : '#ffc107';
-            ctx.fillStyle = isLightMode ? '#D97706' : '#ffc107';
+            // Bayangan pesawat bersinar (Cyber Cyan)
+            ctx.shadowBlur = 12;
+            ctx.shadowColor = '#38bdf8';
+            ctx.fillStyle = '#38bdf8';
             
             // Gambar Pesawat
             ctx.beginPath();
@@ -1293,7 +1291,7 @@ function startFlightMapAnimation(flight) {
         const maxLabels = COUNTRY_LABELS.length;
         let labelCount = 0;
         
-        ctx.font = `bold ${labelFontSize}px monospace`;
+        ctx.font = `bold ${labelFontSize}px "Roboto Mono", monospace`;
         ctx.textAlign = 'center';
         
         for (let i = 0; i < COUNTRY_LABELS.length; i++) {
@@ -1312,13 +1310,13 @@ function startFlightMapAnimation(flight) {
             if (distFromCenter > R * 0.92) continue;
             
             // Titik penanda kecil
-            ctx.fillStyle = isLightMode ? 'rgba(2, 132, 199, 0.7)' : 'rgba(56, 189, 248, 0.7)';
+            ctx.fillStyle = 'rgba(56, 189, 248, 0.7)';
             ctx.beginPath();
             ctx.arc(ptC.x, ptC.y, 1.5, 0, Math.PI * 2);
             ctx.fill();
             
             // Teks nama negara
-            ctx.fillStyle = isLightMode ? 'rgba(30, 64, 175, 0.7)' : 'rgba(200, 230, 255, 0.65)';
+            ctx.fillStyle = 'rgba(200, 230, 255, 0.65)';
             const dispName = (typeof currentLang !== 'undefined' && currentLang === 'en' && country.name_en) ? country.name_en : country.name;
             ctx.fillText(dispName, ptC.x, ptC.y - 5);
             labelCount++;
@@ -1326,51 +1324,51 @@ function startFlightMapAnimation(flight) {
         
         ctx.textAlign = 'start'; // Reset text alignment
         
-        // 8. Tampilan HUD Dashboard Telemetry di Kanan Atas
-        ctx.fillStyle = isLightMode ? 'rgba(255, 255, 255, 0.85)' : 'rgba(5, 7, 13, 0.8)';
+        // 8. Tampilan Cockpit Radar HUD Dashboard Telemetry di Kanan Atas
+        ctx.fillStyle = 'rgba(9, 9, 11, 0.88)';
         const hudX = logW - 122;
         const hudY = 40; // Diturunkan dari 10 ke 40 agar tidak ketutupan tombol Close
         const hudW = 112;
         const hudH = 75;
         ctx.fillRect(hudX, hudY, hudW, hudH);
         
-        ctx.strokeStyle = isLightMode ? 'rgba(217, 119, 6, 0.35)' : 'rgba(255, 193, 7, 0.25)';
+        ctx.strokeStyle = 'rgba(56, 189, 248, 0.35)';
         ctx.lineWidth = 1;
         ctx.strokeRect(hudX, hudY, hudW, hudH);
         
-        ctx.fillStyle = isLightMode ? '#D97706' : '#ffc107';
-        ctx.font = 'bold 7px monospace';
+        ctx.fillStyle = '#38bdf8';
+        ctx.font = 'bold 7px "Roboto Mono", monospace';
         ctx.fillText("FLIGHT TELEMETRY", hudX + 8, hudY + 12);
         
-        ctx.fillStyle = isLightMode ? '#6B7280' : 'rgba(255, 255, 255, 0.5)';
-        ctx.font = '6.5px monospace';
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+        ctx.font = '6.5px "Roboto Mono", monospace';
         ctx.fillText("SPEED :", hudX + 8, hudY + 25);
         ctx.fillText("ALT   :", hudX + 8, hudY + 36);
         ctx.fillText("DIST  :", hudX + 8, hudY + 47);
         ctx.fillText("HDG   :", hudX + 8, hudY + 58);
         ctx.fillText("STATUS:", hudX + 8, hudY + 69);
         
-        ctx.fillStyle = isLightMode ? '#2C2C28' : '#ffffff';
-        ctx.font = 'bold 7.2px monospace';
+        ctx.fillStyle = '#f8fafc';
+        ctx.font = 'bold 7.2px "Roboto Mono", monospace';
         ctx.fillText(`${currentSpeed} km/h`, hudX + 46, hudY + 25);
         ctx.fillText(`${currentAlt.toLocaleString()} ft`, hudX + 46, hudY + 36);
         ctx.fillText(`${Math.round(currentDist)} km`, hudX + 46, hudY + 47);
         ctx.fillText(`${heading}°`, hudX + 46, hudY + 58);
         
         if (flight.status === 'Cancelled') {
-            ctx.fillStyle = '#dc3545';
+            ctx.fillStyle = '#ef4444';
         } else if (isLanded) {
-            ctx.fillStyle = '#198754';
+            ctx.fillStyle = '#22c55e';
         } else if (flight.status === 'Delayed') {
-            ctx.fillStyle = '#fd7e14';
+            ctx.fillStyle = '#f59e0b';
         } else {
-            ctx.fillStyle = isLightMode ? '#C26A00' : '#ffc107';
+            ctx.fillStyle = '#38bdf8';
         }
         ctx.fillText(flight.status.toUpperCase(), hudX + 46, hudY + 69);
         
         // Tampilkan petunjuk putar di kiri bawah
-        ctx.fillStyle = isLightMode ? 'rgba(0, 0, 0, 0.4)' : 'rgba(255, 255, 255, 0.3)';
-        ctx.font = '7px monospace';
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+        ctx.font = '7px "Roboto Mono", monospace';
         ctx.fillText("◀ SERET MOUSE / TOUCH UNTUK MEMUTAR BUMI ▶", 12, canvas.height - 10);
         
         // Loop Frame

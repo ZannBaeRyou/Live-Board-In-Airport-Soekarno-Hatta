@@ -218,91 +218,25 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ============================================
    THEME TOGGLE LOGIC (DARK/LIGHT)
    ============================================ */
-// Deteksi tema: 1) Cek localStorage (pilihan manual user), 2) Ikuti sistem device
-function getSystemTheme() {
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-        return 'light';
-    }
-    return 'dark';
-}
-let currentTheme = localStorage.getItem('fids_theme') || getSystemTheme();
+// ============================================
+// THEME SYSTEM (DARK MODE ONLY)
+// ============================================
+let currentTheme = 'dark';
 
 function initTheme() {
-    document.documentElement.setAttribute('data-theme', currentTheme);
-    updateThemeIcon();
-    
-    // Pantau perubahan tema sistem secara real-time (jika user belum pernah set manual)
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-        if (!localStorage.getItem('fids_theme')) {
-            executeThemeChange(e.matches ? 'dark' : 'light');
-        }
-    });
+    document.documentElement.setAttribute('data-theme', 'dark');
 }
 
 function toggleTheme(event) {
-    const isDark = currentTheme === 'dark';
-    const nextTheme = isDark ? 'light' : 'dark';
-    
-    // Fallback for browsers that do not support View Transitions API
-    if (!document.startViewTransition) {
-        executeThemeChange(nextTheme);
-        return;
-    }
-    
-    // Get click coordinates for the ripple center (fallback to center of screen)
-    const x = event?.clientX ?? window.innerWidth / 2;
-    const y = event?.clientY ?? window.innerHeight / 2;
-    
-    // Calculate the maximum radius required to cover the whole screen
-    const endRadius = Math.hypot(
-        Math.max(x, window.innerWidth - x),
-        Math.max(y, window.innerHeight - y)
-    );
-    
-    // Add a class to disable normal CSS color transitions during the view transition
-    document.documentElement.classList.add('theme-transitioning');
-    
-    const transition = document.startViewTransition(() => {
-        executeThemeChange(nextTheme);
-    });
-    
-    transition.ready.then(() => {
-        const clipPath = [
-            `circle(0px at ${x}px ${y}px)`,
-            `circle(${endRadius}px at ${x}px ${y}px)`
-        ];
-        
-        document.documentElement.animate(
-            {
-                clipPath: isDark ? clipPath : [...clipPath].reverse(),
-            },
-            {
-                duration: 600,
-                easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
-                pseudoElement: isDark ? '::view-transition-new(root)' : '::view-transition-old(root)',
-            }
-        );
-    });
-    
-    transition.finished.finally(() => {
-        document.documentElement.classList.remove('theme-transitioning');
-    });
+    // Liveboard runs in permanent modern Dark Mode
+    document.documentElement.setAttribute('data-theme', 'dark');
 }
 
 function executeThemeChange(theme) {
-    currentTheme = theme;
-    document.documentElement.setAttribute('data-theme', currentTheme);
-    localStorage.setItem('fids_theme', currentTheme);
-    updateThemeIcon();
+    currentTheme = 'dark';
+    document.documentElement.setAttribute('data-theme', 'dark');
 }
 
 function updateThemeIcon() {
-    const btn = document.getElementById('theme-toggle');
-    if (btn) {
-        if (currentTheme === 'light') {
-            btn.innerHTML = '<i class="fa-solid fa-moon"></i>';
-        } else {
-            btn.innerHTML = '<i class="fa-solid fa-sun"></i>';
-        }
-    }
+    // Legacy theme toggle deprecated in favor of unified Dark Mode
 }
