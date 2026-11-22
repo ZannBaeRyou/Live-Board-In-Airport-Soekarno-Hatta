@@ -62,7 +62,7 @@ body,
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     color: var(--text-primary);
     background-color: var(--bg-canvas);
-    background-image: radial-gradient(circle, #94a3b8 1.5px, transparent 1.8px);
+    background-image: radial-gradient(circle, #94a3b8 1.8px, transparent 2.2px);
     background-size: 24px 24px;
     background-position: 0 0;
     overflow-x: hidden;
@@ -490,12 +490,10 @@ h1, h2, h3, h4, h5, h6 {
     color: #0f172a;
     box-shadow: 0 2px 6px rgba(15, 23, 42, 0.1);
 }
-.hero-fids-container,
 .modern-page-banner,
-[data-theme="light"] .hero-fids-container,
 [data-theme="light"] .modern-page-banner {
-    background: linear-gradient(180deg, #f1f5f9 0%, #f8fafc 100%) !important;
-    border-bottom: 1px solid #e2e8f0 !important;
+    background: linear-gradient(135deg, #f8fafc 0%, #edf8ff 60%, #e2f2fe 100%) !important;
+    border-bottom: 1px solid #cbd5e1 !important;
 }
 .hero-fids-title,
 .brand-font,
@@ -1079,11 +1077,11 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Light mode gradient */
 .hero-fids-container::after {
-    background: linear-gradient(rgba(245, 243, 236, 0.4), rgba(245, 243, 236, 0.92));
+    display: none;
     opacity: 0;
 }
 [data-theme="light"] .hero-fids-container::after {
-    opacity: 1;
+    opacity: 0;
 }
 
 .hero-fids-content {
@@ -1158,10 +1156,10 @@ h1, h2, h3, h4, h5, h6 {
     border: 1px solid var(--fids-border);
     border-radius: var(--radius-fids);
     padding: 30px;
-    margin-top: -60px;
+    margin-top: 0;
     position: relative;
     z-index: 10;
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
 }
 
 /* Custom Search & Filters inside FIDS Board */
@@ -1704,6 +1702,65 @@ h1, h2, h3, h4, h5, h6 {
 #t3-bento-card:hover {
     border-color: #fbbf24 !important;
     box-shadow: 0 12px 28px rgba(217, 119, 6, 0.16) !important;
+}
+
+/* === Terminal Header Bento Card (for Terminal 1, 2, 3 pages) === */
+.terminal-hero-section {
+    position: relative;
+    padding-top: 100px;
+    padding-bottom: 24px;
+}
+
+.terminal-hero-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.terminal-hero-batik-watermark {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 52%;
+    height: 100%;
+    background-image: url('../images/batik-megamendung-clean.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.28;
+    -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 100%);
+    mask-image: linear-gradient(to left, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Color thematic filters for terminal hero cards */
+/* T1 (Domestik): CGK Ocean / Sky Blue (#0284c7) */
+.terminal-hero-batik-watermark.batik-t1 {
+    filter: hue-rotate(0deg) saturate(1.25) contrast(1.05);
+}
+
+/* T2 (LCC & Regional): Royal Violet / Purple (#7c3aed) */
+.terminal-hero-batik-watermark.batik-t2 {
+    filter: hue-rotate(58deg) saturate(1.45) contrast(1.05);
+}
+
+/* T3 (Internasional & Flagship): Warm Golden Amber (#d97706) */
+.terminal-hero-batik-watermark.batik-t3 {
+    filter: hue-rotate(185deg) saturate(1.8) contrast(1.1) brightness(0.96);
+}
+
+@media (max-width: 768px) {
+    .terminal-hero-section {
+        padding-top: 85px;
+        padding-bottom: 16px;
+    }
+    .terminal-hero-batik-watermark {
+        width: 100%;
+        opacity: 0.16;
+    }
 }
 
 /* Badge styles */

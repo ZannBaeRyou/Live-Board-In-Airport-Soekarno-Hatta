@@ -55,42 +55,51 @@
         </div>
     </nav>
 
-    <!-- Terminal 3 FIDS Hero Section -->
-    <header class="hero-fids-container terminal-3-hero">
-        <div class="container hero-fids-content">
-            <div class="row align-items-center">
-                <div class="col-lg-8 text-start">
-                    <div class="terminal-breadcrumb">
-                        <a href="index.html">Dashboard</a>
-                        <span class="separator">&gt;</span>
-                        <span>Terminal 3</span>
+    <!-- Terminal 3 Hero Bento Card Section -->
+    <header class="terminal-hero-section position-relative">
+        <div class="container">
+            <div class="terminal-hero-card position-relative overflow-hidden" id="terminal-hero-card" style="border-top: 4px solid var(--accent-t3);">
+                <div class="terminal-hero-batik-watermark batik-t3" aria-hidden="true"></div>
+                <div class="p-4 p-md-5 position-relative" style="z-index: 2;">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8 text-start">
+                            <div class="terminal-breadcrumb mb-2">
+                                <a href="index.html">Dashboard</a>
+                                <span class="separator">&gt;</span>
+                                <span>Terminal 3</span>
+                            </div>
+                            <span class="badge rounded-pill px-3 py-1 mb-2 d-inline-flex align-items-center gap-2" style="background: #ffffff; border: 1px solid #fde68a; color: #d97706; font-size: 0.78rem; font-weight: 700; box-shadow: 0 1px 3px rgba(217, 119, 6, 0.1);">
+                                <span class="live-pulse" style="width: 7px; height: 7px; background: #d97706;"></span> CORAK RESMI BATIK MEGAMENDUNG • CGK
+                            </span>
+                            <h1 class="brand-font fs-1 mb-2" style="color: #0f172a !important; font-weight: 800; letter-spacing: -0.5px;">Terminal 3 CGK</h1>
+                            <p class="mb-3" style="max-width: 620px; color: #334155 !important; font-size: 0.95rem; font-weight: 500; line-height: 1.6;" data-i18n="term3_desc">
+                                Terminal Premium Domestik & Internasional. Menampilkan jadwal real-time untuk maskapai Garuda Indonesia, Singapore Airlines, Emirates, Qatar Airways, ANA, Japan Airlines, Korean Air, Etihad, dan Citilink.
+                            </p>
+                            <div class="terminal-airline-pills mt-2">
+                                <button class="airline-filter-pill" onclick="filterByAirline('Garuda Indonesia')"><span class="pill-dot"></span> Garuda Indonesia</button>
+                                <button class="airline-filter-pill" onclick="filterByAirline('Singapore Airlines')"><span class="pill-dot"></span> Singapore Airlines</button>
+                                <button class="airline-filter-pill" onclick="filterByAirline('Emirates')"><span class="pill-dot"></span> Emirates</button>
+                                <button class="airline-filter-pill" onclick="filterByAirline('Qatar Airways')"><span class="pill-dot"></span> Qatar Airways</button>
+                                <button class="airline-filter-pill" onclick="filterByAirline('Citilink')"><span class="pill-dot"></span> Citilink</button>
+                                <button class="airline-filter-pill" onclick="filterByAirline('ANA')"><span class="pill-dot"></span> ANA</button>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+                            <div class="d-inline-block text-start p-3 rounded-3 bg-white border" style="box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);">
+                                <span class="text-secondary small d-block mb-1 font-digital" data-i18n="sys_time" style="font-size: 0.72rem; letter-spacing: 0.5px;">WAKTU SISTEM</span>
+                                <div class="d-flex align-items-baseline gap-2">
+                                    <span class="d-block font-digital fs-2 fw-bold fids-live-clock" style="color: #d97706;">--:--:-- WIB</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <span class="hero-fids-subtitle mb-2" data-i18n="hero_subtitle">
-                        <span class="live-pulse"></span> Live FIDS Board
-                    </span>
-                    <h1 class="hero-fids-title mb-3">Terminal 3 CGK</h1>
-                    <p class="text-white-50 mb-0" style="max-width: 550px;" data-i18n="term3_desc">
-                        Terminal Premium Domestik & Internasional. Menampilkan jadwal real-time untuk maskapai Garuda Indonesia, Singapore Airlines, Emirates, Qatar Airways, ANA, Japan Airlines, Korean Air, Etihad, dan Citilink.
-                    </p>
-                    <div class="terminal-airline-pills mt-3">
-                        <button class="airline-filter-pill" onclick="filterByAirline('Garuda Indonesia')"><span class="pill-dot"></span> Garuda Indonesia</button>
-                        <button class="airline-filter-pill" onclick="filterByAirline('Singapore Airlines')"><span class="pill-dot"></span> Singapore Airlines</button>
-                        <button class="airline-filter-pill" onclick="filterByAirline('Emirates')"><span class="pill-dot"></span> Emirates</button>
-                        <button class="airline-filter-pill" onclick="filterByAirline('Qatar Airways')"><span class="pill-dot"></span> Qatar Airways</button>
-                        <button class="airline-filter-pill" onclick="filterByAirline('Citilink')"><span class="pill-dot"></span> Citilink</button>
-                        <button class="airline-filter-pill" onclick="filterByAirline('ANA')"><span class="pill-dot"></span> ANA</button>
-                    </div>
-                </div>
-                <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
-                    <span class="font-digital text-white-50 small d-block" data-i18n="sys_time">WAKTU SISTEM</span>
-                    <span class="d-block font-digital text-gold fs-2 fids-live-clock">--:--:-- WIB</span>
                 </div>
             </div>
         </div>
     </header>
 
     <!-- FIDS Board Container -->
-    <section class="py-5" style="margin-bottom: 80px;">
+    <section class="pb-5" style="margin-bottom: 60px;">
         <div class="container">
             <div class="fids-dashboard-container">
                 <!-- Search & Tabs & Filter Row -->
