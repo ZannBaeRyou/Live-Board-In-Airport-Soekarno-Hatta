@@ -120,9 +120,23 @@ The user explicitly selected **Opsi A: Cyber-Aviation Radar (High-Tech Flight Op
   - Normalize query matching using `f.number || f.flight_no`.
   - Construct result links using `terminal${f.terminal}.html?flight=${encodeURIComponent(f.number || f.flight_no)}`.
 
+### 4.5 Builder Check Decisions & Refinements
+Following the builder review check, the following architectural choices have been codified:
+1. **Airlines Directory Scope & Filtering:**
+   - `AIRLINE_DATABASE` encompasses all active tenant airlines across CGK (including Terminal 2 LCC carriers: Scoot, Jetstar Asia, Cebu Pacific, Super Air Jet, Wings Air, Sriwijaya Air, NAM Air) so terminal filter buttons (All, T1, T2, T3) render complete fleet sets.
+   - For carriers operating across multiple terminals (e.g., Lion Air at T1 & T2), the bento card displays operational badges for both terminals.
+   - Clicking "Lihat Penerbangan" links to `terminal{N}.html?search={AirlineName}`.
+2. **Terminal Board Search Query Parameter Support:**
+   - `initFIDSBoard()` in `main.js` checks for `?search=` or `?airline=` in `window.location.search`. When present, it automatically populates `#fids-search-input` and executes `renderFIDS()`.
+3. **Terminal Hero Header Airline Badges:**
+   - Displays a row of sleek airline emblem pill badges. Clicking an emblem filters the board below directly to that carrier.
+4. **Dual-Mode Flight Stepper Lifecycle:**
+   - Departures: *Check-in* → *Boarding* → *Final Call* → *Departed*.
+   - Arrivals: *Scheduled* → *In Flight* → *Landed* → *Baggage Claim*.
+   - Both modes share the cyber-aviation glowing cyan/emerald checkpoint and line styling.
+
 ---
 
 ## 5. What is Left to the Builder
 - Precise pixel padding adjustments for mobile viewport breakpoints (<768px).
-- Extraction of airline fleet lookup mappings in `airlines.html` if not already present in `AIRLINE_DATABASE`.
 - Execution ordering and test writing for regression prevention.
