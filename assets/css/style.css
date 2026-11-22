@@ -1634,6 +1634,73 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
+/* === Terminal Card Animated Batik Watermark on Hover === */
+@keyframes batikCloudDrift {
+    0% {
+        transform: scale(1.02) translate(0, 0);
+    }
+    50% {
+        transform: scale(1.06) translate(-5px, -3px);
+    }
+    100% {
+        transform: scale(1.02) translate(0, 0);
+    }
+}
+
+.terminal-card-batik-watermark {
+    position: absolute;
+    inset: 0;
+    background-image: url('../images/batik-megamendung-clean.jpg');
+    background-size: cover;
+    background-position: center;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    transform: scale(0.93) translateY(8px);
+    transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    -webkit-mask-image: radial-gradient(ellipse at 85% 75%, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 85%);
+    mask-image: radial-gradient(ellipse at 85% 75%, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 85%);
+}
+
+/* Hover State: emerges with soft cloud drift */
+.bento-terminal-card:hover .terminal-card-batik-watermark {
+    opacity: 0.30;
+    transform: scale(1.02) translate(0, 0);
+    animation: batikCloudDrift 8s ease-in-out infinite alternate;
+}
+
+/* Terminal-specific Color Schemes matching card themes */
+/* T1 (Domestik): CGK Ocean / Sky Blue (#0284c7) */
+.terminal-card-batik-watermark.batik-t1 {
+    filter: hue-rotate(0deg) saturate(1.25) contrast(1.05);
+}
+
+/* T2 (LCC & Regional): Royal Violet / Purple (#7c3aed) */
+.terminal-card-batik-watermark.batik-t2 {
+    filter: hue-rotate(58deg) saturate(1.45) contrast(1.05);
+}
+
+/* T3 (Internasional & Flagship): Warm Golden Amber (#d97706) */
+.terminal-card-batik-watermark.batik-t3 {
+    filter: hue-rotate(185deg) saturate(1.8) contrast(1.1) brightness(0.96);
+}
+
+/* Matching Card Hover Border & Glow */
+#t1-bento-card:hover {
+    border-color: #38bdf8 !important;
+    box-shadow: 0 12px 28px rgba(2, 132, 199, 0.16) !important;
+}
+
+#t2-bento-card:hover {
+    border-color: #a78bfa !important;
+    box-shadow: 0 12px 28px rgba(124, 58, 237, 0.16) !important;
+}
+
+#t3-bento-card:hover {
+    border-color: #fbbf24 !important;
+    box-shadow: 0 12px 28px rgba(217, 119, 6, 0.16) !important;
+}
+
 /* Badge styles */
 .badge-tracker {
     font-family: 'Roboto Mono', monospace;
