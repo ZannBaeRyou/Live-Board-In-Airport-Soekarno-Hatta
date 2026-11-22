@@ -1,295 +1,60 @@
 /* 
    Soekarno-Hatta CGK - Flight Information Display System (FIDS)
-   ALL TERMINALS: Terminal 1, 2, 3
-   Theme: FIDS Digital Board Aesthetic (Deep Charcoal, Amber Yellow, Emerald, Crimson, Cyan)
-   Typography: Outfit (Futuristic Headings) & Roboto Mono (Digital Data Rows)
+   Theme: Aviation Bento Dashboard & Dark Zinc Precision ("Vibe Coder" Aesthetic)
+   Typography: Plus Jakarta Sans (Headings & UI) & Roboto Mono (Flight Telemetry)
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@400;500;600;700&display=swap');
 
 :root {
-    /* Premium Modern Dark Theme (Glassmorphism & Deep Obsidian) */
-    --fids-bg-darkest: #050505;      /* Ultra deep obsidian background */
-    --fids-bg-board: rgba(15, 15, 17, 0.7); /* Translucent glass board */
-    --fids-bg-row: rgba(255, 255, 255, 0.02); /* Glass row */
-    --fids-bg-row-hover: rgba(255, 255, 255, 0.06); /* Glass row hover */
-    --fids-border: rgba(255, 255, 255, 0.08); /* Frosted hairline border */
+    /* Modern Vibe Coder Dark Palette */
+    --bg-canvas: #09090b;
+    --surface-card: #13151b;
+    --surface-hover: #181a22;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-hover: rgba(255, 255, 255, 0.16);
     
-    /* Modern Sophisticated Accents */
-    --fids-amber: #F59E0B;           /* Premium Gold/Amber */
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    
+    --accent-t1: #38bdf8;
+    --accent-t2: #a855f7;
+    --accent-t3: #f59e0b;
+    
+    --status-boarding: #22c55e;
+    --status-final-call: #f59e0b;
+    --status-checkin: #38bdf8;
+    --status-scheduled: #94a3b8;
+    --status-delayed: #f43f5e;
+    
+    /* Backward Compatibility Aliases */
+    --fids-bg-darkest: var(--bg-canvas);
+    --fids-bg-board: var(--surface-card);
+    --fids-bg-row: rgba(255, 255, 255, 0.02);
+    --fids-bg-row-hover: rgba(255, 255, 255, 0.05);
+    --fids-border: var(--border-subtle);
+    --fids-amber: #f59e0b;
     --fids-amber-glow: rgba(245, 158, 11, 0.15);
-    --fids-green: #10B981;           /* Emerald Green */
-    --fids-red: #EF4444;             /* Modern Rose/Red */
-    --fids-blue: #38BDF8;            /* Sky Blue */
-    --fids-grey: #94A3B8;            /* Slate Gray */
-    
-    --text-white: #F8FAFC;
-    --text-muted: #94A3B8;
-    
-    --transition-fids: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-    --radius-fids: 12px;             /* Slightly rounder for modern feel */
-
-    /* Glassmorphism Overlays */
-    --navbar-bg: rgba(5, 5, 5, 0.75);
-    --navbar-border: rgba(255, 255, 255, 0.05);
-    --hero-overlay-start: rgba(5, 5, 5, 0.5);
-    --hero-overlay-end: rgba(5, 5, 5, 0.95);
+    --fids-green: #22c55e;
+    --fids-red: #f43f5e;
+    --fids-blue: #38bdf8;
+    --fids-grey: #94a3b8;
+    --text-white: var(--text-primary);
+    --radius-fids: 12px;
+    --navbar-bg: rgba(9, 9, 11, 0.85);
+    --navbar-border: var(--border-subtle);
     --modal-backdrop: rgba(0, 0, 0, 0.85);
-    --scrollbar-track: #050505;
     --canvas-bg: #09090b;
     --shadow-color: rgba(0, 0, 0, 0.6);
-    --shadow-hover: rgba(245, 158, 11, 0.2);
-}
-
-/* ============================================
-   LIGHT MODE THEME OVERRIDE
-   ============================================ */
-[data-theme="light"] {
-    --fids-bg-darkest: #F5F3EC;
-    --fids-bg-board: #FEFDF9;
-    --fids-bg-row: #FBF9F4;
-    --fids-bg-row-hover: #F0EEE4;
-    --fids-border: #E8E5DA;
-    
-    --fids-amber: #C26A00;
-    --fids-amber-glow: rgba(194, 106, 0, 0.12);
-    --fids-green: #047857;
-    --fids-red: #B91C1C;
-    --fids-blue: #0369A1;
-    --fids-grey: #8A92A0;
-    
-    --text-white: #2C2C28;
-    --text-muted: #6C6B65;
-    
-    --navbar-bg: rgba(254, 253, 249, 0.9);
-    --navbar-border: rgba(194, 106, 0, 0.2);
-    --hero-overlay-start: rgba(245, 243, 236, 0.4);
-    --hero-overlay-end: rgba(245, 243, 236, 0.92);
-    --modal-backdrop: rgba(20, 20, 18, 0.65);
-    --scrollbar-track: #F5F3EC;
-    --canvas-bg: #1a2744;
-    --shadow-color: rgba(0, 0, 0, 0.05);
-    --shadow-hover: rgba(194, 106, 0, 0.1);
-}
-
-/* Smooth theme transition on all elements for colors */
-*, *::before, *::after {
-    transition-property: background-color, color, border-color, box-shadow, fill, stroke;
-    transition-duration: 0.6s;
-    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Light mode specific overrides for hardcoded colors */
-[data-theme="light"] .navbar-brand {
-    text-shadow: none;
-}
-
-[data-theme="light"] .fids-flight {
-    text-shadow: none;
-}
-
-[data-theme="light"] .dashboard-stat-number {
-    text-shadow: none;
-}
-
-[data-theme="light"] .dashboard-hero::before {
-    opacity: 1;
-}
-
-/* We removed the [data-theme="light"] overrides for hero-fids-container here */
-
-[data-theme="light"] .terminal-card-image-wrapper::after {
-    background: linear-gradient(transparent, var(--fids-bg-board));
-}
-
-[data-theme="light"] .terminal-card:hover {
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.1), 0 0 30px var(--fids-amber-glow);
-}
-
-[data-theme="light"] .fids-board-header {
-    background-color: rgba(255, 255, 255, 0.95);
-}
-
-[data-theme="light"] .fids-board-row {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-}
-
-[data-theme="light"] .fids-board-row:hover {
-    box-shadow: 0 8px 20px var(--shadow-hover);
-}
-
-[data-theme="light"] .fids-modal {
-    background-color: var(--modal-backdrop);
-}
-
-[data-theme="light"] .fids-modal-content {
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-}
-
-[data-theme="light"] .fids-tabs {
-    background: rgba(0, 0, 0, 0.04);
-}
-
-[data-theme="light"] .btn-fids-tab:hover:not(.active) {
-    background: rgba(0, 0, 0, 0.05);
-}
-
-[data-theme="light"] .fids-dashboard-container {
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
-}
-
-[data-theme="light"] .modal-timeline-line {
-    background: rgba(0, 0, 0, 0.1);
-}
-
-[data-theme="light"] .modal-drag-handle {
-    background: rgba(0, 0, 0, 0.15);
-}
-
-[data-theme="light"] #flight-map-canvas {
-    background-color: var(--canvas-bg);
-}
-
-[data-theme="light"] .flight-map-wrapper {
-    box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.15), 0 0 15px rgba(217, 119, 6, 0.05);
-}
-
-[data-theme="light"] .radar-pulse {
-    border-color: rgba(217, 119, 6, 0.12);
-}
-
-[data-theme="light"] .modern-page-banner {
-    background: linear-gradient(135deg, #EEF1F8 0%, #F4F6FA 100%);
-}
-
-[data-theme="light"] .terminal-card-number {
-    color: rgba(217, 119, 6, 0.08);
-}
-
-[data-theme="light"] .terminal-breadcrumb {
-    background: rgba(217, 119, 6, 0.06);
-    border-color: rgba(217, 119, 6, 0.15);
-    color: var(--text-white);
-}
-
-[data-theme="light"] .terminal-breadcrumb .separator {
-    color: var(--text-white);
-    opacity: 0.5;
-}
-
-[data-theme="light"] .airline-card-modern:hover {
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08), 0 0 15px var(--fids-amber-glow);
-}
-
-/* Global utility class overrides for light mode */
-[data-theme="light"] .text-white-50:not(.footer-fids .text-white-50) {
-    color: var(--text-white) !important;
-}
-
-[data-theme="light"] .text-white:not(.footer-fids .text-white) {
-    color: var(--text-white) !important;
-}
-
-/* Footer stays dark in light mode for elegant contrast */
-[data-theme="light"] .footer-fids {
-    background-color: #1A1F36;
-    color: #8E9BAE;
-    border-top-color: #2A3050;
-}
-
-[data-theme="light"] .footer-fids h5 {
-    color: #D97706;
-}
-
-[data-theme="light"] .footer-fids-link {
-    color: #8E9BAE;
-}
-
-[data-theme="light"] .footer-fids-link:hover {
-    color: #D97706;
-}
-
-[data-theme="light"] .footer-fids .text-white-50 {
-    color: rgba(255, 255, 255, 0.5) !important;
-}
-
-[data-theme="light"] .footer-fids .text-white {
-    color: #FFFFFF !important;
-}
-
-[data-theme="light"] .footer-fids .text-gold {
-    color: #D97706 !important;
-}
-
-[data-theme="light"] .footer-fids .small.text-white-50 {
-    color: rgba(255, 255, 255, 0.5) !important;
-}
-
-[data-theme="light"] .footer-fids .footer-contact-link {
-    color: #FFFFFF !important;
-}
-
-/* Light mode page loader */
-[data-theme="light"] #page-loader {
-    background-color: #F4F6FA;
-}
-
-[data-theme="light"] .loader-logo {
-    text-shadow: none;
-}
-
-/* Light mode scrollbar */
-[data-theme="light"] ::-webkit-scrollbar-track {
-    background: var(--scrollbar-track);
-}
-
-/* Theme Toggle Button */
-.btn-theme-toggle {
-    background: none;
-    border: 1px solid rgba(255, 193, 7, 0.3);
-    color: var(--fids-amber);
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    padding: 0;
-    line-height: 1;
-}
-
-.btn-theme-toggle:hover {
-    background: var(--fids-amber);
-    color: var(--fids-bg-darkest);
-    box-shadow: 0 0 12px var(--fids-amber-glow);
-}
-
-[data-theme="light"] .btn-theme-toggle {
-    border-color: rgba(217, 119, 6, 0.3);
-}
-
-/* Light mode sticky controls */
-[data-theme="light"] .sticky-controls {
-    background: var(--fids-bg-board);
-}
-
-/* Light mode fullscreen map */
-[data-theme="light"] .flight-map-wrapper.fullscreen-map {
-    box-shadow: 0 0 60px rgba(0, 0, 0, 0.2), 0 0 35px var(--fids-amber-glow) !important;
-}
-
-[data-theme="light"] .map-fullscreen-backdrop {
-    background: rgba(244, 246, 250, 0.9);
+    --shadow-hover: rgba(56, 189, 248, 0.15);
 }
 
 /* Base Styles */
 body {
-    font-family: 'Outfit', sans-serif;
-    color: var(--text-white);
-    background-color: var(--fids-bg-darkest);
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    color: var(--text-primary);
+    background-color: var(--bg-canvas);
     overflow-x: hidden;
     scroll-behavior: smooth;
     line-height: 1.6;
@@ -305,9 +70,274 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     font-weight: 700;
-    color: var(--text-white);
+    color: var(--text-primary);
+}
+
+/* Pulsing Status Dot Animations */
+@keyframes pulse-ring {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+    }
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+    }
+}
+@keyframes pulse-ring-amber {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+    }
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 6px rgba(245, 158, 11, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+    }
+}
+.status-pulse-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+}
+.status-pulse-dot.pulse-green {
+    background-color: #22c55e;
+    animation: pulse-ring 2s infinite;
+}
+.status-pulse-dot.pulse-amber {
+    background-color: #f59e0b;
+    animation: pulse-ring-amber 1.5s infinite;
+}
+.status-pulse-dot.dot-blue {
+    background-color: #38bdf8;
+}
+.status-pulse-dot.dot-slate {
+    background-color: #94a3b8;
+}
+.status-pulse-dot.dot-rose {
+    background-color: #f43f5e;
+}
+
+/* Bento Grid Layout */
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.25rem;
+}
+.bento-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 1.5rem;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+.bento-card:hover {
+    background: var(--surface-hover);
+    border-color: var(--border-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+.bento-hero {
+    grid-column: span 8;
+}
+.bento-weather {
+    grid-column: span 4;
+}
+.bento-terminal-card {
+    grid-column: span 4;
+}
+@media (max-width: 991px) {
+    .bento-hero, .bento-weather, .bento-terminal-card {
+        grid-column: span 12;
+    }
+}
+
+/* Quick Search Component */
+.quick-search-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 680px;
+    margin: 1.5rem auto;
+}
+.quick-search-input-box {
+    display: flex;
+    align-items: center;
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 0.75rem 1.25rem;
+    gap: 0.85rem;
+    transition: all 0.2s ease;
+}
+.quick-search-input-box:focus-within {
+    border-color: var(--accent-t1);
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+}
+.quick-search-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    width: 100%;
+    font-family: inherit;
+}
+.quick-search-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: #181a22;
+    border: 1px solid var(--border-hover);
+    border-radius: 12px;
+    padding: 0.5rem;
+    z-index: 1000;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(12px);
+    max-height: 380px;
+    overflow-y: auto;
+    display: none;
+}
+.quick-search-dropdown.show {
+    display: block;
+}
+.quick-search-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    text-decoration: none;
+    color: inherit;
+}
+.quick-search-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Modern Segmented Control */
+.segmented-control {
+    display: inline-flex;
+    background: #13151b;
+    border: 1px solid var(--border-subtle);
+    padding: 0.3rem;
+    border-radius: 10px;
+    gap: 0.35rem;
+}
+.segmented-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 0.45rem 1.1rem;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.segmented-btn.active {
+    background: var(--text-primary);
+    color: var(--bg-canvas);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Modern FIDS Table Rows */
+.fids-row-modern {
+    display: grid;
+    grid-template-columns: 85px 1.8fr 1.5fr 110px 130px;
+    align-items: center;
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 0.85rem 1.25rem;
+    margin-bottom: 0.6rem;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+}
+.fids-row-modern:hover {
+    background: var(--surface-hover);
+    border-color: var(--border-hover);
+    transform: translateX(3px);
+}
+.airline-emblem-sq {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+.airline-emblem-sq img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.gate-badge-modern {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    font-family: 'Roboto Mono', monospace;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.3rem 0.65rem;
+    border-radius: 6px;
+}
+.status-pill-modern {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+.status-pill-boarding {
+    background: rgba(34, 197, 94, 0.12);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.25);
+}
+.status-pill-final-call {
+    background: rgba(245, 158, 11, 0.12);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.25);
+}
+.status-pill-checkin {
+    background: rgba(56, 189, 248, 0.12);
+    color: #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.25);
+}
+.status-pill-scheduled {
+    background: rgba(148, 163, 184, 0.1);
+    color: #94a3b8;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+}
+.status-pill-delayed {
+    background: rgba(244, 63, 94, 0.12);
+    color: #fb7185;
+    border: 1px solid rgba(244, 63, 94, 0.25);
 }
 
 .text-gold { color: var(--fids-amber) !important; }
