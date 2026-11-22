@@ -30,4 +30,10 @@ if (!css.includes('.weather-batik-watermark') || !css.includes('hue-rotate(135de
     process.exit(1);
 }
 
-console.log('PASS: Custom batik color themes verified for Airport Hero (Green), Airlines Banner (Green), and Weather Card (Sunset Coral)');
+// 5. Verify weather-batik-watermark has hover transition animation
+if (!css.includes('#bento-weather-card:hover .weather-batik-watermark') && !css.includes('.bento-weather:hover .weather-batik-watermark')) {
+    console.error('FAIL: style.css must define hover state for weather-batik-watermark');
+    process.exit(1);
+}
+
+console.log('PASS: Custom batik color themes verified for Airport Hero (Green), Airlines Banner (Green), and Weather Card (Sunset Coral with hover animation)');

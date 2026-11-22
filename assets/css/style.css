@@ -1619,24 +1619,39 @@ h1, h2, h3, h4, h5, h6 {
     position: absolute;
     right: 0;
     top: 0;
-    width: 65%;
+    width: 70%;
     height: 100%;
     background-image: url('../images/batik-megamendung-clean.jpg');
     background-size: cover;
     background-position: center;
-    opacity: 0.26;
-    -webkit-mask-image: radial-gradient(ellipse at 85% 50%, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 85%);
-    mask-image: radial-gradient(ellipse at 85% 50%, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 85%);
+    opacity: 0;
+    transform: translate(25px, 45px) scale(0.85);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    -webkit-mask-image: radial-gradient(ellipse at 85% 70%, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 85%);
+    mask-image: radial-gradient(ellipse at 85% 70%, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 85%);
     pointer-events: none;
     z-index: 1;
     border-radius: 14px;
     filter: hue-rotate(135deg) saturate(1.5) contrast(1.05); /* Sunset Rose / Coral */
+    will-change: opacity, transform;
+}
+
+/* Weather Card Hover State: emerges smoothly from the corner */
+.bento-weather:hover .weather-batik-watermark,
+#bento-weather-card:hover .weather-batik-watermark {
+    opacity: 0.30;
+    transform: translate(0, 0) scale(1.04);
+    transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#bento-weather-card:hover {
+    border-color: #fb7185 !important;
+    box-shadow: 0 12px 28px rgba(244, 63, 94, 0.16) !important;
 }
 
 @media (max-width: 768px) {
     .weather-batik-watermark {
         width: 100%;
-        opacity: 0.16;
     }
 }
 
