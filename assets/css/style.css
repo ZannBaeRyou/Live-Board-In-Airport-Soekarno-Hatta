@@ -525,13 +525,60 @@ h1, h2, h3, h4, h5, h6 {
 [data-theme="light"] .terminal-breadcrumb span {
     color: #475569;
 }
+/* ==========================================================================
+   MODERN TERMINAL AIRLINE FILTER PILLS
+   ========================================================================== */
+.terminal-airline-pills {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
 .airline-filter-pill,
 [data-theme="light"] .airline-filter-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.2;
     background: #ffffff;
     border: 1px solid #cbd5e1;
     color: #334155 !important;
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    cursor: pointer;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+    -webkit-user-select: none;
+    outline: none;
 }
+
+.airline-filter-pill .pill-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #94a3b8;
+    transition: background-color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+    flex-shrink: 0;
+}
+
+.airline-filter-pill:hover,
+[data-theme="light"] .airline-filter-pill:hover {
+    transform: translateY(-1.5px);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+
+.airline-filter-pill:active,
+[data-theme="light"] .airline-filter-pill:active {
+    transform: translateY(0);
+}
+
+/* Default / Neutral Active & Hover */
 .airline-filter-pill:hover,
 .airline-filter-pill.active,
 [data-theme="light"] .airline-filter-pill:hover,
@@ -539,7 +586,114 @@ h1, h2, h3, h4, h5, h6 {
     background: #e0f2fe;
     border-color: #0284c7;
     color: #0284c7 !important;
-    box-shadow: 0 0 8px rgba(2, 132, 199, 0.2);
+    box-shadow: 0 2px 10px rgba(2, 132, 199, 0.18);
+}
+.airline-filter-pill:hover .pill-dot,
+.airline-filter-pill.active .pill-dot {
+    background-color: #0284c7;
+    box-shadow: 0 0 6px rgba(2, 132, 199, 0.6);
+}
+
+/* Terminal 1: Crimson Red (#e11d48) */
+.pills-t1 .airline-filter-pill:hover,
+[data-terminal="1"] .airline-filter-pill:hover,
+.batik-t1 ~ * .airline-filter-pill:hover,
+[data-theme="light"] .pills-t1 .airline-filter-pill:hover,
+[data-theme="light"] [data-terminal="1"] .airline-filter-pill:hover {
+    background: #fff1f2;
+    border-color: #f43f5e;
+    color: #e11d48 !important;
+    box-shadow: 0 3px 12px rgba(225, 29, 72, 0.15);
+}
+.pills-t1 .airline-filter-pill:hover .pill-dot,
+[data-terminal="1"] .airline-filter-pill:hover .pill-dot,
+.batik-t1 ~ * .airline-filter-pill:hover .pill-dot {
+    background-color: #e11d48;
+    box-shadow: 0 0 6px rgba(225, 29, 72, 0.6);
+}
+.pills-t1 .airline-filter-pill.active,
+[data-terminal="1"] .airline-filter-pill.active,
+.batik-t1 ~ * .airline-filter-pill.active,
+[data-theme="light"] .pills-t1 .airline-filter-pill.active,
+[data-theme="light"] [data-terminal="1"] .airline-filter-pill.active {
+    background: #e11d48 !important;
+    border-color: #e11d48 !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35);
+}
+.pills-t1 .airline-filter-pill.active .pill-dot,
+[data-terminal="1"] .airline-filter-pill.active .pill-dot,
+.batik-t1 ~ * .airline-filter-pill.active .pill-dot {
+    background-color: #ffffff;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+}
+
+/* Terminal 2: Royal Violet (#7c3aed) */
+.pills-t2 .airline-filter-pill:hover,
+[data-terminal="2"] .airline-filter-pill:hover,
+.batik-t2 ~ * .airline-filter-pill:hover,
+[data-theme="light"] .pills-t2 .airline-filter-pill:hover,
+[data-theme="light"] [data-terminal="2"] .airline-filter-pill:hover {
+    background: #f5f3ff;
+    border-color: #8b5cf6;
+    color: #7c3aed !important;
+    box-shadow: 0 3px 12px rgba(124, 58, 237, 0.15);
+}
+.pills-t2 .airline-filter-pill:hover .pill-dot,
+[data-terminal="2"] .airline-filter-pill:hover .pill-dot,
+.batik-t2 ~ * .airline-filter-pill:hover .pill-dot {
+    background-color: #7c3aed;
+    box-shadow: 0 0 6px rgba(124, 58, 237, 0.6);
+}
+.pills-t2 .airline-filter-pill.active,
+[data-terminal="2"] .airline-filter-pill.active,
+.batik-t2 ~ * .airline-filter-pill.active,
+[data-theme="light"] .pills-t2 .airline-filter-pill.active,
+[data-theme="light"] [data-terminal="2"] .airline-filter-pill.active {
+    background: #7c3aed !important;
+    border-color: #7c3aed !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35);
+}
+.pills-t2 .airline-filter-pill.active .pill-dot,
+[data-terminal="2"] .airline-filter-pill.active .pill-dot,
+.batik-t2 ~ * .airline-filter-pill.active .pill-dot {
+    background-color: #ffffff;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+}
+
+/* Terminal 3: Amber Gold (#d97706) */
+.pills-t3 .airline-filter-pill:hover,
+[data-terminal="3"] .airline-filter-pill:hover,
+.batik-t3 ~ * .airline-filter-pill:hover,
+[data-theme="light"] .pills-t3 .airline-filter-pill:hover,
+[data-theme="light"] [data-terminal="3"] .airline-filter-pill:hover {
+    background: #fffbeb;
+    border-color: #f59e0b;
+    color: #d97706 !important;
+    box-shadow: 0 3px 12px rgba(217, 119, 6, 0.15);
+}
+.pills-t3 .airline-filter-pill:hover .pill-dot,
+[data-terminal="3"] .airline-filter-pill:hover .pill-dot,
+.batik-t3 ~ * .airline-filter-pill:hover .pill-dot {
+    background-color: #d97706;
+    box-shadow: 0 0 6px rgba(217, 119, 6, 0.6);
+}
+.pills-t3 .airline-filter-pill.active,
+[data-terminal="3"] .airline-filter-pill.active,
+.batik-t3 ~ * .airline-filter-pill.active,
+[data-theme="light"] .pills-t3 .airline-filter-pill.active,
+[data-theme="light"] [data-terminal="3"] .airline-filter-pill.active {
+    background: #d97706 !important;
+    border-color: #d97706 !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(217, 119, 6, 0.35);
+}
+.pills-t3 .airline-filter-pill.active .pill-dot,
+[data-terminal="3"] .airline-filter-pill.active .pill-dot,
+.batik-t3 ~ * .airline-filter-pill.active .pill-dot {
+    background-color: #ffffff;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
 }
 /* Segmented Terminal Dock (Airlines Directory Filter) */
 .segmented-terminal-dock {

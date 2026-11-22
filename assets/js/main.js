@@ -465,8 +465,19 @@ function renderFIDS() {
     const boardList = document.getElementById('fids-board-list');
     if (!boardList) return;
 
-    const query = document.getElementById('fids-search-input')?.value.toLowerCase() || '';
+    const query = document.getElementById('fids-search-input')?.value.toLowerCase().trim() || '';
     const selectedStatus = document.getElementById('fids-status-filter')?.value || '';
+
+    // Synchronize active state on modern airline filter pills
+    const airlinePills = document.querySelectorAll('.airline-filter-pill');
+    airlinePills.forEach(pill => {
+        const pillText = pill.textContent.trim().toLowerCase();
+        if (query && (query === pillText || pillText.includes(query))) {
+            pill.classList.add('active');
+        } else {
+            pill.classList.remove('active');
+        }
+    });
 
     const flights = FLIGHT_DATABASE.filter(flight => {
         const matchesTab = flight.type === activeTab;
