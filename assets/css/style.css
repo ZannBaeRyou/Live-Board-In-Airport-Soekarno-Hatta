@@ -56,11 +56,15 @@
 }
 
 /* Base Styles */
-body {
+body,
+[data-theme="light"] body {
     position: relative;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     color: var(--text-primary);
     background-color: var(--bg-canvas);
+    background-image: radial-gradient(circle, #94a3b8 1.5px, transparent 1.8px);
+    background-size: 24px 24px;
+    background-position: 0 0;
     overflow-x: hidden;
     scroll-behavior: smooth;
     line-height: 1.6;
@@ -1745,7 +1749,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Footer Section */
 .footer-fids {
-    background-color: #f8fafc;
+    background-color: transparent;
     color: #475569;
     border-top: 1px solid #e2e8f0;
     padding: 60px 0 35px;
