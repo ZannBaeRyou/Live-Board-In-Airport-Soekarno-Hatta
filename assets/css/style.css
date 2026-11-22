@@ -1588,7 +1588,7 @@ h1, h2, h3, h4, h5, h6 {
     border-bottom: 1px solid #cbd5e1 !important;
 }
 
-/* Bento Airport Hero Batik Mega Mendung Watermark (Dashboard) */
+/* Bento Airport Hero Batik Mega Mendung Watermark (Dashboard) - Emerald Green */
 .hero-batik-watermark {
     position: absolute;
     right: 0;
@@ -1604,6 +1604,7 @@ h1, h2, h3, h4, h5, h6 {
     pointer-events: none;
     z-index: 1;
     border-radius: 14px;
+    filter: hue-rotate(285deg) saturate(1.4) contrast(1.05); /* Emerald Green */
 }
 
 @media (max-width: 768px) {
@@ -1613,6 +1614,33 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
+/* Weather Bento Card Batik Mega Mendung Watermark (Dashboard) - Sunset Rose / Coral */
+.weather-batik-watermark {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 65%;
+    height: 100%;
+    background-image: url('../images/batik-megamendung-clean.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.26;
+    -webkit-mask-image: radial-gradient(ellipse at 85% 50%, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 85%);
+    mask-image: radial-gradient(ellipse at 85% 50%, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 85%);
+    pointer-events: none;
+    z-index: 1;
+    border-radius: 14px;
+    filter: hue-rotate(135deg) saturate(1.5) contrast(1.05); /* Sunset Rose / Coral */
+}
+
+@media (max-width: 768px) {
+    .weather-batik-watermark {
+        width: 100%;
+        opacity: 0.16;
+    }
+}
+
+/* Airlines Page Banner Batik Mega Mendung Watermark - Emerald Green */
 .banner-batik-watermark {
     position: absolute;
     right: 0;
@@ -1627,6 +1655,7 @@ h1, h2, h3, h4, h5, h6 {
     mask-image: linear-gradient(to left, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
     pointer-events: none;
     z-index: 1;
+    filter: hue-rotate(285deg) saturate(1.4) contrast(1.05); /* Emerald Green */
 }
 
 @media (max-width: 768px) {
