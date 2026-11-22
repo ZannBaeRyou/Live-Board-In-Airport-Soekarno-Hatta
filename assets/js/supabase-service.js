@@ -468,10 +468,22 @@ async function fetchSystemStatus() {
     if (!supabaseClient) return null;
 
     try {
-        // Ambil config
-        const { data: config } = await supabaseClient
-            .from('system_config')
+        // Ambil status sistem (gunakan view public_system_status yang aman tanpa kunci rahasia)
+        let config = [];
+        const { data: safeConfig, error: viewError } = await supabaseClient
+            .from('public_system_status')
             .select('*');
+
+        if (!viewError && safeConfig) {
+            config = safeConfig;
+        } else {
+            // Fallback jika view belum dibuat di database
+            const { data: rawConfig } = await supabaseClient
+                .from('system_config')
+                .select('key, value, updated_at');
+            // Filter di client jika fallback terpakai
+            config = (rawConfig || []).filter(c => !c.key.toLowerCase().includes('key') && !c.key.toLowerCase().includes('secret'));
+        }
 
         // Ambil log sinkronisasi terakhir (10 terbaru)
         const { data: logs } = await supabaseClient

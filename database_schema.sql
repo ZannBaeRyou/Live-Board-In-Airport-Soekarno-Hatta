@@ -82,36 +82,70 @@ CREATE TRIGGER set_updated_at
     EXECUTE FUNCTION update_updated_at();
 
 -- 7. Enable Realtime on flights table (SANGAT PENTING!)
-ALTER PUBLICATION supabase_realtime ADD TABLE flights;
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_publication_tables 
+        WHERE pubname = 'supabase_realtime' AND tablename = 'flights'
+    ) THEN
+        ALTER PUBLICATION supabase_realtime ADD TABLE flights;
+    END IF;
+END $$;
 
--- 8. Row Level Security (RLS) - Izinkan akses publik untuk read
+-- 8. Row Level Security (RLS) - Proteksi Akses Data
 ALTER TABLE flights ENABLE ROW LEVEL SECURITY;
 ALTER TABLE sync_logs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE system_config ENABLE ROW LEVEL SECURITY;
 
--- Policy: Semua orang boleh membaca data penerbangan
+-- A. Tabel FLIGHTS:
+-- Semua orang boleh membaca data jadwal penerbangan publik (CGK FIDS Board)
+DROP POLICY IF EXISTS "Public read flights" ON flights;
 CREATE POLICY "Public read flights" ON flights
     FOR SELECT USING (true);
 
--- Policy: Semua orang boleh membaca sync logs
+-- HANYA backend / Edge Function (service_role) yang boleh mengubah data penerbangan
+DROP POLICY IF EXISTS "Service role write flights" ON flights;
+DROP POLICY IF EXISTS "Service role all flights" ON flights;
+CREATE POLICY "Service role all flights" ON flights
+    FOR ALL USING (auth.role() = 'service_role');
+
+-- B. Tabel SYSTEM_CONFIG (SANGAT SENSITIF):
+-- PERINGATAN KEAMANAN: Jangan izinkan publik membaca tabel ini!
+-- Hanya backend / service_role yang boleh membaca & menulis konfigurasi dan API Key.
+DROP POLICY IF EXISTS "Public read system_config" ON system_config;
+DROP POLICY IF EXISTS "Service role write system_config" ON system_config;
+DROP POLICY IF EXISTS "Service role all system_config" ON system_config;
+CREATE POLICY "Service role all system_config" ON system_config
+    FOR ALL USING (auth.role() = 'service_role');
+
+-- C. Tabel SYNC_LOGS:
+-- Hanya service_role yang boleh mencatat log
+DROP POLICY IF EXISTS "Service role write sync_logs" ON sync_logs;
+DROP POLICY IF EXISTS "Service role all sync_logs" ON sync_logs;
+CREATE POLICY "Service role all sync_logs" ON sync_logs
+    FOR ALL USING (auth.role() = 'service_role');
+
+-- Publik boleh melihat ringkasan log untuk status monitor
+DROP POLICY IF EXISTS "Public read sync_logs" ON sync_logs;
 CREATE POLICY "Public read sync_logs" ON sync_logs
     FOR SELECT USING (true);
 
--- Policy: Semua orang boleh membaca system config
-CREATE POLICY "Public read system_config" ON system_config
-    FOR SELECT USING (true);
+-- 9. View: Status Publik & Statistik Terminal (Aman dari Kebocoran Kunci Rahasia)
 
--- Policy: Hanya service_role yang boleh insert/update/delete
-CREATE POLICY "Service role write flights" ON flights
-    FOR ALL USING (auth.role() = 'service_role');
+-- View status yang aman: Hanya mengekspos status operasional, otomatis memfilter kunci rahasia/token
+CREATE OR REPLACE VIEW public_system_status AS
+SELECT key, value, updated_at
+FROM system_config
+WHERE key NOT ILIKE '%key%' 
+  AND key NOT ILIKE '%secret%' 
+  AND key NOT ILIKE '%token%' 
+  AND key NOT ILIKE '%password%'
+  AND key NOT ILIKE '%auth%';
 
-CREATE POLICY "Service role write sync_logs" ON sync_logs
-    FOR ALL USING (auth.role() = 'service_role');
+-- Berikan izin akses SELECT view ke pengguna publik/anon
+GRANT SELECT ON public_system_status TO anon, authenticated;
 
-CREATE POLICY "Service role write system_config" ON system_config
-    FOR ALL USING (auth.role() = 'service_role');
-
--- 9. View: Ringkasan statistik per terminal (untuk Dashboard)
+-- View Ringkasan statistik per terminal (untuk Dashboard)
 CREATE OR REPLACE VIEW terminal_stats AS
 SELECT 
     terminal,
@@ -123,6 +157,8 @@ FROM flights
 WHERE scheduled_time::date = CURRENT_DATE
 GROUP BY terminal
 ORDER BY terminal;
+
+GRANT SELECT ON terminal_stats TO anon, authenticated;
 
 -- 10. Masukkan data sampel awal (opsional - bisa dihapus setelah API terhubung)
 -- Data ini akan digantikan oleh data real-time dari API penerbangan

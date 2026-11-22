@@ -159,20 +159,46 @@ Deno.serve(async (req) => {
     const startTime = Date.now();
 
     try {
-        // Inisialisasi Supabase Client (service role untuk write access)
+        // ---- 1. PROTEKSI KEAMANAN & OTORISASI ----
+        // Mencegah pihak luar memicu sinkronisasi liar, menghabiskan kuota RapidAPI, atau menghapus data penerbangan
+        const syncSecret = Deno.env.get('SYNC_SECRET');
+        const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
+        const authHeader = req.headers.get('Authorization') || req.headers.get('x-sync-secret') || '';
+
+        if (syncSecret) {
+            const isAuthorized = 
+                authHeader === `Bearer ${syncSecret}` || 
+                authHeader === syncSecret || 
+                (serviceRoleKey && authHeader === `Bearer ${serviceRoleKey}`);
+            
+            if (!isAuthorized) {
+                console.warn('[Security] Akses ditolak ke sync-flights: Token/Secret tidak valid');
+                return new Response(
+                    JSON.stringify({ error: 'Unauthorized: Akses ditolak. Kunci otorisasi tidak valid.' }), 
+                    { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+                );
+            }
+        }
+
+        // Inisialisasi Supabase Client (service role untuk write access internal)
         const supabase = createClient(
             Deno.env.get('SUPABASE_URL') ?? '',
-            Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+            serviceRoleKey,
         );
 
-        // Ambil RapidAPI Key dari system_config (cek dua kemungkinan nama, handle spasi nyasar)
-        let apiKey = null;
-        const { data: configData1 } = await supabase
-            .from('system_config')
-            .select('value')
-            .ilike('key', '%rapidapi_key%')
-            .maybeSingle();
-        apiKey = configData1?.value?.trim();
+        // ---- 2. PENGAMBILAN API KEY SECARA AMAN ----
+        // Prioritas Utama: Dari Supabase Secrets / Environment Variables (Sangat Aman)
+        let apiKey = Deno.env.get('RAPIDAPI_KEY')?.trim() || Deno.env.get('AERODATABOX_API_KEY')?.trim();
+
+        // Fallback: Jika belum diset di Secrets, cek tabel system_config (internal)
+        if (!apiKey) {
+            const { data: configData1 } = await supabase
+                .from('system_config')
+                .select('value')
+                .ilike('key', '%rapidapi_key%')
+                .maybeSingle();
+            apiKey = configData1?.value?.trim();
+        }
 
         if (!apiKey) {
             const { data: configData2 } = await supabase
@@ -185,7 +211,7 @@ Deno.serve(async (req) => {
 
         if (!apiKey) {
             await supabase.from('system_config').upsert({ key: 'api_status', value: 'no_api_key' });
-            return new Response(JSON.stringify({ error: 'RapidAPI key belum dikonfigurasi' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+            return new Response(JSON.stringify({ error: 'RapidAPI key belum dikonfigurasi di Supabase Secrets (RAPIDAPI_KEY) maupun tabel system_config' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
         }
 
         // HAPUS SEMUA DATA LAMA AGAR TIDAK ADA DATA NYANGKUT
