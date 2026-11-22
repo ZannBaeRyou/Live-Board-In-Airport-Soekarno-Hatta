@@ -1496,10 +1496,35 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Modern Page Banner (for airlines page etc) */
 .modern-page-banner {
-    padding-top: 120px;
-    padding-bottom: 30px;
-    background: linear-gradient(135deg, var(--fids-bg-darkest) 0%, var(--fids-bg-board) 100%);
-    border-bottom: 1px solid var(--fids-border);
+    position: relative;
+    overflow: hidden;
+    padding-top: 100px;
+    padding-bottom: 35px;
+    background: linear-gradient(135deg, #f8fafc 0%, #edf8ff 60%, #e2f2fe 100%) !important;
+    border-bottom: 1px solid #cbd5e1 !important;
+}
+
+.banner-batik-watermark {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 52%;
+    height: 100%;
+    background-image: url('../images/batik-megamendung-clean.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.35;
+    -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
+    mask-image: linear-gradient(to left, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+@media (max-width: 768px) {
+    .banner-batik-watermark {
+        width: 100%;
+        opacity: 0.18;
+    }
 }
 
 /* Badge styles */

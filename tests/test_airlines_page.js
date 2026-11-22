@@ -34,4 +34,15 @@ if (!css.includes('.airline-card-bento')) {
     process.exit(1);
 }
 
-console.log("PASS: Airlines directory bento grid architecture verified");
+// 5. Check Batik Mega Mendung watermark banner presence and styling
+if (!airlinesHtml.includes('class="banner-batik-watermark"') && !airlinesHtml.includes("class='banner-batik-watermark'")) {
+    console.error("FAIL: airlines.html must contain .banner-batik-watermark in header");
+    process.exit(1);
+}
+
+if (!css.includes('.banner-batik-watermark') || !css.includes('batik-megamendung-clean.jpg')) {
+    console.error("FAIL: style.css must define .banner-batik-watermark referencing batik-megamendung-clean.jpg");
+    process.exit(1);
+}
+
+console.log("PASS: Airlines directory bento grid architecture and Batik watermark banner verified");
