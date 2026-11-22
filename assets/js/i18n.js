@@ -216,45 +216,25 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ============================================
-   THEME TOGGLE LOGIC (DARK/LIGHT)
+   THEME SYSTEM (PERMANENT LIGHT MODE ONLY)
    ============================================ */
-/* ============================================
-   THEME TOGGLE LOGIC (LIGHT/DARK WITH PERSISTENCE)
-   ============================================ */
-let currentTheme = localStorage.getItem('liveboard_theme') || 'light';
+let currentTheme = 'light';
 
 function initTheme() {
-    currentTheme = localStorage.getItem('liveboard_theme') || 'light';
-    document.documentElement.setAttribute('data-theme', currentTheme);
-    updateThemeIcon(currentTheme);
+    currentTheme = 'light';
+    document.documentElement.setAttribute('data-theme', 'light');
+    localStorage.removeItem('liveboard_theme');
 }
 
 function toggleTheme(event) {
-    if (event) event.preventDefault();
-    currentTheme = currentTheme === 'light' ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', currentTheme);
-    localStorage.setItem('liveboard_theme', currentTheme);
-    updateThemeIcon(currentTheme);
-    window.dispatchEvent(new Event('themechange'));
+    // Mode gelap telah dihapus sesuai preferensi pengguna
+    document.documentElement.setAttribute('data-theme', 'light');
 }
 
 function executeThemeChange(theme) {
-    currentTheme = theme;
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('liveboard_theme', theme);
-    updateThemeIcon(theme);
-    window.dispatchEvent(new Event('themechange'));
+    document.documentElement.setAttribute('data-theme', 'light');
 }
 
-function updateThemeIcon(theme) {
-    const icon = document.getElementById('theme-toggle-icon');
-    if (icon) {
-        if (theme === 'light') {
-            icon.className = 'fa-solid fa-moon text-slate-700';
-            icon.setAttribute('title', 'Beralih ke Mode Gelap');
-        } else {
-            icon.className = 'fa-solid fa-sun text-amber-400';
-            icon.setAttribute('title', 'Beralih ke Mode Terang');
-        }
-    }
+function updateThemeIcon() {
+    // Toggle icon tidak diperlukan lagi
 }
