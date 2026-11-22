@@ -1585,26 +1585,27 @@ h1, h2, h3, h4, h5, h6 {
     border-bottom: 1px solid #cbd5e1 !important;
 }
 
-/* Ambient Top Sky Batik Mega Mendung Backdrop (Dashboard & Airlines) */
-.dashboard-batik-sky-backdrop {
+/* Bento Airport Hero Batik Mega Mendung Watermark (Dashboard) */
+.hero-batik-watermark {
     position: absolute;
+    right: 0;
     top: 0;
-    left: 0;
-    width: 100%;
-    height: 520px;
+    width: 55%;
+    height: 100%;
     background-image: url('../images/batik-megamendung-clean.jpg');
     background-size: cover;
-    background-position: top center;
-    opacity: 0.20;
-    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.85) 30%, rgba(0,0,0,0.15) 75%, rgba(0,0,0,0) 100%);
-    mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.85) 30%, rgba(0,0,0,0.15) 75%, rgba(0,0,0,0) 100%);
+    background-position: center;
+    opacity: 0.35;
+    -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 100%);
+    mask-image: linear-gradient(to left, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 100%);
     pointer-events: none;
-    z-index: 0;
+    z-index: 1;
+    border-radius: 14px;
 }
 
 @media (max-width: 768px) {
-    .dashboard-batik-sky-backdrop {
-        height: 420px;
+    .hero-batik-watermark {
+        width: 100%;
         opacity: 0.16;
     }
 }

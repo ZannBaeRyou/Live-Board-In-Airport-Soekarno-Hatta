@@ -26,9 +26,6 @@
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-    <!-- Top Sky Batik Mega Mendung Fade-Down Backdrop -->
-    <div class="dashboard-batik-sky-backdrop" aria-hidden="true"></div>
-
     <!-- Page Loader -->
     <div id="page-loader">
         <div class="text-center loader-logo">
@@ -67,47 +64,50 @@
     <main class="container my-4" style="margin-top: 100px !important;">
         <div class="bento-grid">
             <!-- Bento 1: Hero Airport Hub (8 cols) -->
-            <div class="bento-card bento-hero overflow-visible" id="bento-airport-hero">
-                <div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
-                    <div>
-                        <span class="badge rounded-pill mb-2 px-3 py-1 text-uppercase" style="background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; font-size: 0.75rem; letter-spacing: 0.05em; font-weight: 700;">
-                            <span class="status-pulse-dot pulse-green me-1"></span> International Airport Hub
-                        </span>
-                        <h1 class="fs-2 fw-bold mb-2 text-white" data-i18n="hero_title">Soekarno-Hatta (CGK / WIII)</h1>
-                        <p class="text-white-50 small mb-0" style="max-width: 520px; line-height: 1.6;" data-i18n="hero_desc">
-                            Pusat kendali informasi penerbangan digital real-time seluruh terminal. Terintegrasi satelit ADS-B dan AeroDataBox.
-                        </p>
+            <div class="bento-card bento-hero overflow-visible position-relative" id="bento-airport-hero">
+                <div class="hero-batik-watermark"></div>
+                <div class="position-relative" style="z-index: 2;">
+                    <div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
+                        <div>
+                            <span class="badge rounded-pill mb-2 px-3 py-1 text-uppercase" style="background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; font-size: 0.75rem; letter-spacing: 0.05em; font-weight: 700;">
+                                <span class="status-pulse-dot pulse-green me-1"></span> International Airport Hub
+                            </span>
+                            <h1 class="fs-2 fw-bold mb-2 text-white" data-i18n="hero_title">Soekarno-Hatta (CGK / WIII)</h1>
+                            <p class="text-white-50 small mb-0" style="max-width: 520px; line-height: 1.6;" data-i18n="hero_desc">
+                                Pusat kendali informasi penerbangan digital real-time seluruh terminal. Terintegrasi satelit ADS-B dan AeroDataBox.
+                            </p>
+                        </div>
+                        <div class="text-start text-md-end font-digital">
+                            <div class="fs-3 fw-bold text-white mb-0" id="live-clock-wib">--:--:-- <span class="fs-6 text-cyan">WIB</span></div>
+                            <div class="small text-secondary" id="live-clock-utc">--:--:-- UTC</div>
+                        </div>
                     </div>
-                    <div class="text-start text-md-end font-digital">
-                        <div class="fs-3 fw-bold text-white mb-0" id="live-clock-wib">--:--:-- <span class="fs-6 text-cyan">WIB</span></div>
-                        <div class="small text-secondary" id="live-clock-utc">--:--:-- UTC</div>
-                    </div>
-                </div>
 
-                <div class="row g-3 pt-3 border-top border-secondary border-opacity-10">
-                    <div class="col-sm-4">
-                        <span class="small text-secondary text-uppercase d-block" style="font-size: 0.7rem; letter-spacing: 0.05em;" data-i18n="stat_runway">STATUS LANDASAN</span>
-                        <span class="fw-semibold text-white small" id="stat-runway"><i class="fa-solid fa-plane text-success me-1"></i> 07L/25R & 07R/25L Active</span>
+                    <div class="row g-3 pt-3 border-top border-secondary border-opacity-10">
+                        <div class="col-sm-4">
+                            <span class="small text-secondary text-uppercase d-block" style="font-size: 0.7rem; letter-spacing: 0.05em;" data-i18n="stat_runway">STATUS LANDASAN</span>
+                            <span class="fw-semibold text-white small" id="stat-runway"><i class="fa-solid fa-plane text-success me-1"></i> 07L/25R & 07R/25L Active</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <span class="small text-secondary text-uppercase d-block" style="font-size: 0.7rem; letter-spacing: 0.05em;" data-i18n="stat_otp">KETEPATAN WAKTU</span>
+                            <span class="fw-semibold text-white small" id="stat-otp"><i class="fa-solid fa-chart-line text-cyan me-1"></i> 95% On-Time</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <span class="small text-secondary text-uppercase d-block" style="font-size: 0.7rem; letter-spacing: 0.05em;" data-i18n="total_flights">TOTAL PENERBANGAN</span>
+                            <span class="fw-bold font-digital fs-5 text-gold" id="total-flights">0</span>
+                            <span class="small text-secondary ms-1">(<span id="total-active">0</span> aktif)</span>
+                        </div>
                     </div>
-                    <div class="col-sm-4">
-                        <span class="small text-secondary text-uppercase d-block" style="font-size: 0.7rem; letter-spacing: 0.05em;" data-i18n="stat_otp">KETEPATAN WAKTU</span>
-                        <span class="fw-semibold text-white small" id="stat-otp"><i class="fa-solid fa-chart-line text-cyan me-1"></i> 95% On-Time</span>
-                    </div>
-                    <div class="col-sm-4">
-                        <span class="small text-secondary text-uppercase d-block" style="font-size: 0.7rem; letter-spacing: 0.05em;" data-i18n="total_flights">TOTAL PENERBANGAN</span>
-                        <span class="fw-bold font-digital fs-5 text-gold" id="total-flights">0</span>
-                        <span class="small text-secondary ms-1">(<span id="total-active">0</span> aktif)</span>
-                    </div>
-                </div>
 
-                <!-- Integrated Quick Search Bar inside Hero -->
-                <div class="quick-search-wrapper mt-3" id="quick-search-container">
-                    <div class="quick-search-input-box">
-                        <i class="fa-solid fa-magnifying-glass text-cyan"></i>
-                        <input type="text" id="quick-search-input" class="quick-search-input" placeholder="Cari nomor pesawat (GA-206), maskapai, kota tujuan..." data-i18n="quick_search_placeholder">
-                        <span class="badge bg-secondary bg-opacity-25 text-secondary font-digital small">ESC</span>
+                    <!-- Integrated Quick Search Bar inside Hero -->
+                    <div class="quick-search-wrapper mt-3" id="quick-search-container">
+                        <div class="quick-search-input-box">
+                            <i class="fa-solid fa-magnifying-glass text-cyan"></i>
+                            <input type="text" id="quick-search-input" class="quick-search-input" placeholder="Cari nomor pesawat (GA-206), maskapai, kota tujuan..." data-i18n="quick_search_placeholder">
+                            <span class="badge bg-secondary bg-opacity-25 text-secondary font-digital small">ESC</span>
+                        </div>
+                        <div id="quick-search-dropdown" class="quick-search-dropdown"></div>
                     </div>
-                    <div id="quick-search-dropdown" class="quick-search-dropdown"></div>
                 </div>
             </div>
 
