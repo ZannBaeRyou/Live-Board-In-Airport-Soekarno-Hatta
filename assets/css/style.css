@@ -1776,6 +1776,39 @@ span.flap-animate, a.flap-animate {
     box-shadow: 0 0 6px #38bdf8;
 }
 
+.btn-outline-cyan {
+    color: #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    background: rgba(56, 189, 248, 0.05);
+    transition: all 0.2s ease;
+}
+.btn-outline-cyan:hover {
+    color: #ffffff;
+    background: rgba(56, 189, 248, 0.25);
+    border-color: #38bdf8;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+}
+
+.airline-term-btn {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.airline-term-btn:hover,
+.airline-term-btn.active {
+    background: rgba(56, 189, 248, 0.15);
+    border-color: #38bdf8;
+    color: #38bdf8;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+}
+
 /* Airlines Bento Grid (Task 4) */
 .airline-bento-grid {
     display: grid;

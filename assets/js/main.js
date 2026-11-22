@@ -196,6 +196,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initFIDSClock();
     initWeather();
     initQuickSearch();
+    initAirlinesDirectory();
 
     // 5. Scroll animations
     initScrollReveal();
@@ -1886,4 +1887,137 @@ function initQuickSearch() {
             dropdown.classList.remove('show');
         }
     });
+}
+
+// ============================================
+// AIRLINES DIRECTORY BENTO SYSTEM
+// ============================================
+const AIRLINE_DATABASE = [
+    { code: 'GA', name: 'Garuda Indonesia', country: 'Indonesia', category: 'Flag Carrier', terminals: ['3'], zone: 'Row F (Domestik & Intl)', contact: '0804-1-807-807', website: 'https://www.garuda-indonesia.com' },
+    { code: 'SQ', name: 'Singapore Airlines', country: 'Singapore', category: 'Full Service Intl', terminals: ['3'], zone: 'Row C11 - C18 (Intl)', contact: '(021) 5790-3747', website: 'https://www.singaporeair.com' },
+    { code: 'QR', name: 'Qatar Airways', country: 'Qatar', category: '5-Star Airline Intl', terminals: ['3'], zone: 'Row A11 - A20 (Intl)', contact: '(021) 550-2525', website: 'https://www.qatarairways.com' },
+    { code: 'EK', name: 'Emirates', country: 'Uni Emirat Arab', category: 'Global Flagship', terminals: ['3'], zone: 'Row B01 - B10 (Intl)', contact: '(021) 2934-5555', website: 'https://www.emirates.com' },
+    { code: 'NH', name: 'All Nippon Airways (ANA)', country: 'Jepang', category: '5-Star Airline Intl', terminals: ['3'], zone: 'Row C01 - C10 (Intl)', contact: '(021) 5797-4384', website: 'https://www.ana.co.jp' },
+    { code: 'JL', name: 'Japan Airlines (JAL)', country: 'Jepang', category: 'Full Service Intl', terminals: ['3'], zone: 'Row C19 - C26 (Intl)', contact: '(021) 572-3211', website: 'https://www.jal.co.jp' },
+    { code: 'CX', name: 'Cathay Pacific', country: 'Hong Kong', category: 'Full Service Intl', terminals: ['3'], zone: 'Row D01 - D10 (Intl)', contact: '(021) 515-1747', website: 'https://www.cathaypacific.com' },
+    { code: 'EY', name: 'Etihad Airways', country: 'Uni Emirat Arab', category: 'Premium Carrier', terminals: ['3'], zone: 'Row B11 - B20 (Intl)', contact: '(021) 520-2268', website: 'https://www.etihad.com' },
+    { code: 'SV', name: 'Saudia', country: 'Arab Saudi', category: 'National Carrier', terminals: ['3'], zone: 'Row A01 - A10 (Intl)', contact: '(021) 8378-7777', website: 'https://www.saudia.com' },
+    { code: 'TK', name: 'Turkish Airlines', country: 'Turki', category: 'Global Carrier', terminals: ['3'], zone: 'Row B21 - B26 (Intl)', contact: '(021) 550-7186', website: 'https://www.turkishairlines.com' },
+    { code: 'QG', name: 'Citilink', country: 'Indonesia', category: 'LCC Garuda Group', terminals: ['3'], zone: 'Row E (Domestik & Intl)', contact: '0804-1-080-808', website: 'https://www.citilink.co.id' },
+    { code: 'JT', name: 'Lion Air', country: 'Indonesia', category: 'Main Domestic Carrier', terminals: ['1'], zone: 'Row 1-4 (Domestik)', contact: '(021) 6379-8000', website: 'https://www.lionair.co.id' },
+    { code: 'ID', name: 'Batik Air', country: 'Indonesia', category: 'Full Service Domestic & LCC', terminals: ['1', '2'], zone: 'T1 Row 5-8 & T2 Row 4', contact: '(021) 6379-8000', website: 'https://www.batikair.com' },
+    { code: 'IW', name: 'Wings Air', country: 'Indonesia', category: 'Regional Feeder', terminals: ['1'], zone: 'Row 9-10 (Domestik)', contact: '(021) 6379-8000', website: 'https://www.lionair.co.id' },
+    { code: 'SJ', name: 'Sriwijaya Air', country: 'Indonesia', category: 'Domestic Carrier', terminals: ['1'], zone: 'Row 11-14 (Domestik)', contact: '(021) 2927-9777', website: 'https://www.sriwijayaair.co.id' },
+    { code: 'IN', name: 'NAM Air', country: 'Indonesia', category: 'Domestic Carrier', terminals: ['1'], zone: 'Row 15-16 (Domestik)', contact: '(021) 2927-9777', website: 'https://www.flynamair.com' },
+    { code: 'QZ', name: 'AirAsia Indonesia', country: 'Indonesia / Malaysia', category: 'LCC Domestik & Intl', terminals: ['2'], zone: 'Row 1-3 (Domestik & Intl)', contact: 'support.airasia.com', website: 'https://www.airasia.com' },
+    { code: 'IU', name: 'Super Air Jet', country: 'Indonesia', category: 'Millennial LCC', terminals: ['2'], zone: 'Row 4-6 (Domestik)', contact: '(021) 6379-8000', website: 'https://www.superairjet.com' },
+    { code: 'IP', name: 'Pelita Air', country: 'Indonesia', category: 'Medium Service Domestic', terminals: ['2'], zone: 'Row 7-8 (Domestik)', contact: '(021) 2977-8888', website: 'https://www.pelita-air.com' },
+    { code: 'TR', name: 'Scoot', country: 'Singapore', category: 'Low-Cost Carrier Intl', terminals: ['2'], zone: 'Row 2 (Intl)', contact: '+65 3157 6434', website: 'https://www.flyscoot.com' },
+    { code: '3K', name: 'Jetstar Asia', country: 'Singapore', category: 'Low-Cost Carrier Intl', terminals: ['2'], zone: 'Row 3 (Intl)', contact: '(021) 2555-6339', website: 'https://www.jetstar.com' }
+];
+
+function initAirlinesDirectory() {
+    const grid = document.getElementById('airline-bento-grid');
+    if (!grid) return;
+
+    const searchInput = document.getElementById('airline-search-input');
+    const termBtns = document.querySelectorAll('.airline-term-btn');
+    const countBadge = document.getElementById('active-airlines-count');
+
+    let currentTermFilter = 'all';
+    let searchQuery = '';
+
+    function renderCards() {
+        const cleanQuery = searchQuery.toLowerCase().trim();
+        const filtered = AIRLINE_DATABASE.filter(a => {
+            const matchesTerm = currentTermFilter === 'all' || a.terminals.includes(currentTermFilter);
+            const matchesQuery = !cleanQuery || 
+                a.name.toLowerCase().includes(cleanQuery) ||
+                a.code.toLowerCase().includes(cleanQuery) ||
+                a.country.toLowerCase().includes(cleanQuery) ||
+                a.zone.toLowerCase().includes(cleanQuery);
+            return matchesTerm && matchesQuery;
+        });
+
+        if (countBadge) countBadge.textContent = filtered.length;
+
+        if (filtered.length === 0) {
+            grid.innerHTML = `
+                <div class="col-12 text-center py-5">
+                    <div class="p-4 rounded-4" style="background: rgba(18, 22, 34, 0.5); border: 1px dashed var(--border-subtle); max-width: 480px; margin: 0 auto;">
+                        <i class="fa-solid fa-plane-slash text-secondary fs-2 mb-3"></i>
+                        <h5 class="text-white">Tidak Ada Maskapai Ditemukan</h5>
+                        <p class="text-secondary small mb-0">Coba gunakan kata kunci pencarian lain atau pilih tab terminal yang berbeda.</p>
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
+        let html = '';
+        filtered.forEach(a => {
+            const primaryTerm = a.terminals[0] || '3';
+            const termBadgeColor = primaryTerm === '1' ? 'var(--accent-t1)' : (primaryTerm === '2' ? 'var(--accent-t2)' : 'var(--accent-t3)');
+            const termBg = primaryTerm === '1' ? 'rgba(56, 189, 248, 0.1)' : (primaryTerm === '2' ? 'rgba(168, 85, 247, 0.1)' : 'rgba(234, 179, 8, 0.1)');
+
+            html += `
+                <div class="col-md-6 col-lg-4">
+                    <div class="airline-card-bento h-100">
+                        <div>
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <span class="badge font-digital px-2 py-1 mb-2 d-inline-block" style="background: ${termBg}; color: ${termBadgeColor}; border: 1px solid ${termBadgeColor}40; font-size: 0.95rem; font-weight: 700;">
+                                        ${a.code}
+                                    </span>
+                                    <h4 class="brand-font fs-4 text-white mb-1">${a.name}</h4>
+                                    <span class="text-secondary small d-flex align-items-center gap-1">
+                                        <i class="fa-solid fa-globe opacity-50"></i> ${a.country} &bull; ${a.category || 'Scheduled Carrier'}
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="p-3 rounded-3 mb-3" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-subtle);">
+                                <span class="text-secondary d-block small mb-1" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px;">TERMINAL & ZONA CHECK-IN</span>
+                                <strong class="fs-6 d-block" style="font-family: var(--font-mono); color: ${termBadgeColor} !important;">
+                                    Terminal ${a.terminals.join(' & ')} &mdash; ${a.zone}
+                                </strong>
+                                ${a.contact ? `
+                                <div class="mt-2 pt-2 border-top border-secondary border-opacity-10 d-flex align-items-center justify-content-between">
+                                    <span class="text-secondary small" style="font-size: 0.75rem;"><i class="fa-solid fa-phone me-1"></i> ${a.contact}</span>
+                                </div>` : ''}
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 pt-2 mt-auto">
+                            <a href="terminal${primaryTerm}.html?search=${encodeURIComponent(a.name)}" class="btn btn-sm btn-outline-cyan flex-grow-1 d-flex align-items-center justify-content-center gap-2" style="font-size: 0.8rem; padding: 7px 12px; border-radius: 8px;">
+                                <i class="fa-solid fa-list-check"></i> <span>Lihat Jadwal</span>
+                            </a>
+                            ${a.website ? `
+                            <a href="${a.website}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center" style="width: 36px; padding: 7px 0; border-radius: 8px;" title="Website Resmi">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        grid.innerHTML = html;
+    }
+
+    searchInput?.addEventListener('input', (e) => {
+        searchQuery = e.target.value;
+        renderCards();
+    });
+
+    termBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            termBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentTermFilter = btn.dataset.terminal || 'all';
+            renderCards();
+        });
+    });
+
+    renderCards();
 }

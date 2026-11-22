@@ -53,235 +53,64 @@
         </div>
     </nav>
 
-    <!-- Page Header Banner -->
-    <header class="modern-page-banner text-center">
-        <div class="container py-3">
-            <span class="text-gold font-weight-bold d-block mb-2 small text-uppercase" style="letter-spacing: 3px;" data-i18n="airlines_subtitle">CHECK-IN AREA DIRECTORY</span>
-            <h1 class="brand-font text-white fs-1 mb-0 text-uppercase" style="letter-spacing: 1px;" data-i18n="airlines_title">Direktori Maskapai</h1>
+    <!-- Cyber Ops Header Banner -->
+    <header class="hero-fids-container" style="background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.15), transparent 70%); border-bottom: 1px solid var(--border-subtle); padding: 50px 0 35px;">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8 text-start">
+                    <div class="terminal-breadcrumb mb-2">
+                        <a href="index.html">Dashboard</a>
+                        <span class="separator">&gt;</span>
+                        <span>Direktori Maskapai</span>
+                    </div>
+                    <span class="badge bg-primary bg-opacity-10 text-cyan border border-cyan border-opacity-25 px-3 py-1 mb-2 d-inline-flex align-items-center gap-2" style="font-size: 0.78rem;">
+                        <span class="live-pulse" style="width: 7px; height: 7px; background: #38bdf8;"></span> FLEET & TERMINAL DIRECTORY
+                    </span>
+                    <h1 class="brand-font text-white fs-1 mb-2">Direktori Maskapai Soekarno-Hatta</h1>
+                    <p class="text-white-50 mb-0" style="max-width: 600px;">
+                        Pusat informasi pembagian terminal, zona konter check-in, dan kontak resmi seluruh maskapai yang aktif beroperasi di CGK.
+                    </p>
+                </div>
+                <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+                    <div class="d-inline-block text-start p-3 rounded-3" style="background: rgba(18, 22, 34, 0.6); border: 1px solid var(--border-subtle);">
+                        <span class="text-secondary small d-block mb-1" style="font-size: 0.72rem; letter-spacing: 0.5px;">TOTAL MASKAPAI AKTIF</span>
+                        <div class="d-flex align-items-baseline gap-2">
+                            <span class="font-digital fs-2 fw-bold" id="active-airlines-count" style="color: #38bdf8;">21</span>
+                            <span class="text-white-50 small">Maskapai</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </header>
 
     <!-- Main Airlines Directory Section -->
-    <section class="py-5" style="margin-bottom: 50px; margin-top: 30px;">
+    <section class="py-5" style="margin-bottom: 60px;">
         <div class="container">
-            <div class="row mb-4">
-                <div class="col-12 text-center text-md-start">
-                    <p class="text-white-50" style="max-width: 600px;" data-i18n="airlines_intro">Berikut adalah daftar maskapai penerbangan utama yang beroperasi secara aktif di Bandara Internasional Soekarno-Hatta (CGK) beserta lokasi terminal dan zona pembagian konter check-in keberangkatan.</p>
+            <!-- Filter & Search Toolbar -->
+            <div class="row g-3 mb-4 align-items-center">
+                <div class="col-lg-6 col-md-12">
+                    <div class="d-flex flex-wrap gap-2" id="terminal-filter-group">
+                        <button class="airline-term-btn active" data-terminal="all">Semua Terminal</button>
+                        <button class="airline-term-btn" data-terminal="1">Terminal 1 (Domestik)</button>
+                        <button class="airline-term-btn" data-terminal="2">Terminal 2 (LCC)</button>
+                        <button class="airline-term-btn" data-terminal="3">Terminal 3 (Intl & GA)</button>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="position-relative">
+                        <i class="fa-solid fa-magnifying-glass position-absolute text-secondary" style="top: 50%; left: 16px; transform: translateY(-50%);"></i>
+                        <input type="text" id="airline-search-input" class="form-control" placeholder="Cari maskapai, kode IATA (GA, SQ), negara, atau zona konter..." style="background: rgba(18, 22, 34, 0.8); border: 1px solid var(--border-subtle); color: #fff; padding-left: 44px; border-radius: 12px; height: 46px;">
+                    </div>
                 </div>
             </div>
-            
-            <div class="row g-4">
-                <!-- Garuda Indonesia -->
-                <div class="col-md-6 col-lg-4">
-                    <a href="https://www.garuda-indonesia.com" target="_blank" class="airline-card-modern reveal text-decoration-none d-block">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4 class="brand-font fs-3 text-white mb-0">Garuda Indonesia</h4>
-                            <span class="badge-tracker badge-status-inflight">GA</span>
-                        </div>
-                        <div class="border-top border-secondary border-opacity-25 pt-3">
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_term_zone">TERMINAL & ZONA</span>
-                            <strong class="text-gold font-digital fs-5 d-block mb-3">T3 — Row F (Domestik & Intl)</strong>
-                            
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_contact">KONTAK LAYANAN</span>
-                            <span class="d-block text-white-50 font-digital" style="font-size:0.85rem;"><i class="fa-solid fa-phone me-1 text-gold"></i> 0804-1-807-807</span>
-                        </div>
-                    </a>
-                </div>
 
-                <!-- Singapore Airlines -->
-                <div class="col-md-6 col-lg-4">
-                    <a href="https://www.singaporeair.com" target="_blank" class="airline-card-modern reveal delay-1 text-decoration-none d-block">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4 class="brand-font fs-3 text-white mb-0">Singapore Airlines</h4>
-                            <span class="badge-tracker badge-status-transit">SQ</span>
-                        </div>
-                        <div class="border-top border-secondary border-opacity-25 pt-3">
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_term_zone">TERMINAL & ZONA</span>
-                            <strong class="text-gold font-digital fs-5 d-block mb-3">T3 — Row C11 - C18 (Intl)</strong>
-                            
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_contact">KONTAK LAYANAN</span>
-                            <span class="d-block text-white-50 font-digital" style="font-size:0.85rem;"><i class="fa-solid fa-phone me-1 text-gold"></i> (021) 5790-3747</span>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Qatar Airways -->
-                <div class="col-md-6 col-lg-4">
-                    <a href="https://www.qatarairways.com" target="_blank" class="airline-card-modern reveal delay-2 text-decoration-none d-block">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4 class="brand-font fs-3 text-white mb-0">Qatar Airways</h4>
-                            <span class="badge-tracker badge-status-transit">QR</span>
-                        </div>
-                        <div class="border-top border-secondary border-opacity-25 pt-3">
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_term_zone">TERMINAL & ZONA</span>
-                            <strong class="text-gold font-digital fs-5 d-block mb-3">T3 — Row A11 - A20 (Intl)</strong>
-                            
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_contact">KONTAK LAYANAN</span>
-                            <span class="d-block text-white-50 font-digital" style="font-size:0.85rem;"><i class="fa-solid fa-phone me-1 text-gold"></i> (021) 550-2525</span>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Emirates -->
-                <div class="col-md-6 col-lg-4">
-                    <a href="https://www.emirates.com" target="_blank" class="airline-card-modern reveal text-decoration-none d-block">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4 class="brand-font fs-3 text-white mb-0">Emirates</h4>
-                            <span class="badge-tracker badge-status-transit">EK</span>
-                        </div>
-                        <div class="border-top border-secondary border-opacity-25 pt-3">
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_term_zone">TERMINAL & ZONA</span>
-                            <strong class="text-gold font-digital fs-5 d-block mb-3">T3 — Row B01 - B10 (Intl)</strong>
-                            
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_contact">KONTAK LAYANAN</span>
-                            <span class="d-block text-white-50 font-digital" style="font-size:0.85rem;"><i class="fa-solid fa-phone me-1 text-gold"></i> (021) 2934-5555</span>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- All Nippon Airways -->
-                <div class="col-md-6 col-lg-4">
-                    <a href="https://www.ana.co.jp" target="_blank" class="airline-card-modern reveal delay-1 text-decoration-none d-block">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4 class="brand-font fs-3 text-white mb-0">All Nippon Airways</h4>
-                            <span class="badge-tracker badge-status-transit">NH</span>
-                        </div>
-                        <div class="border-top border-secondary border-opacity-25 pt-3">
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_term_zone">TERMINAL & ZONA</span>
-                            <strong class="text-gold font-digital fs-5 d-block mb-3">T3 — Row C01 - C10 (Intl)</strong>
-                            
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_contact">KONTAK LAYANAN</span>
-                            <span class="d-block text-white-50 font-digital" style="font-size:0.85rem;"><i class="fa-solid fa-phone me-1 text-gold"></i> (021) 5797-4382</span>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Etihad Airways -->
-                <div class="col-md-6 col-lg-4">
-                    <a href="https://www.etihad.com" target="_blank" class="airline-card-modern reveal delay-2 text-decoration-none d-block">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4 class="brand-font fs-3 text-white mb-0">Etihad Airways</h4>
-                            <span class="badge-tracker badge-status-transit">EY</span>
-                        </div>
-                        <div class="border-top border-secondary border-opacity-25 pt-3">
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_term_zone">TERMINAL & ZONA</span>
-                            <strong class="text-gold font-digital fs-5 d-block mb-3">T3 — Row A01 - A10 (Intl)</strong>
-                            
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_contact">KONTAK LAYANAN</span>
-                            <span class="d-block text-white-50 font-digital" style="font-size:0.85rem;"><i class="fa-solid fa-phone me-1 text-gold"></i> (021) 520-2020</span>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Citilink -->
-                <div class="col-md-6 col-lg-4">
-                    <a href="https://www.citilink.co.id" target="_blank" class="airline-card-modern reveal text-decoration-none d-block">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4 class="brand-font fs-3 text-white mb-0">Citilink</h4>
-                            <span class="badge-tracker badge-status-inflight">QG</span>
-                        </div>
-                        <div class="border-top border-secondary border-opacity-25 pt-3">
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_term_zone">TERMINAL & ZONA</span>
-                            <strong class="text-gold font-digital fs-5 d-block mb-3">T3 — Row D01 - D08 (Domestik)</strong>
-                            
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_contact">KONTAK LAYANAN</span>
-                            <span class="d-block text-white-50 font-digital" style="font-size:0.85rem;"><i class="fa-solid fa-phone me-1 text-gold"></i> 0804-1-080-808</span>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Japan Airlines -->
-                <div class="col-md-6 col-lg-4">
-                    <a href="https://www.jal.co.jp" target="_blank" class="airline-card-modern reveal delay-1 text-decoration-none d-block">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4 class="brand-font fs-3 text-white mb-0">Japan Airlines</h4>
-                            <span class="badge-tracker badge-status-transit">JL</span>
-                        </div>
-                        <div class="border-top border-secondary border-opacity-25 pt-3">
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_term_zone">TERMINAL & ZONA</span>
-                            <strong class="text-gold font-digital fs-5 d-block mb-3">T3 — Row C01 - C08 (Intl)</strong>
-                            
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_contact">KONTAK LAYANAN</span>
-                            <span class="d-block text-white-50 font-digital" style="font-size:0.85rem;"><i class="fa-solid fa-phone me-1 text-gold"></i> (021) 5797-3600</span>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Korean Air -->
-                <div class="col-md-6 col-lg-4">
-                    <a href="https://www.koreanair.com" target="_blank" class="airline-card-modern reveal delay-2 text-decoration-none d-block">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4 class="brand-font fs-3 text-white mb-0">Korean Air</h4>
-                            <span class="badge-tracker badge-status-transit">KE</span>
-                        </div>
-                        <div class="border-top border-secondary border-opacity-25 pt-3">
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_term_zone">TERMINAL & ZONA</span>
-                            <strong class="text-gold font-digital fs-5 d-block mb-3">T3 — Row B11 - B20 (Intl)</strong>
-                            
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_contact">KONTAK LAYANAN</span>
-                            <span class="d-block text-white-50 font-digital" style="font-size:0.85rem;"><i class="fa-solid fa-phone me-1 text-gold"></i> (021) 5797-3800</span>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Lion Air -->
-                <div class="col-md-6 col-lg-4">
-                    <a href="https://www.lionair.co.id" target="_blank" class="airline-card-modern reveal text-decoration-none d-block">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4 class="brand-font fs-3 text-white mb-0">Lion Air</h4>
-                            <span class="badge-tracker badge-status-inflight">JT</span>
-                        </div>
-                        <div class="border-top border-secondary border-opacity-25 pt-3">
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_term_zone">TERMINAL & ZONA</span>
-                            <strong class="text-gold font-digital fs-5 d-block mb-3">T1 (Domestik) / T2 (Intl)</strong>
-                            
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_contact">KONTAK LAYANAN</span>
-                            <span class="d-block text-white-50 font-digital" style="font-size:0.85rem;"><i class="fa-solid fa-phone me-1 text-gold"></i> (021) 6379-8000</span>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Batik Air -->
-                <div class="col-md-6 col-lg-4">
-                    <a href="https://www.batikair.com" target="_blank" class="airline-card-modern reveal delay-1 text-decoration-none d-block">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4 class="brand-font fs-3 text-white mb-0">Batik Air</h4>
-                            <span class="badge-tracker badge-status-inflight">ID</span>
-                        </div>
-                        <div class="border-top border-secondary border-opacity-25 pt-3">
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_term_zone">TERMINAL & ZONA</span>
-                            <strong class="text-gold font-digital fs-5 d-block mb-3">T1 — Row 5-8 (Domestik)</strong>
-                            
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_contact">KONTAK LAYANAN</span>
-                            <span class="d-block text-white-50 font-digital" style="font-size:0.85rem;"><i class="fa-solid fa-phone me-1 text-gold"></i> (021) 633-8345</span>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- AirAsia -->
-                <div class="col-md-6 col-lg-4">
-                    <a href="https://www.airasia.com" target="_blank" class="airline-card-modern reveal delay-2 text-decoration-none d-block">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4 class="brand-font fs-3 text-white mb-0">AirAsia</h4>
-                            <span class="badge-tracker badge-status-inflight">QZ</span>
-                        </div>
-                        <div class="border-top border-secondary border-opacity-25 pt-3">
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_term_zone">TERMINAL & ZONA</span>
-                            <strong class="text-gold font-digital fs-5 d-block mb-3">T2 — Row E01-E06 (Intl)</strong>
-                            
-                            <span class="text-muted d-block small mb-1" style="font-size:0.7rem; letter-spacing:0.5px" data-i18n="airlines_contact">KONTAK LAYANAN</span>
-                            <span class="d-block text-white-50 font-digital" style="font-size:0.85rem;"><i class="fa-solid fa-phone me-1 text-gold"></i> 0804-1-333-333</span>
-                        </div>
-                    </a>
-                </div>
+            <!-- Bento Fleet Grid -->
+            <div class="row g-4" id="airline-bento-grid">
+                <!-- Dynamically rendered via initAirlinesDirectory() -->
             </div>
         </div>
     </section>
-
-            </div>
-        </div>
-    </section>
-
     <!-- Footer -->
         <footer class="footer-fids mt-5">
         <div class="container">
