@@ -256,7 +256,21 @@ h1, h2, h3, h4, h5, h6 {
     z-index: 2;
     letter-spacing: -0.2px;
 }
-@media (max-width: 991px) {
+/* Responsive Grid for Tablets (768px - 991.98px) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .bento-hero {
+        grid-column: span 8;
+    }
+    .bento-weather {
+        grid-column: span 4;
+    }
+    .bento-terminal-card {
+        grid-column: span 4;
+    }
+}
+
+/* Responsive Grid for Mobile (< 768px) */
+@media (max-width: 767.98px) {
     .bento-hero, .bento-weather, .bento-terminal-card {
         grid-column: span 12;
     }
