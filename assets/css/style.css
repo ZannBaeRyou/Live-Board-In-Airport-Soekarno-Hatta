@@ -274,6 +274,34 @@ h1, h2, h3, h4, h5, h6 {
     .bento-hero, .bento-weather, .bento-terminal-card {
         grid-column: span 12;
     }
+
+    /* Terminal Carousel for Mobile Snap */
+    .terminal-carousel-mobile {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        padding: 4px 2px 14px 2px;
+        grid-column: span 12;
+        margin: 0 -0.5rem;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+    .terminal-carousel-mobile .bento-terminal-card {
+        flex: 0 0 85%;
+        scroll-snap-align: start;
+        margin-bottom: 0;
+    }
+    .terminal-card-photo {
+        height: 80px;
+    }
+}
+
+@media (min-width: 768px) {
+    .terminal-carousel-mobile {
+        display: contents;
+    }
 }
 
 /* Quick Search Component */
