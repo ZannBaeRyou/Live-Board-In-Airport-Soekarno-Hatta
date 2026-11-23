@@ -1613,11 +1613,11 @@ function openModal(flight) {
             <div class="modal-header-row">
                 <div>
                     <div class="d-flex align-items-center gap-2 mb-1">
-                        <span class="modal-terminal-badge px-2 py-1 rounded small fw-bold font-digital" style="font-size: 0.75rem;">${termName}</span>
+                        <span class="modal-terminal-badge px-3 py-1 rounded-pill small fw-bold font-digital" style="font-size: 0.75rem;">${termName}</span>
                         <span class="text-secondary small fw-medium" data-i18n="modal_flight_status">${typeof __t === 'function' ? __t('modal_flight_status') : 'STATUS PENERBANGAN'}</span>
                     </div>
                     <div class="d-flex align-items-center gap-2">
-                        ${(flight.logo && (flight.logo.startsWith('http') || flight.logo.startsWith('/') || flight.logo.startsWith('assets/') || flight.logo.includes('.'))) ? `<img src="${encodeURI(flight.logo)}" alt="" class="rounded bg-white p-1" style="width: 28px; height: 28px; object-fit: contain; border: 1px solid #e2e8f0;" onerror="this.style.display='none'">` : ''}
+                        ${(flight.logo && (flight.logo.startsWith('http') || flight.logo.startsWith('/') || flight.logo.startsWith('assets/') || flight.logo.includes('.'))) ? `<img src="${encodeURI(flight.logo)}" alt="" class="rounded-3 bg-white p-1" style="width: 28px; height: 28px; object-fit: contain; border: 1px solid #e2e8f0;" onerror="this.style.display='none'">` : ''}
                         <h2 class="modal-flight-title fs-3 fw-bold mb-0 text-white font-digital">${flightNum} <span class="modal-flight-airline fs-5 fw-normal text-secondary">&bull; ${airlineName}</span></h2>
                     </div>
                 </div>
@@ -1666,7 +1666,7 @@ function openModal(flight) {
 
             <!-- Action / Close Button -->
             <div class="mt-3">
-                <button class="btn btn-modern-outline w-100 py-2 fids-modal-close" onclick="closeModal()" data-i18n="modal_close">${closeBtnText}</button>
+                <button class="btn btn-modern-outline rounded-pill w-100 py-2 fids-modal-close" onclick="closeModal()" data-i18n="modal_close">${closeBtnText}</button>
             </div>
         </div>
     `;

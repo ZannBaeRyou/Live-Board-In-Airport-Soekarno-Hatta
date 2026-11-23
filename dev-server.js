@@ -20,7 +20,10 @@ const MIME = {
 const server = http.createServer((req, res) => {
   let reqPath = decodeURIComponent(req.url.split('?')[0]);
   if (reqPath === '/') reqPath = '/index.html';
-  const filePath = path.join(__dirname, reqPath);
+  let filePath = path.join(__dirname, reqPath);
+  if (!fs.existsSync(filePath) && fs.existsSync(filePath + '.html')) {
+    filePath += '.html';
+  }
 
   fs.readFile(filePath, (err, data) => {
     if (err) {

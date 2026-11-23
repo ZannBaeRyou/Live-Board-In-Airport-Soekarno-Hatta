@@ -1313,7 +1313,7 @@ h1, h2, h3, h4, h5, h6 {
 .dashboard-live-counter {
     background: var(--fids-bg-board);
     border: 1px solid var(--fids-border);
-    border-radius: var(--radius-fids);
+    border-radius: 9999px !important;
     padding: 25px 30px;
 }
 
@@ -1452,7 +1452,7 @@ h1, h2, h3, h4, h5, h6 {
 .fids-dashboard-container {
     background-color: var(--fids-bg-board);
     border: 1px solid var(--fids-border);
-    border-radius: var(--radius-fids);
+    border-radius: 9999px !important;
     padding: 30px;
     margin-top: 0;
     position: relative;
@@ -1465,7 +1465,7 @@ h1, h2, h3, h4, h5, h6 {
     background-color: #ffffff !important;
     border: 1px solid #cbd5e1 !important;
     color: #0f172a !important;
-    border-radius: var(--radius-fids);
+    border-radius: 9999px !important;
     padding: 14px 18px; /* Increased padding for touch targets */
     font-size: 1rem; /* Prevent iOS zoom */
     transition: var(--transition-fids);
@@ -1594,7 +1594,7 @@ h1, h2, h3, h4, h5, h6 {
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--fids-border);
     border-left: 3px solid transparent;
-    border-radius: var(--radius-fids);
+    border-radius: 9999px !important;
     margin-bottom: 12px;
     padding: 18px 20px;
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1773,7 +1773,7 @@ h1, h2, h3, h4, h5, h6 {
 .fids-modal-content.fids-modal-executive {
     max-width: 620px;
     padding: 28px 24px;
-    border-radius: 18px;
+    border-radius: 24px !important;
     background: #ffffff;
     border: 1px solid #e2e8f0;
     box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
@@ -1788,8 +1788,13 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 16px;
 }
 
+.modal-terminal-badge {
+    border-radius: 9999px !important;
+    padding: 4px 12px !important;
+}
+
 .modal-highlight-banner {
-    border-radius: 14px;
+    border-radius: 18px !important;
     padding: 18px 22px;
     margin-bottom: 18px;
     display: flex;
@@ -1852,7 +1857,7 @@ h1, h2, h3, h4, h5, h6 {
     background: #f8fafc;
     border: 1px solid #e2e8f0;
     padding: 12px 14px;
-    border-radius: 12px;
+    border-radius: 16px !important;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -1861,13 +1866,14 @@ h1, h2, h3, h4, h5, h6 {
 .modal-info-card.aircraft-card {
     background: #f0fdf4;
     border-color: #bbf7d0;
+    border-radius: 16px !important;
 }
 
 /* Responsive Compact Modal for Mobile (< 768px) */
 @media (max-width: 767.98px) {
     .fids-modal-content.fids-modal-executive {
         padding: 18px 16px calc(18px + env(safe-area-inset-bottom)) !important;
-        border-radius: 20px 20px 0 0;
+        border-radius: 24px !important;
     }
     .modal-header-row {
         padding-bottom: 10px;
@@ -1884,6 +1890,7 @@ h1, h2, h3, h4, h5, h6 {
     .modal-compact-highlight {
         padding: 10px 14px;
         margin-bottom: 10px;
+        border-radius: 18px !important;
         display: flex;
         flex-direction: row !important;
         justify-content: space-between !important;
@@ -1907,22 +1914,24 @@ h1, h2, h3, h4, h5, h6 {
     .modal-info-card,
     .modal-info-card-compact {
         padding: 8px 10px !important;
-        border-radius: 10px !important;
+        border-radius: 14px !important;
     }
     .modal-info-card.aircraft-card {
         grid-column: span 2 !important;
         flex-direction: row !important;
         justify-content: space-between !important;
         align-items: center !important;
-        padding: 6px 12px !important;
+        padding: 6px 14px !important;
+        border-radius: 20px !important;
     }
     .modal-info-card.aircraft-card strong {
         font-size: 0.85rem !important;
         margin: 0 !important;
     }
     .fids-modal-close {
-        padding: 7px 14px !important;
+        padding: 8px 14px !important;
         font-size: 0.85rem !important;
+        border-radius: 9999px !important;
     }
 }
 
@@ -2069,7 +2078,7 @@ h1, h2, h3, h4, h5, h6 {
 .airline-card-modern {
     background-color: var(--fids-bg-row);
     border: 1px solid var(--fids-border);
-    border-radius: var(--radius-fids);
+    border-radius: 9999px !important;
     padding: 25px;
     transition: var(--transition-fids);
 }
@@ -2416,7 +2425,7 @@ h1, h2, h3, h4, h5, h6 {
     letter-spacing: 1px;
     text-transform: uppercase;
     font-size: 0.8rem;
-    border-radius: var(--radius-fids);
+    border-radius: 9999px !important;
     transition: var(--transition-fids);
     cursor: pointer;
 }

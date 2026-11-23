@@ -252,7 +252,8 @@
         function setPage(url) {
             currentPage = url;
             const iframe = document.getElementById('preview-iframe');
-            iframe.src = url;
+            const cacheBuster = (url.includes('?') ? '&' : '?') + 't=' + Date.now();
+            iframe.src = url + cacheBuster;
 
             const directLink = document.getElementById('direct-link');
             directLink.href = url;
