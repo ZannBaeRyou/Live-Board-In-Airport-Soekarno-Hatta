@@ -1788,26 +1788,84 @@ h1, h2, h3, h4, h5, h6 {
 
 .modal-header-row {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    flex-direction: column;
+    align-items: stretch;
     border-bottom: 1px solid #f1f5f9;
-    padding-bottom: 16px;
-    margin-bottom: 16px;
+    padding-bottom: 14px;
+    margin-bottom: 14px;
+}
+
+.modal-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header-main {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .modal-terminal-badge {
     border-radius: 9999px !important;
     padding: 4px 12px !important;
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+.modal-status-badge {
+    border-radius: 9999px !important;
+    padding: 4px 12px !important;
+    font-size: 0.78rem;
+    white-space: nowrap;
 }
 
 .modal-highlight-banner {
-    border-radius: 18px !important;
-    padding: 18px 22px;
-    margin-bottom: 18px;
+    border-radius: 20px !important;
+    padding: 16px 20px;
+    margin-bottom: 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     transition: var(--transition-fids);
+}
+
+.highlight-banner-left {
+    text-align: left;
+    min-width: 0;
+    flex: 1 1 50%;
+}
+
+.highlight-banner-right {
+    text-align: right;
+    min-width: 0;
+    flex: 1 1 50%;
+}
+
+.highlight-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.modal-highlight-val {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.modal-highlight-sub-val {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #0f172a !important;
+}
+
+[data-theme="dark"] .modal-highlight-sub-val {
+    color: #ffffff !important;
 }
 
 /* Terminal Theme 1: Crimson Red */
@@ -1863,35 +1921,137 @@ h1, h2, h3, h4, h5, h6 {
 .modal-info-card {
     background: #f8fafc;
     border: 1px solid #e2e8f0;
-    padding: 12px 14px;
+    padding: 10px 12px;
     border-radius: 16px !important;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    min-width: 0;
+    height: 100%;
+}
+
+.modal-card-label {
+    font-size: 0.68rem;
+    color: #64748b;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.modal-card-value-wrap {
+    min-height: 24px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 3px 0;
+}
+
+.modal-card-city {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.modal-card-airport-code {
+    font-size: 0.65rem;
+    background: #e2e8f0;
+    color: #475569;
+    font-weight: 700;
+    border-radius: 9999px !important;
+    padding: 2px 6px;
+    flex-shrink: 0;
+}
+
+.modal-card-val {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.modal-card-sub {
+    font-size: 0.72rem;
+    color: #64748b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .modal-info-card.aircraft-card {
-    background: #f0fdf4;
-    border-color: #bbf7d0;
-    border-radius: 16px !important;
+    background: #f0fdf4 !important;
+    border: 1px solid #bbf7d0 !important;
+    border-radius: 9999px !important;
+    padding: 8px 16px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+}
+
+.aircraft-card-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.aircraft-label {
+    font-size: 0.68rem;
+    color: #166534;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.aircraft-val {
+    font-size: 0.92rem;
+    color: #15803d;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.aircraft-card-badge-wrap {
+    flex-shrink: 0;
+}
+
+.aircraft-category-pill {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #166534;
+    background: rgba(22, 163, 74, 0.12);
+    border: 1px solid rgba(22, 163, 74, 0.25);
+    border-radius: 9999px !important;
+    padding: 3px 10px;
+    white-space: nowrap;
 }
 
 /* Responsive Compact Modal for Mobile (< 768px) */
 @media (max-width: 767.98px) {
     .fids-modal-content.fids-modal-executive {
-        padding: 18px 16px calc(18px + env(safe-area-inset-bottom)) !important;
+        padding: 16px 14px calc(16px + env(safe-area-inset-bottom)) !important;
         border-radius: 24px !important;
     }
     .modal-header-row {
-        padding-bottom: 10px;
-        margin-bottom: 12px;
+        padding-bottom: 8px;
+        margin-bottom: 10px;
     }
     .modal-flight-title {
-        font-size: 1.3rem !important;
+        font-size: 1.2rem !important;
         line-height: 1.2;
+        color: #0f172a !important;
     }
     .modal-flight-airline {
-        font-size: 0.85rem !important;
+        font-size: 0.82rem !important;
     }
     .modal-highlight-banner,
     .modal-compact-highlight {
@@ -1905,13 +2065,14 @@ h1, h2, h3, h4, h5, h6 {
         gap: 10px;
     }
     .modal-highlight-val {
-        font-size: 1.5rem !important;
+        font-size: 1.45rem !important;
         line-height: 1 !important;
         margin-top: 2px !important;
     }
     .modal-highlight-sub-val {
         font-size: 1.05rem !important;
         margin-top: 2px !important;
+        text-align: right !important;
     }
     .modal-info-grid {
         grid-template-columns: 1fr 1fr !important;
@@ -1929,11 +2090,7 @@ h1, h2, h3, h4, h5, h6 {
         justify-content: space-between !important;
         align-items: center !important;
         padding: 6px 14px !important;
-        border-radius: 20px !important;
-    }
-    .modal-info-card.aircraft-card strong {
-        font-size: 0.85rem !important;
-        margin: 0 !important;
+        border-radius: 9999px !important;
     }
     .fids-modal-close {
         padding: 8px 14px !important;

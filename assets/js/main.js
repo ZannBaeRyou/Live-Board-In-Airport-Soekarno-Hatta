@@ -1593,8 +1593,13 @@ function openModal(flight) {
         }
     }
 
+    const rawLoc = isDep ? (flight.destination || 'Destination') : (flight.origin || 'Origin');
+    const locMatch = rawLoc.match(/^(.*?)\s*\(([^)]+)\)$/);
+    const locCity = locMatch ? locMatch[1].trim() : rawLoc;
+    const locCode = locMatch ? locMatch[2].trim() : '';
+
     const col1Title = isDep ? (typeof __t === 'function' ? __t('modal_destination_city') : 'KOTA TUJUAN') : (typeof __t === 'function' ? __t('modal_origin_city') : 'KOTA ASAL');
-    const col1Val = isDep ? (flight.destination || 'Destination') : (flight.origin || 'Origin');
+    const col1Val = rawLoc;
     const col1Sub = `${typeof currentLang !== 'undefined' && currentLang === 'en' ? 'Scheduled' : 'Jadwal'}: ${flight.time || '--:--'} WIB`;
 
     const col2Title = isDep ? (typeof __t === 'function' ? __t('modal_counter_island') : 'KONTER CHECK-IN') : (typeof __t === 'function' ? __t('modal_exit_gate') : 'PINTU KELUAR');
@@ -1611,56 +1616,60 @@ function openModal(flight) {
         <div class="fids-modal-content fids-modal-executive ${themeClass}" style="position: relative;">
             <!-- Header Row -->
             <div class="modal-header-row">
-                <div>
-                    <div class="d-flex align-items-center gap-2 mb-1">
-                        <span class="modal-terminal-badge px-3 py-1 rounded-pill small fw-bold font-digital" style="font-size: 0.75rem;">${termName}</span>
-                        <span class="text-secondary small fw-medium" data-i18n="modal_flight_status">${typeof __t === 'function' ? __t('modal_flight_status') : 'STATUS PENERBANGAN'}</span>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        ${(flight.logo && (flight.logo.startsWith('http') || flight.logo.startsWith('/') || flight.logo.startsWith('assets/') || flight.logo.includes('.'))) ? `<img src="${encodeURI(flight.logo)}" alt="" class="rounded-3 bg-white p-1" style="width: 28px; height: 28px; object-fit: contain; border: 1px solid #e2e8f0;" onerror="this.style.display='none'">` : ''}
-                        <h2 class="modal-flight-title fs-3 fw-bold mb-0 text-white font-digital">${flightNum} <span class="modal-flight-airline fs-5 fw-normal text-secondary">&bull; ${airlineName}</span></h2>
-                    </div>
-                </div>
-                <div class="text-end">
-                    <span class="badge rounded-pill px-3 py-2 fw-bold d-inline-flex align-items-center gap-2 font-digital" style="background: ${statusBg}; color: ${statusText}; border: 1px solid ${statusBorder}; font-size: 0.8rem;">
+                <div class="d-flex justify-content-between align-items-center w-100 modal-header-top">
+                    <span class="modal-terminal-badge px-3 py-1 rounded-pill small fw-bold font-digital">${termName}</span>
+                    <span class="badge rounded-pill px-3 py-1.5 fw-bold d-inline-flex align-items-center gap-2 font-digital modal-status-badge" style="background: ${statusBg}; color: ${statusText}; border: 1px solid ${statusBorder};">
                         <span class="status-pulse-dot" style="background: ${dotColor};"></span> ${status}
                     </span>
+                </div>
+                <div class="d-flex align-items-center gap-2 w-100 modal-header-main mt-2">
+                    ${(flight.logo && (flight.logo.startsWith('http') || flight.logo.startsWith('/') || flight.logo.startsWith('assets/') || flight.logo.includes('.'))) ? `<img src="${encodeURI(flight.logo)}" alt="" class="rounded-3 bg-white p-1 modal-airline-emblem" style="width: 28px; height: 28px; object-fit: contain; border: 1px solid #e2e8f0;" onerror="this.style.display='none'">` : ''}
+                    <h2 class="modal-flight-title fw-bold mb-0 font-digital">${flightNum} <span class="modal-flight-airline fw-normal text-secondary">&bull; ${airlineName}</span></h2>
                 </div>
             </div>
 
             <!-- Big Highlight Banner -->
             <div class="modal-highlight-banner modal-compact-highlight">
-                <div>
-                    <span class="small fw-bold text-uppercase d-block" style="color: ${termColor}; letter-spacing: 0.5px; font-size: 0.75rem;">${highlightTitle}</span>
-                    <div class="modal-highlight-val fs-1 fw-bold font-digital" style="line-height: 1.1; margin-top: 4px;">${highlightVal}</div>
+                <div class="highlight-banner-left">
+                    <span class="small fw-bold text-uppercase d-block highlight-label" style="color: ${termColor}; letter-spacing: 0.5px; font-size: 0.72rem;">${highlightTitle}</span>
+                    <div class="modal-highlight-val fs-1 fw-bold font-digital" style="line-height: 1.1; margin-top: 2px;">${highlightVal}</div>
                 </div>
-                <div class="text-md-end text-start">
-                    <span class="small fw-bold text-uppercase d-block" style="color: ${termColor}; letter-spacing: 0.5px; font-size: 0.75rem;">${subRightTitle}</span>
-                    <div class="modal-highlight-sub-val fs-3 fw-bold font-digital text-white" style="margin-top: 4px;">${subRightVal}</div>
+                <div class="highlight-banner-right text-end">
+                    <span class="small fw-bold text-uppercase d-block highlight-label" style="color: ${termColor}; letter-spacing: 0.5px; font-size: 0.72rem;">${subRightTitle}</span>
+                    <div class="modal-highlight-sub-val fs-3 fw-bold font-digital" style="margin-top: 2px;">${subRightVal}</div>
                 </div>
             </div>
 
             <!-- 3 Info Box Grid -->
             <div class="modal-info-grid">
-                <!-- Col 1 -->
+                <!-- Col 1: Destination / Origin -->
                 <div class="modal-info-card modal-info-card-compact">
-                    <span class="text-secondary small fw-bold text-uppercase" style="font-size: 0.7rem;">${col1Title}</span>
-                    <strong class="text-white fs-6 mt-1 mb-1 font-digital text-uppercase">${col1Val}</strong>
-                    <span class="text-secondary small" style="font-size: 0.72rem;">${col1Sub}</span>
+                    <span class="text-secondary small fw-bold text-uppercase modal-card-label">${col1Title}</span>
+                    <div class="modal-card-value-wrap">
+                        <strong class="modal-card-city text-uppercase font-digital">${locCity}</strong>
+                        ${locCode ? `<span class="modal-card-airport-code badge rounded-pill">${locCode}</span>` : ''}
+                    </div>
+                    <span class="text-secondary small modal-card-sub">${col1Sub}</span>
                 </div>
 
-                <!-- Col 2 -->
+                <!-- Col 2: Check-in / Gate -->
                 <div class="modal-info-card modal-info-card-compact">
-                    <span class="text-secondary small fw-bold text-uppercase" style="font-size: 0.7rem;">${col2Title}</span>
-                    <strong class="text-white fs-6 mt-1 mb-1 font-digital">${col2Val}</strong>
-                    <span class="text-secondary small" style="font-size: 0.72rem;">${col2Sub}</span>
+                    <span class="text-secondary small fw-bold text-uppercase modal-card-label">${col2Title}</span>
+                    <div class="modal-card-value-wrap">
+                        <strong class="modal-card-val font-digital">${col2Val}</strong>
+                    </div>
+                    <span class="text-secondary small modal-card-sub">${col2Sub}</span>
                 </div>
 
                 <!-- Col 3: Aircraft Model -->
                 <div class="modal-info-card modal-info-card-compact aircraft-card">
-                    <span class="small fw-bold text-uppercase" style="color: #166534; font-size: 0.7rem;">${col3Title}</span>
-                    <strong class="fs-6 mt-1 mb-1 font-digital" style="color: #15803d;">${col3Val}</strong>
-                    <span class="small" style="color: #16a34a; font-size: 0.72rem;">${col3Sub}</span>
+                    <div class="aircraft-card-info">
+                        <span class="small fw-bold text-uppercase aircraft-label">${col3Title}</span>
+                        <strong class="aircraft-val font-digital">${col3Val}</strong>
+                    </div>
+                    <div class="aircraft-card-badge-wrap">
+                        <span class="aircraft-category-pill badge rounded-pill">${col3Sub}</span>
+                    </div>
                 </div>
             </div>
 
