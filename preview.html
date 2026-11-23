@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liveboard — Mobile & Tablet Interactive Device Simulator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-canvas: #090d16;
+            --surface-bar: #131b2e;
+            --border-bar: #1e293b;
+            --accent-cyan: #0284c7;
+            --accent-gold: #f59e0b;
+        }
+        body {
+            background-color: var(--bg-canvas);
+            color: #f8fafc;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Control Bar */
+        .preview-topbar {
+            background: var(--surface-bar);
+            border-bottom: 1px solid var(--border-bar);
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+        .brand-pill {
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #38bdf8;
+            font-size: 1.1rem;
+        }
+        .btn-device-toggle {
+            background: #1e293b;
+            color: #94a3b8;
+            border: 1px solid #334155;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .btn-device-toggle:hover {
+            color: #f8fafc;
+            border-color: #0284c7;
+        }
+        .btn-device-toggle.active {
+            background: #0284c7;
+            color: #ffffff;
+            border-color: #38bdf8;
+            box-shadow: 0 0 12px rgba(2, 132, 199, 0.4);
+        }
+
+        .btn-page-toggle {
+            background: rgba(255, 255, 255, 0.05);
+            color: #cbd5e1;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .btn-page-toggle:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+        }
+        .btn-page-toggle.active {
+            background: #f59e0b;
+            color: #000;
+            border-color: #fbbf24;
+            font-weight: 700;
+        }
+
+        /* Device Simulator Canvas */
+        .simulator-canvas {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 30px 20px 60px 20px;
+            background: radial-gradient(circle at 50% 20%, #1e293b 0%, #090d16 80%);
+        }
+
+        /* Smartphone Hardware Mockup Frame */
+        .phone-frame {
+            background: #020617;
+            border: 12px solid #1e293b;
+            border-radius: 54px;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Dynamic Island / Camera Notch */
+        .phone-island {
+            width: 110px;
+            height: 26px;
+            background: #000000;
+            border-radius: 20px;
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 50;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 12px;
+        }
+        .phone-island-camera {
+            width: 10px;
+            height: 10px;
+            background: #082f49;
+            border-radius: 50%;
+            border: 2px solid #0f172a;
+        }
+
+        /* Phone Screen Iframe */
+        .phone-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #ffffff;
+            border-radius: 42px;
+        }
+
+        /* Tablet Frame Variant */
+        .phone-frame.tablet {
+            border-width: 16px;
+            border-radius: 36px;
+        }
+        .phone-frame.tablet .phone-island {
+            display: none;
+        }
+        .phone-frame.tablet .phone-iframe {
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Topbar Controller -->
+    <header class="preview-topbar">
+        <div class="brand-pill">
+            <i class="fa-solid fa-mobile-screen text-cyan"></i>
+            <span>Liveboard Mobile Simulator</span>
+        </div>
+
+        <!-- Device Selector -->
+        <div class="d-flex align-items-center gap-2">
+            <span class="text-secondary small fw-semibold me-1"><i class="fa-solid fa-display me-1"></i>Device:</span>
+            <button class="btn-device-toggle active" onclick="setDevice(390, 844, 'iPhone 15 / 14 Pro')">
+                <i class="fa-solid fa-mobile me-1"></i> iPhone 15 (390px)
+            </button>
+            <button class="btn-device-toggle" onclick="setDevice(360, 780, 'Galaxy S23 (Small)')">
+                <i class="fa-solid fa-mobile-screen-button me-1"></i> Galaxy (360px)
+            </button>
+            <button class="btn-device-toggle" onclick="setDevice(768, 960, 'iPad Mini / Tablet', true)">
+                <i class="fa-solid fa-tablet-screen-button me-1"></i> Tablet iPad (768px)
+            </button>
+        </div>
+
+        <!-- Page Selector -->
+        <div class="d-flex align-items-center gap-2">
+            <span class="text-secondary small fw-semibold me-1"><i class="fa-solid fa-compass me-1"></i>Halaman:</span>
+            <button class="btn-page-toggle active" onclick="setPage('index.html')">
+                <i class="fa-solid fa-house me-1"></i> Beranda
+            </button>
+            <button class="btn-page-toggle" onclick="setPage('terminal3.html')">
+                <i class="fa-solid fa-plane-departure me-1"></i> Terminal 3
+            </button>
+            <button class="btn-page-toggle" onclick="setPage('terminal1.html')">
+                Terminal 1
+            </button>
+            <button class="btn-page-toggle" onclick="setPage('terminal2.html')">
+                Terminal 2
+            </button>
+            <button class="btn-page-toggle" onclick="setPage('airlines.html')">
+                <i class="fa-solid fa-passport me-1"></i> Maskapai
+            </button>
+        </div>
+
+        <!-- Direct Link -->
+        <div>
+            <a id="direct-link" href="index.html" target="_blank" class="btn btn-sm btn-outline-info rounded-pill px-3 fw-semibold">
+                Buka Tab Penuh <i class="fa-solid fa-arrow-up-right-from-square ms-1"></i>
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Canvas -->
+    <main class="simulator-canvas">
+        <div class="phone-frame" id="device-frame" style="width: 390px; height: 844px;">
+            <div class="phone-island">
+                <div class="phone-island-camera"></div>
+            </div>
+            <iframe id="preview-iframe" class="phone-iframe" src="index.html"></iframe>
+        </div>
+    </main>
+
+    <script>
+        let currentWidth = 390;
+        let currentHeight = 844;
+        let currentPage = 'index.html';
+
+        function setDevice(w, h, name, isTablet = false) {
+            currentWidth = w;
+            currentHeight = h;
+            const frame = document.getElementById('device-frame');
+            frame.style.width = w + 'px';
+            frame.style.height = h + 'px';
+            
+            if (isTablet) {
+                frame.classList.add('tablet');
+            } else {
+                frame.classList.remove('tablet');
+            }
+
+            // Update button active states
+            const buttons = document.querySelectorAll('.btn-device-toggle');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+
+        function setPage(url) {
+            currentPage = url;
+            const iframe = document.getElementById('preview-iframe');
+            iframe.src = url;
+
+            const directLink = document.getElementById('direct-link');
+            directLink.href = url;
+
+            // Update button active states
+            const buttons = document.querySelectorAll('.btn-page-toggle');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>
