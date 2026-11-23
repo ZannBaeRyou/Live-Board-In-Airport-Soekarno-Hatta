@@ -604,6 +604,7 @@ function renderFIDS() {
         const safeGate = escapeHtml(flight.gate || (flight.type === 'departure' ? flight.counter : flight.baggage) || 'Gate -');
         const safeEstTime = escapeHtml(flight.estimatedTime ? flight.estimatedTime.split(' ')[0] : flight.time);
         const safeStatus = escapeHtml(flight.status);
+        const hasValidLogo = flight.logo && (flight.logo.startsWith('http') || flight.logo.startsWith('/') || flight.logo.startsWith('assets/') || flight.logo.includes('.'));
 
         const row = document.createElement('div');
         row.className = `fids-row-modern fids-compact-row status-${statusSlug}`;
@@ -615,7 +616,7 @@ function renderFIDS() {
                     <div class="d-flex align-items-center gap-2 overflow-hidden">
                         <span class="fw-bold font-digital text-white fids-compact-time">${safeTime}</span>
                         <div class="airline-emblem-sq airline-emblem-sq-compact">
-                            ${flight.logo ? `<img src="${encodeURI(flight.logo)}" alt="${safeAirline}" onerror="this.parentElement.innerHTML='<span class=\\'small fw-bold text-white font-digital\\'>${fallbackLetters}</span>'">` : `<span class="small fw-bold text-white font-digital">${fallbackLetters}</span>`}
+                            ${hasValidLogo ? `<img src="${encodeURI(flight.logo)}" alt="${safeAirline}" onerror="this.parentElement.innerHTML='<span class=\\'small fw-bold text-white font-digital\\'>${fallbackLetters}</span>'">` : `<span class="small fw-bold text-white font-digital">${fallbackLetters}</span>`}
                         </div>
                         <span class="fw-bold font-digital text-white text-truncate">${safeNumber}</span>
                         <span class="text-secondary small text-truncate d-none d-sm-inline" style="font-size:0.75rem">${safeAirline}</span>
@@ -647,7 +648,7 @@ function renderFIDS() {
                 <!-- Airline & Flight No -->
                 <div class="col-md-3 d-flex align-items-center gap-2 overflow-hidden px-md-2 p-0">
                     <div class="airline-emblem-sq">
-                        ${flight.logo ? `<img src="${encodeURI(flight.logo)}" alt="${safeAirline}" onerror="this.parentElement.innerHTML='<span class=\\'small fw-bold text-white font-digital\\'>${fallbackLetters}</span>'">` : `<span class="small fw-bold text-white font-digital">${fallbackLetters}</span>`}
+                        ${hasValidLogo ? `<img src="${encodeURI(flight.logo)}" alt="${safeAirline}" onerror="this.parentElement.innerHTML='<span class=\\'small fw-bold text-white font-digital\\'>${fallbackLetters}</span>'">` : `<span class="small fw-bold text-white font-digital">${fallbackLetters}</span>`}
                     </div>
                     <div class="text-truncate">
                         <div class="fw-bold font-digital text-white fs-6 text-truncate">${safeNumber}</div>
@@ -1616,7 +1617,7 @@ function openModal(flight) {
                         <span class="text-secondary small fw-medium" data-i18n="modal_flight_status">${typeof __t === 'function' ? __t('modal_flight_status') : 'STATUS PENERBANGAN'}</span>
                     </div>
                     <div class="d-flex align-items-center gap-2">
-                        ${flight.logo ? `<img src="${flight.logo}" alt="" class="rounded bg-white p-1" style="width: 28px; height: 28px; object-fit: contain; border: 1px solid #e2e8f0;" onerror="this.style.display='none'">` : ''}
+                        ${(flight.logo && (flight.logo.startsWith('http') || flight.logo.startsWith('/') || flight.logo.startsWith('assets/') || flight.logo.includes('.'))) ? `<img src="${encodeURI(flight.logo)}" alt="" class="rounded bg-white p-1" style="width: 28px; height: 28px; object-fit: contain; border: 1px solid #e2e8f0;" onerror="this.style.display='none'">` : ''}
                         <h2 class="fs-3 fw-bold mb-0 text-white font-digital">${flightNum} <span class="fs-5 fw-normal text-secondary">&bull; ${airlineName}</span></h2>
                     </div>
                 </div>
