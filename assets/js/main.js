@@ -606,18 +606,46 @@ function renderFIDS() {
         const safeStatus = escapeHtml(flight.status);
 
         const row = document.createElement('div');
-        row.className = `fids-row-modern status-${statusSlug}`;
+        row.className = `fids-row-modern fids-compact-row status-${statusSlug}`;
         row.id = `flight-row-${cleanFlightNo}`;
         row.innerHTML = `
-            <div class="row align-items-center w-100 g-2 g-md-0 m-0">
+            <!-- Mobile 2-Tier Ultra-Dense Layout (< md) -->
+            <div class="fids-mobile-view d-md-none w-100">
+                <div class="fids-mobile-top-row d-flex justify-content-between align-items-center mb-1">
+                    <div class="d-flex align-items-center gap-2 overflow-hidden">
+                        <span class="fw-bold font-digital text-white fids-compact-time">${safeTime}</span>
+                        <div class="airline-emblem-sq airline-emblem-sq-compact">
+                            ${flight.logo ? `<img src="${encodeURI(flight.logo)}" alt="${safeAirline}" onerror="this.parentElement.innerHTML='<span class=\\'small fw-bold text-white font-digital\\'>${fallbackLetters}</span>'">` : `<span class="small fw-bold text-white font-digital">${fallbackLetters}</span>`}
+                        </div>
+                        <span class="fw-bold font-digital text-white text-truncate">${safeNumber}</span>
+                        <span class="text-secondary small text-truncate d-none d-sm-inline" style="font-size:0.75rem">${safeAirline}</span>
+                    </div>
+                    <div class="flex-shrink-0 ms-2">
+                        <span class="status-pill-modern status-pill-compact ${pillClass}">
+                            <span class="status-pulse-dot ${dotClass}"></span> ${safeStatus}
+                        </span>
+                    </div>
+                </div>
+                <div class="fids-mobile-bottom-row d-flex justify-content-between align-items-center">
+                    <div class="text-truncate pe-2">
+                        <span class="fw-semibold text-white text-uppercase text-truncate d-block" style="font-size:0.85rem">${safeDestOrOrigin}</span>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <span class="gate-badge-modern gate-badge-compact">${safeGate}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Desktop & Tablet Layout (>= md) -->
+            <div class="row align-items-center w-100 g-2 g-md-0 m-0 d-none d-md-flex">
                 <!-- Time -->
-                <div class="col-3 col-md-1 font-digital p-0">
+                <div class="col-md-1 font-digital p-0">
                     <div class="fw-bold text-white fs-6">${safeTime}</div>
-                    <div class="text-secondary small font-digital d-none d-md-block" style="font-size:0.7rem">WIB</div>
+                    <div class="text-secondary small font-digital" style="font-size:0.7rem">WIB</div>
                 </div>
 
                 <!-- Airline & Flight No -->
-                <div class="col-9 col-md-3 d-flex align-items-center gap-2 overflow-hidden px-md-2 p-0">
+                <div class="col-md-3 d-flex align-items-center gap-2 overflow-hidden px-md-2 p-0">
                     <div class="airline-emblem-sq">
                         ${flight.logo ? `<img src="${encodeURI(flight.logo)}" alt="${safeAirline}" onerror="this.parentElement.innerHTML='<span class=\\'small fw-bold text-white font-digital\\'>${fallbackLetters}</span>'">` : `<span class="small fw-bold text-white font-digital">${fallbackLetters}</span>`}
                     </div>
@@ -630,23 +658,23 @@ function renderFIDS() {
                 </div>
 
                 <!-- Destination / Origin -->
-                <div class="col-6 col-md-3 mt-2 mt-md-0 px-md-2 p-0">
+                <div class="col-md-3 px-md-2 p-0">
                     <span class="fw-semibold text-white d-block text-uppercase text-truncate">${safeDestOrOrigin}</span>
-                    <span class="text-secondary small d-none d-md-block" style="font-size:0.72rem">${flight.type === 'departure' ? (typeof __t === 'function' ? __t('lbl_dest') : 'Tujuan') : (typeof __t === 'function' ? __t('lbl_origin') : 'Asal')}</span>
+                    <span class="text-secondary small" style="font-size:0.72rem">${flight.type === 'departure' ? (typeof __t === 'function' ? __t('lbl_dest') : 'Tujuan') : (typeof __t === 'function' ? __t('lbl_origin') : 'Asal')}</span>
                 </div>
 
                 <!-- Gate / Belt -->
-                <div class="col-6 col-md-2 mt-2 mt-md-0 text-md-start text-end px-md-2 p-0">
+                <div class="col-md-2 text-start px-md-2 p-0">
                     <span class="gate-badge-modern">${safeGate}</span>
                 </div>
 
                 <!-- Estimated Time -->
-                <div class="col-md-1 font-digital text-white-50 mt-2 mt-md-0 d-none d-md-block px-md-2 p-0">
+                <div class="col-md-1 font-digital text-white-50 px-md-2 p-0">
                     <span class="small font-digital">${safeEstTime}</span>
                 </div>
 
                 <!-- Status Pill -->
-                <div class="col-12 col-md-2 text-md-end text-center mt-2 mt-md-0 p-0">
+                <div class="col-md-2 text-end p-0">
                     <span class="status-pill-modern ${pillClass}">
                         <span class="status-pulse-dot ${dotClass}"></span> ${safeStatus}
                     </span>

@@ -430,6 +430,34 @@ h1, h2, h3, h4, h5, h6 {
     border-color: var(--border-hover);
     transform: translateX(3px);
 }
+
+/* Compact styling for FIDS rows on mobile (< 768px) */
+@media (max-width: 767.98px) {
+    .fids-row-modern {
+        padding: 8px 12px;
+        min-height: 52px;
+        margin-bottom: 0.45rem;
+    }
+    .airline-emblem-sq-compact {
+        width: 26px;
+        height: 26px;
+        border-radius: 6px;
+    }
+    .status-pill-compact {
+        padding: 3px 8px;
+        font-size: 0.72rem;
+        border-radius: 20px;
+    }
+    .gate-badge-compact {
+        padding: 2px 8px;
+        font-size: 0.72rem;
+        border-radius: 6px;
+    }
+    .fids-compact-time {
+        font-size: 0.95rem;
+        min-width: 44px;
+    }
+}
 .airline-emblem-sq {
     width: 34px;
     height: 34px;
