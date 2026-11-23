@@ -1863,15 +1863,66 @@ h1, h2, h3, h4, h5, h6 {
     border-color: #bbf7d0;
 }
 
-@media (max-width: 576px) {
-    .modal-info-grid {
-        grid-template-columns: 1fr;
+/* Responsive Compact Modal for Mobile (< 768px) */
+@media (max-width: 767.98px) {
+    .fids-modal-content.fids-modal-executive {
+        padding: 18px 16px calc(18px + env(safe-area-inset-bottom)) !important;
+        border-radius: 20px 20px 0 0;
+    }
+    .modal-header-row {
+        padding-bottom: 10px;
+        margin-bottom: 12px;
+    }
+    .modal-flight-title {
+        font-size: 1.3rem !important;
+        line-height: 1.2;
+    }
+    .modal-flight-airline {
+        font-size: 0.85rem !important;
+    }
+    .modal-highlight-banner,
+    .modal-compact-highlight {
+        padding: 10px 14px;
+        margin-bottom: 10px;
+        display: flex;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
         gap: 10px;
     }
-    .modal-highlight-banner {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
+    .modal-highlight-val {
+        font-size: 1.5rem !important;
+        line-height: 1 !important;
+        margin-top: 2px !important;
+    }
+    .modal-highlight-sub-val {
+        font-size: 1.05rem !important;
+        margin-top: 2px !important;
+    }
+    .modal-info-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px !important;
+        margin-bottom: 10px !important;
+    }
+    .modal-info-card,
+    .modal-info-card-compact {
+        padding: 8px 10px !important;
+        border-radius: 10px !important;
+    }
+    .modal-info-card.aircraft-card {
+        grid-column: span 2 !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 6px 12px !important;
+    }
+    .modal-info-card.aircraft-card strong {
+        font-size: 0.85rem !important;
+        margin: 0 !important;
+    }
+    .fids-modal-close {
+        padding: 7px 14px !important;
+        font-size: 0.85rem !important;
     }
 }
 

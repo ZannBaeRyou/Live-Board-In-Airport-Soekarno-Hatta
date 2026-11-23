@@ -1618,7 +1618,7 @@ function openModal(flight) {
                     </div>
                     <div class="d-flex align-items-center gap-2">
                         ${(flight.logo && (flight.logo.startsWith('http') || flight.logo.startsWith('/') || flight.logo.startsWith('assets/') || flight.logo.includes('.'))) ? `<img src="${encodeURI(flight.logo)}" alt="" class="rounded bg-white p-1" style="width: 28px; height: 28px; object-fit: contain; border: 1px solid #e2e8f0;" onerror="this.style.display='none'">` : ''}
-                        <h2 class="fs-3 fw-bold mb-0 text-white font-digital">${flightNum} <span class="fs-5 fw-normal text-secondary">&bull; ${airlineName}</span></h2>
+                        <h2 class="modal-flight-title fs-3 fw-bold mb-0 text-white font-digital">${flightNum} <span class="modal-flight-airline fs-5 fw-normal text-secondary">&bull; ${airlineName}</span></h2>
                     </div>
                 </div>
                 <div class="text-end">
@@ -1629,35 +1629,35 @@ function openModal(flight) {
             </div>
 
             <!-- Big Highlight Banner -->
-            <div class="modal-highlight-banner">
+            <div class="modal-highlight-banner modal-compact-highlight">
                 <div>
                     <span class="small fw-bold text-uppercase d-block" style="color: ${termColor}; letter-spacing: 0.5px; font-size: 0.75rem;">${highlightTitle}</span>
                     <div class="modal-highlight-val fs-1 fw-bold font-digital" style="line-height: 1.1; margin-top: 4px;">${highlightVal}</div>
                 </div>
                 <div class="text-md-end text-start">
                     <span class="small fw-bold text-uppercase d-block" style="color: ${termColor}; letter-spacing: 0.5px; font-size: 0.75rem;">${subRightTitle}</span>
-                    <div class="fs-3 fw-bold font-digital text-white" style="margin-top: 4px;">${subRightVal}</div>
+                    <div class="modal-highlight-sub-val fs-3 fw-bold font-digital text-white" style="margin-top: 4px;">${subRightVal}</div>
                 </div>
             </div>
 
             <!-- 3 Info Box Grid -->
             <div class="modal-info-grid">
                 <!-- Col 1 -->
-                <div class="modal-info-card">
+                <div class="modal-info-card modal-info-card-compact">
                     <span class="text-secondary small fw-bold text-uppercase" style="font-size: 0.7rem;">${col1Title}</span>
                     <strong class="text-white fs-6 mt-1 mb-1 font-digital text-uppercase">${col1Val}</strong>
                     <span class="text-secondary small" style="font-size: 0.72rem;">${col1Sub}</span>
                 </div>
 
                 <!-- Col 2 -->
-                <div class="modal-info-card">
+                <div class="modal-info-card modal-info-card-compact">
                     <span class="text-secondary small fw-bold text-uppercase" style="font-size: 0.7rem;">${col2Title}</span>
                     <strong class="text-white fs-6 mt-1 mb-1 font-digital">${col2Val}</strong>
                     <span class="text-secondary small" style="font-size: 0.72rem;">${col2Sub}</span>
                 </div>
 
                 <!-- Col 3: Aircraft Model -->
-                <div class="modal-info-card aircraft-card">
+                <div class="modal-info-card modal-info-card-compact aircraft-card">
                     <span class="small fw-bold text-uppercase" style="color: #166534; font-size: 0.7rem;">${col3Title}</span>
                     <strong class="fs-6 mt-1 mb-1 font-digital" style="color: #15803d;">${col3Val}</strong>
                     <span class="small" style="color: #16a34a; font-size: 0.72rem;">${col3Sub}</span>
