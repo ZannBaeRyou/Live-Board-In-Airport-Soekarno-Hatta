@@ -256,9 +256,49 @@ h1, h2, h3, h4, h5, h6 {
     z-index: 2;
     letter-spacing: -0.2px;
 }
-@media (max-width: 991px) {
+/* Responsive Grid for Tablets (768px - 991.98px) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .bento-hero {
+        grid-column: span 8;
+    }
+    .bento-weather {
+        grid-column: span 4;
+    }
+    .bento-terminal-card {
+        grid-column: span 4;
+    }
+}
+
+/* Responsive Grid for Mobile (< 768px) */
+@media (max-width: 767.98px) {
     .bento-hero, .bento-weather, .bento-terminal-card {
         grid-column: span 12;
+    }
+
+    /* Terminal Carousel for Mobile Snap */
+    .terminal-carousel-mobile {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        padding: 4px 0.5rem 14px 0.5rem;
+        grid-column: span 12;
+        margin: 0 -0.5rem;
+    }
+    .terminal-carousel-mobile .bento-terminal-card {
+        flex: 0 0 85%;
+        scroll-snap-align: start;
+        margin-bottom: 0;
+    }
+    .terminal-card-photo {
+        height: 80px;
+    }
+}
+
+@media (min-width: 768px) {
+    .terminal-carousel-mobile {
+        display: contents;
     }
 }
 
@@ -387,6 +427,34 @@ h1, h2, h3, h4, h5, h6 {
     background: var(--surface-hover);
     border-color: var(--border-hover);
     transform: translateX(3px);
+}
+
+/* Compact styling for FIDS rows on mobile (< 768px) */
+@media (max-width: 767.98px) {
+    .fids-row-modern {
+        padding: 8px 12px;
+        min-height: 52px;
+        margin-bottom: 0.45rem;
+    }
+    .airline-emblem-sq-compact {
+        width: 26px;
+        height: 26px;
+        border-radius: 6px;
+    }
+    .status-pill-compact {
+        padding: 3px 8px;
+        font-size: 0.72rem;
+        border-radius: 20px;
+    }
+    .gate-badge-compact {
+        padding: 2px 8px;
+        font-size: 0.72rem;
+        border-radius: 6px;
+    }
+    .fids-compact-time {
+        font-size: 0.95rem;
+        min-width: 44px;
+    }
 }
 .airline-emblem-sq {
     width: 34px;
@@ -1245,7 +1313,7 @@ h1, h2, h3, h4, h5, h6 {
 .dashboard-live-counter {
     background: var(--fids-bg-board);
     border: 1px solid var(--fids-border);
-    border-radius: var(--radius-fids);
+    border-radius: 9999px !important;
     padding: 25px 30px;
 }
 
@@ -1384,7 +1452,7 @@ h1, h2, h3, h4, h5, h6 {
 .fids-dashboard-container {
     background-color: var(--fids-bg-board);
     border: 1px solid var(--fids-border);
-    border-radius: var(--radius-fids);
+    border-radius: 9999px !important;
     padding: 30px;
     margin-top: 0;
     position: relative;
@@ -1397,7 +1465,7 @@ h1, h2, h3, h4, h5, h6 {
     background-color: #ffffff !important;
     border: 1px solid #cbd5e1 !important;
     color: #0f172a !important;
-    border-radius: var(--radius-fids);
+    border-radius: 9999px !important;
     padding: 14px 18px; /* Increased padding for touch targets */
     font-size: 1rem; /* Prevent iOS zoom */
     transition: var(--transition-fids);
@@ -1416,33 +1484,40 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     background: #e2e8f0;
     padding: 4px;
-    border-radius: 12px;
+    border-radius: 9999px;
     border: 1px solid #cbd5e1;
+    overflow: hidden;
+    width: 100%;
 }
 
 .btn-fids-tab {
-    flex: 1;
+    flex: 1 1 50%;
+    min-width: 0;
     background: transparent;
     border: none;
     color: #334155;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    font-size: 0.85rem;
-    padding: 12px 16px;
-    border-radius: 8px;
+    letter-spacing: 0.02em;
+    font-size: 0.82rem;
+    padding: 10px 14px;
+    border-radius: 9999px;
     transition: var(--transition-fids);
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .btn-fids-tab.active {
     color: #ffffff !important;
     background: #0284c7 !important;
     box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25);
+    border-radius: 9999px;
 }
 
 .btn-fids-tab:hover:not(.active) {
@@ -1526,7 +1601,7 @@ h1, h2, h3, h4, h5, h6 {
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--fids-border);
     border-left: 3px solid transparent;
-    border-radius: var(--radius-fids);
+    border-radius: 9999px !important;
     margin-bottom: 12px;
     padding: 18px 20px;
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1705,7 +1780,7 @@ h1, h2, h3, h4, h5, h6 {
 .fids-modal-content.fids-modal-executive {
     max-width: 620px;
     padding: 28px 24px;
-    border-radius: 18px;
+    border-radius: 24px !important;
     background: #ffffff;
     border: 1px solid #e2e8f0;
     box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
@@ -1713,21 +1788,84 @@ h1, h2, h3, h4, h5, h6 {
 
 .modal-header-row {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    flex-direction: column;
+    align-items: stretch;
     border-bottom: 1px solid #f1f5f9;
-    padding-bottom: 16px;
-    margin-bottom: 16px;
+    padding-bottom: 14px;
+    margin-bottom: 14px;
+}
+
+.modal-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header-main {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.modal-terminal-badge {
+    border-radius: 9999px !important;
+    padding: 4px 12px !important;
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+.modal-status-badge {
+    border-radius: 9999px !important;
+    padding: 4px 12px !important;
+    font-size: 0.78rem;
+    white-space: nowrap;
 }
 
 .modal-highlight-banner {
-    border-radius: 14px;
-    padding: 18px 22px;
-    margin-bottom: 18px;
+    border-radius: 20px !important;
+    padding: 16px 20px;
+    margin-bottom: 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     transition: var(--transition-fids);
+}
+
+.highlight-banner-left {
+    text-align: left;
+    min-width: 0;
+    flex: 1 1 50%;
+}
+
+.highlight-banner-right {
+    text-align: right;
+    min-width: 0;
+    flex: 1 1 50%;
+}
+
+.highlight-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.modal-highlight-val {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.modal-highlight-sub-val {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #0f172a !important;
+}
+
+[data-theme="dark"] .modal-highlight-sub-val {
+    color: #ffffff !important;
 }
 
 /* Terminal Theme 1: Crimson Red */
@@ -1783,27 +1921,181 @@ h1, h2, h3, h4, h5, h6 {
 .modal-info-card {
     background: #f8fafc;
     border: 1px solid #e2e8f0;
-    padding: 12px 14px;
-    border-radius: 12px;
+    padding: 10px 12px;
+    border-radius: 16px !important;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    min-width: 0;
+    height: 100%;
+}
+
+.modal-card-label {
+    font-size: 0.68rem;
+    color: #64748b;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.modal-card-value-wrap {
+    min-height: 24px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 3px 0;
+}
+
+.modal-card-city {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.modal-card-airport-code {
+    font-size: 0.65rem;
+    background: #e2e8f0;
+    color: #475569;
+    font-weight: 700;
+    border-radius: 9999px !important;
+    padding: 2px 6px;
+    flex-shrink: 0;
+}
+
+.modal-card-val {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.modal-card-sub {
+    font-size: 0.72rem;
+    color: #64748b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .modal-info-card.aircraft-card {
-    background: #f0fdf4;
-    border-color: #bbf7d0;
+    background: #f0fdf4 !important;
+    border: 1px solid #bbf7d0 !important;
+    border-radius: 9999px !important;
+    padding: 8px 16px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
 }
 
-@media (max-width: 576px) {
-    .modal-info-grid {
-        grid-template-columns: 1fr;
+.aircraft-card-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.aircraft-label {
+    font-size: 0.68rem;
+    color: #166534;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.aircraft-val {
+    font-size: 0.92rem;
+    color: #15803d;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.aircraft-card-badge-wrap {
+    flex-shrink: 0;
+}
+
+.aircraft-category-pill {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #166534;
+    background: rgba(22, 163, 74, 0.12);
+    border: 1px solid rgba(22, 163, 74, 0.25);
+    border-radius: 9999px !important;
+    padding: 3px 10px;
+    white-space: nowrap;
+}
+
+/* Responsive Compact Modal for Mobile (< 768px) */
+@media (max-width: 767.98px) {
+    .fids-modal-content.fids-modal-executive {
+        padding: 16px 14px calc(16px + env(safe-area-inset-bottom)) !important;
+        border-radius: 24px !important;
+    }
+    .modal-header-row {
+        padding-bottom: 8px;
+        margin-bottom: 10px;
+    }
+    .modal-flight-title {
+        font-size: 1.2rem !important;
+        line-height: 1.2;
+        color: #0f172a !important;
+    }
+    .modal-flight-airline {
+        font-size: 0.82rem !important;
+    }
+    .modal-highlight-banner,
+    .modal-compact-highlight {
+        padding: 10px 14px;
+        margin-bottom: 10px;
+        border-radius: 18px !important;
+        display: flex;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
         gap: 10px;
     }
-    .modal-highlight-banner {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
+    .modal-highlight-val {
+        font-size: 1.45rem !important;
+        line-height: 1 !important;
+        margin-top: 2px !important;
+    }
+    .modal-highlight-sub-val {
+        font-size: 1.05rem !important;
+        margin-top: 2px !important;
+        text-align: right !important;
+    }
+    .modal-info-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px !important;
+        margin-bottom: 10px !important;
+    }
+    .modal-info-card,
+    .modal-info-card-compact {
+        padding: 8px 10px !important;
+        border-radius: 14px !important;
+    }
+    .modal-info-card.aircraft-card {
+        grid-column: span 2 !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 6px 14px !important;
+        border-radius: 9999px !important;
+    }
+    .fids-modal-close {
+        padding: 8px 14px !important;
+        font-size: 0.85rem !important;
+        border-radius: 9999px !important;
     }
 }
 
@@ -1950,7 +2242,7 @@ h1, h2, h3, h4, h5, h6 {
 .airline-card-modern {
     background-color: var(--fids-bg-row);
     border: 1px solid var(--fids-border);
-    border-radius: var(--radius-fids);
+    border-radius: 9999px !important;
     padding: 25px;
     transition: var(--transition-fids);
 }
@@ -2254,8 +2546,11 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 768px) {
     .terminal-hero-section {
-        padding-top: 85px;
-        padding-bottom: 16px;
+        padding-top: 70px;
+        padding-bottom: 8px;
+    }
+    .terminal-hero-card > div {
+        padding: 1rem 1.25rem !important;
     }
     .terminal-hero-batik-watermark {
         width: 100%;
@@ -2294,7 +2589,7 @@ h1, h2, h3, h4, h5, h6 {
     letter-spacing: 1px;
     text-transform: uppercase;
     font-size: 0.8rem;
-    border-radius: var(--radius-fids);
+    border-radius: 9999px !important;
     transition: var(--transition-fids);
     cursor: pointer;
 }
@@ -2529,10 +2824,15 @@ h1, h2, h3, h4, h5, h6 {
     }
     .fids-tabs {
         flex-direction: row;
+        border-radius: 9999px;
+        padding: 4px;
     }
     .btn-fids-tab {
-        padding: 10px 16px;
-        font-size: 0.75rem;
+        padding: 8px 10px;
+        font-size: 0.76rem;
+        letter-spacing: 0;
+        gap: 5px;
+        border-radius: 9999px;
     }
     .fids-search-control {
         padding: 10px 14px;
@@ -2690,8 +2990,15 @@ h1, h2, h3, h4, h5, h6 {
     }
     
     .btn-fids-tab {
-        padding: 8px 12px;
-        font-size: 0.7rem;
+        padding: 7px 6px;
+        font-size: 0.72rem;
+        letter-spacing: -0.01em;
+        gap: 4px;
+        border-radius: 9999px;
+    }
+    .btn-fids-tab i {
+        font-size: 0.72rem;
+        flex-shrink: 0;
     }
     .navbar-brand {
         font-size: 1rem;
@@ -2725,6 +3032,12 @@ h1, h2, h3, h4, h5, h6 {
     }
     .fids-flight {
         font-size: 0.8rem;
+    }
+    .btn-fids-tab {
+        padding: 6px 4px;
+        font-size: 0.68rem;
+        gap: 3px;
+        border-radius: 9999px;
     }
     .fids-modal-content {
         padding: 16px 12px calc(16px + env(safe-area-inset-bottom));
