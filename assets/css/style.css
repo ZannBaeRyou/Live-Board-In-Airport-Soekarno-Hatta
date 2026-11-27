@@ -2270,12 +2270,21 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Bento Airport Hero Batik Mega Mendung Watermark (Dashboard) - Emerald Green */
+.hero-batik-clip {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 1;
+}
+
 .hero-batik-watermark {
     position: absolute;
     right: 0;
-    top: 0;
+    top: -120px;
     width: 55%;
-    height: 100%;
+    height: calc(100% + 240px);
     background-image: url('../images/batik-megamendung-clean.jpg');
     background-size: cover;
     background-position: center;
@@ -2286,6 +2295,7 @@ h1, h2, h3, h4, h5, h6 {
     z-index: 1;
     border-radius: 14px;
     filter: hue-rotate(285deg) saturate(1.4) contrast(1.05); /* Emerald Green */
+    will-change: transform;
 }
 
 @media (max-width: 768px) {
@@ -2515,9 +2525,9 @@ h1, h2, h3, h4, h5, h6 {
 .terminal-hero-batik-watermark {
     position: absolute;
     right: 0;
-    top: 0;
+    top: -120px;
     width: 52%;
-    height: 100%;
+    height: calc(100% + 240px);
     background-image: url('../images/batik-megamendung-clean.jpg');
     background-size: cover;
     background-position: center;
@@ -2526,6 +2536,7 @@ h1, h2, h3, h4, h5, h6 {
     mask-image: linear-gradient(to left, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 100%);
     pointer-events: none;
     z-index: 1;
+    will-change: transform;
 }
 
 /* Color thematic filters for terminal hero cards */
@@ -3279,4 +3290,17 @@ span.flap-animate, a.flap-animate {
     opacity: 0.50;
     transform: translate(0, 0) scale(1.05);
 }
+
+/* Accessibility: Disable parallax scroll effects when reduced motion is preferred */
+@media (prefers-reduced-motion: reduce) {
+    .hero-batik-watermark,
+    .terminal-hero-batik-watermark {
+        transform: none !important;
+        will-change: auto;
+    }
+    body {
+        background-position-y: 0 !important;
+    }
+}
+
 
