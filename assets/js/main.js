@@ -209,8 +209,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     initQuickSearch();
     initAirlinesDirectory();
 
-    // 5. Scroll animations
+    // 5. Scroll animations & Dual-Layer Parallax
     initScrollReveal();
+    initParallaxScroll();
 
     // 6. Dashboard live stats (initial)
     updateDashboardStats();
@@ -1773,6 +1774,44 @@ function initScrollReveal() {
     });
 
     revealElements.forEach(el => observer.observe(el));
+}
+
+/**
+ * Dual-Layer Parallax Scroll Engine (Global Canvas + Hero Batik Watermark)
+ */
+function initParallaxScroll() {
+    if (typeof window === 'undefined') return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const heroWatermark = document.querySelector('.hero-batik-watermark, .terminal-hero-batik-watermark');
+    let ticking = false;
+
+    const updateParallax = () => {
+        const rawScroll = window.pageYOffset || document.documentElement.scrollTop || 0;
+        const scrolled = Math.max(0, rawScroll);
+
+        // Layer 1: Global canvas polka dot drift (modulo 24px grid period)
+        const bgOffset = (scrolled * 0.45) % 24;
+        document.body.style.backgroundPositionY = `${bgOffset}px`;
+
+        // Layer 2: Hero batik watermark parallax (clamped at 120px within clip frame)
+        if (heroWatermark) {
+            const batikY = Math.min(scrolled * 0.22, 120);
+            heroWatermark.style.transform = `translate3d(0, ${batikY}px, 0)`;
+        }
+        ticking = false;
+    };
+
+    if ((window.pageYOffset || document.documentElement.scrollTop || 0) > 0) {
+        updateParallax();
+    }
+
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            window.requestAnimationFrame(updateParallax);
+            ticking = true;
+        }
+    }, { passive: true });
 }
 
 // ============================================
